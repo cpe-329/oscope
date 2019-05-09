@@ -9,7 +9,7 @@
 #define OSCOPE_TERM_H_
 
 
-
+void refresh_terminal();
 
 
 #endif /* OSCOPE_TERM_H_ */
