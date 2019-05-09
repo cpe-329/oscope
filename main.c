@@ -44,7 +44,8 @@ volatile uint8_t got_fresh_char;
 
 int main(void)
 {
-    volatile uint32_t i, j;
+//    volatile uint32_t i, j;
+    uint8_t refresh_term = FALSE;
 
     init(FREQ);
 
@@ -99,15 +100,24 @@ int main(void)
 
     while (1)
     {
-        for (j = 20; j > 0; j--){
-            for (i = 20000; i > 0; i--);  // Delay
-            adc_record();
+//        for (j = 20; j > 0; j--){
+//            for (i = 20000; i > 0; i--);  // Delay
+//            adc_record();
+//        }
+//        led_on();
+//        adc_report_avg();
+//        // adc_report_range();
+//        led_off();
+        read_oscope_data();
+        if (refresh_term){
+            oscope_refresh_term();
+            refresh_term = FALSE;
         }
-        led_on();
-        adc_report_avg();
-        // adc_report_range();
-        led_off();
     }
+}
+
+void TIMER_A_IRQHandler(void){
+    refresh_term = TRUE;
 }
 
 // ADC14 interrupt service routine

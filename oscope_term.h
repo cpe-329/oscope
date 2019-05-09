@@ -8,8 +8,11 @@
 #ifndef OSCOPE_TERM_H_
 #define OSCOPE_TERM_H_
 
+
 #define ESC 0x1B
 
+
+void refresh_terminal();
 
 
 #endif /* OSCOPE_TERM_H_ */
