@@ -50,3 +50,23 @@ modules.order
 Module.symvers
 Mkfile.old
 dkms.conf
+
+# VS Code Porject settings
+.vscode/*
+
+# Code Composer Studio
+targetConfigs/*
+.settings/*
+.launches/*
+.ccsproject
+.cproject
+.project
+.settings/org.eclipse.cdt.codan.core.prefs
+.settings/org.eclipse.cdt.debug.core.prefs
+startup_msp432p401r_ccs.c
+system_msp432p401r.c
+Debug/*
+Release/*
+
+/Debug/
+.directory
