@@ -1,13 +1,12 @@
 /*
  * uart.h
- * 
+ *
  * Danica Fujiwara & Spencer Shaw
- * 
+ *
  * CPE 329-17/18 Spring 2019
  */
 #ifndef __UART_H__
 #define __UART_H__
-
 
 #include <stdint.h>
 
@@ -28,5 +27,7 @@ void uart_write_int(unsigned int acc);
 void uart_write_nl();
 
 unsigned int uart_get_int();
+
+void uart_write_volts(unsigned int val_mv);
 
 #endif

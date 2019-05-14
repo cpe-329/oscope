@@ -1,8 +1,8 @@
 /*
  * my_msp.h
- * 
+ *
  * Danica Fujiwara & Spencer Shaw
- * 
+ *
  * CPE 329-17/18 Spring 2019
  */
 
@@ -28,7 +28,7 @@
 #define P2_5 BIT5  // P2.5
 #define P2_6 BIT6  // P2.6
 #define P2_7 BIT7  // P2.7
- 
+
 // Port 3
 #define P3_0 BIT0  // P3.0
 #define P3_1 BIT1  // P3.1
@@ -70,12 +70,10 @@
 #define P6_7 BIT7  // P6.7
 
 // Macro for disabling watchdog
-#define DISABLE_WATCHDOG  WDT_A->CTL = WDT_A_CTL_PW | WDT_A_CTL_HOLD;
-
+#define DISABLE_WATCHDOG WDT_A->CTL = WDT_A_CTL_PW | WDT_A_CTL_HOLD;
 
 #define TRUE (1)
 #define FALSE (0)
-
 
 // Initialize all used periphrials
 inline void init(const unsigned int freq);

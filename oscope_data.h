@@ -13,5 +13,6 @@
 
 #define HISTOGRAM_SIZE (9)
 
+void read_oscope_data();
 
 #endif /* OSCOPE_DATA_H_ */

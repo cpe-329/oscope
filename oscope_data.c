@@ -8,16 +8,14 @@
 
 #include "oscope_data.h"
 
-uint8_t oscope_mode = OSCOPE_MODE_AC; 
+// Mode selction
+uint8_t oscope_mode = OSCOPE_MODE_AC;
 
 // DC Mode data
-
 unsigned int dc_value = 0;
 // mV from 0 to 3000
 
-
 // AC Mode data
-
 unsigned int ac_dc_offset = 0;
 // mV from 0 to 3000
 
@@ -42,3 +40,28 @@ uint8_t histogram_units = 0;
 
 unsigned int num_samples = 0;
 // Number of samples taken since last term refresh
+
+void read_oscope_data() {
+  unsigned int avg_val = 0;
+  unsigned int avg_val_mv = 0;
+
+  adc_log_reading();
+  avg_val = adc_get_avg();
+
+  if (avg_val > adc_get_max_value()) {
+    adc_set_max_value(avg_val);
+  }
+  if (avg_val < adc_get_min_value()) {
+    adc_set_min_value(avg_val);
+  }
+  switch (oscope_mode) {
+    case OSCOPE_MODE_DC:
+
+      break;
+    case OSCOPE_MODE_AC:
+
+      break;
+    default:
+  }
+  adc_start_conversion();
+}
