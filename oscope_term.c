@@ -6,103 +6,119 @@
  */
 
 #include "oscope_term.h"
+#include "oscope_data.h"
+#include <stdint.h>
+#include "uart.h"
 
-void refresh_terminal(){
 
-}
 
 void update_terminal(){
 
 }
 
 void move_down(unsigned int val){
-    printf("%c[%dB",ESC, val);
+    unsigned char command[] = {ESC, '[', val, 'B'};
+    uart_write_string(command, 4);
 }
 
 void move_up(unsigned int val){
-    printf("%c[%dA",ESC, val);
+    unsigned char command[] = {ESC, '[', val, 'A'};
+    uart_write_string(command, 4);
 }
 
 void move_left(unsigned int val){
-    printf("%c[%dD",ESC, val);
+    unsigned char command[] = {ESC, '[', val, 'D'};
+    uart_write_string(command, 4);
 }
 
 void move_right(unsigned int val){
-    printf("%c[%dC",ESC, val);
+    unsigned char command[] = {ESC, '[', val, 'C'};
+    uart_write_string(command, 4);
 }
 
 
 void move_home(){
-    printf("%c[H",ESC);
+    unsigned char command[] = {ESC, '[', 'H'};
+    uart_write_string(command, 3);
 }
 
 void clear_screen(){
-    printf("%c[%2J",ESC);
+    unsigned char command[] = {ESC, '[', '2','J'};
+    uart_write_string(command, 4);
 }
 
 void move_cursor(unsigned int x, unsigned int y){
-    move_home();
-    move_right(x);
-    move_down(y);
+    unsigned char command[] = {ESC, '[', x, ';', y,'H'};
+    uart_write_string(command, 4);
 }
 
-void draw_horizontal(unsigned int length, char x){
+void draw_horizontal(unsigned int length, char c){
     int i;
     for (i=0; i < length; i++){
-        printf("%c", x);
+        uart_write(c);
     }
 }
 
-void draw_vertical(unsigned int length, char x){
+void draw_vertical(unsigned int length, unsigned int x, unsigned int y, char c){
     int i;
+    move_cursor(x,  y);
     for (i=0; i < length; i++){
-        printf("%c", x);
-        move_down();
-
+        uart_write(c);
+        y++;
+        move_cursor(x, y);
     }
 }
 void print_border(){
     move_home();
     draw_horizontal(LENGTH, 'X');
-    draw_vertical(WIDTH, 'X');
-    move_home();
-    draw_vertical(WIDTH, 'X');
+    draw_vertical(WIDTH, WIDTH, 0, 'X');
+    draw_vertical(WIDTH, 0, 0, 'X');
     draw_horizontal(LENGTH, 'X');
-    move_cursor(40, 0);
-    draw_vertical(WIDTH-2, 'X')
+    draw_vertical(WIDTH-2, 40, 1,'X');
 }
 
 void print_info(){
     int y = INFO_Y_CORD;
     move_cursor(INFO_X_CORD,y);
-    if (oscope_mode = OSCOPE_MODE_AC){
-        printf("AC MODE");
+    if (oscope_mode == OSCOPE_MODE_AC){
+        uart_write_string("AC MODE",7);
         y+=2;
         move_cursor(INFO_X_CORD, y);
-        printf("AC PKPK: %d"; ac_pkpk);
+        uart_write_string("AC PKPK: ",9);
+        uart_write_int(ac_pkpk);
         y+=2;
         move_cursor(INFO_X_CORD, y);
-        printf("AC FREQ: %d"; ac_freq);
+        uart_write_string("AC FREQ: ",9);
+        uart_write_int(ac_freq);
         y+=2;
         move_cursor(INFO_X_CORD, y);
-        printf("AC PERIOD: %d"; ac_period);
+        uart_write_string("AC PERIOD: ", 11);
+        uart_write_int(ac_period);
 
     }
     else{
-        printf("DC MODE");
+        uart_write_string("DC MODE", 7);
     }
     y+=2;
     move_cursor(INFO_X_CORD, y);
-    printf("DC OFFSET: %d"; dc_offset);
+    uart_write_string("DC OFFSET: ", 11);
+    uart_write_int(ac_dc_offset);
     y+=2;
     move_cursor(INFO_X_CORD, y);
-    printf("NUM SAMPLES: %d"; num_samples);
+    uart_write_string("NUM SAMPLES: ", 13);
+    uart_write_int(num_samples);
 
 
 }
 
-void init_terminal(){
+void print_graph_title(){
+    move_cursor(HIST_TITLE_X, HIST_TITLE_Y);
+    uart_write_string("HISTOGRAM", 9);
+}
+
+void refresh_terminal(){
     clear_screen();
     print_border();
     print_info();
 }
+
