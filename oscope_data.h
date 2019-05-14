@@ -8,6 +8,7 @@
 #ifndef OSCOPE_DATA_H_
 #define OSCOPE_DATA_H_
 
+#include <stdint.h>
 #define OSCOPE_MODE_AC (0)
 #define OSCOPE_MODE_DC (1)
 

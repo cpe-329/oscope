@@ -53,6 +53,13 @@ inline void uart_write(unsigned char c) {
   }
 }
 
+void uart_write_string(unsigned char c[], unsigned int size) {
+  int i;
+  for (i = 0; i < size; i++) {
+    uart_write(c[i]);
+  }
+}
+
 void uart_write_int(unsigned int acc) {
   rgb_set(RGB_RED);
   if (acc >= 10) {
