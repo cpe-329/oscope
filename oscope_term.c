@@ -116,9 +116,27 @@ void print_graph_title(){
     uart_write_string("HISTOGRAM", 9);
 }
 
+void print_time_divisions(){
+
+}
+
+void print_volt_divisions(){
+
+}
+void print_bar(unsigned int val, unsigned int x, unsigned int y){
+    int mes = 0, count = 0;
+    while (mes < val){
+        mes += VOLT_DIVISION;
+        count++;
+    }
+    draw_vertical(count, x, y, "|");
+}
+
+
 void refresh_terminal(){
     clear_screen();
     print_border();
     print_info();
+
 }
 
