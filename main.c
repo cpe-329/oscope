@@ -7,26 +7,6 @@
 // *
 // */
 
-//******************************************************************************
-//  MSP432P401 Demo - ADC14, Sample A1, AVcc Ref, Set P1.0 if A1 > 0.5*AVcc
-//
-//   A single sample is made on A1 with reference to AVcc. Software sets
-//   ADC14_CTL0_SC to start sample and conversion - ADC14_CTL0_SC automatically
-//   cleared at EOC. Using MODCLK = 25 MHz for sample and conversion timing
-//   Pulse mode with sample timing of 16 cycles. ADC14 interrupts on conversion
-//   completion. If A1 > 0.5*AVcc, P1.0 set, else reset.
-//
-//
-//                MSP432P401R
-//             -----------------
-//         /|\|                 |
-//          | |                 |
-//          --|RST              |
-//            |                 |
-//        >---|P5.4/A1      P1.0|-->LED
-//
-//******************************************************************************
-
 #include <stdint.h>
 #include "msp.h"
 
