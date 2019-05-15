@@ -49,6 +49,7 @@ inline void uart_init() {
   uart_write('l');
   uart_write('l');
   uart_write('o');
+  uart_write_nl();
 }
 
 inline void uart_write(unsigned char c) {

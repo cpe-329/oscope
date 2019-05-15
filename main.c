@@ -47,6 +47,9 @@ int main(void) {
         // if (refresh_term) {
         scope_refresh_term();
         refresh_term = FALSE;
+        led_off();
+        delay_ms(500, FREQ);
+        led_on();
         // }
     }
 }
