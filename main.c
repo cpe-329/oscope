@@ -14,10 +14,10 @@
 #include "delay.h"
 #include "led.h"
 #include "my_msp.h"
+#include "scope_data.h"
+#include "scope_term.h"
 #include "spi.h"
 #include "uart.h"
-#include "scope_term.h"
-#include "scope_data.h"
 
 #define FREQ FREQ_48_MHZ
 
@@ -44,17 +44,19 @@ int main(void) {
         //        // adc_report_range();
         //        led_off();
         scope_read_data();
-        if (refresh_term) {
-            scope_refresh_term();
-            refresh_term = FALSE;
-        }
+        // if (refresh_term) {
+        scope_refresh_term();
+        refresh_term = FALSE;
+        // }
     }
 }
 
 // Timer A0_0 interrupt service routine
 void TA0_0_IRQHandler(void) {
+    led_on();
     TIMER_A0->CCTL[0] &= ~TIMER_A_CCTLN_CCIFG; // Clear the CCR0 interrupt
     refresh_term = TRUE;
+    led_off();
 }
 
 // Timer A0_N interrupt service routine for CCR1 - CCR4
