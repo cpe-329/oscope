@@ -1,14 +1,14 @@
-///*
-// * main.c
-// *
-// * Danica Fujiwara & Spencer Shaw
-// *
-// * CPE 329-17/18 Spring 2019
-// *
-// */
+/*
+ * main.c
+ *
+ * Danica Fujiwara & Spencer Shaw
+ *
+ * CPE 329-17/18 Spring 2019
+ *
+ */
 
-#include <stdint.h>
 #include "msp.h"
+#include <stdint.h>
 
 #include "adc.h"
 #include "delay.h"
@@ -27,44 +27,42 @@ volatile uint8_t got_fresh_char;
 uint8_t refresh_term = FALSE;
 
 int main(void) {
-  //    volatile uint32_t i, j;
-  init(FREQ);
+    //    volatile uint32_t i, j;
+    init(FREQ);
 
-  adc_set_calibration(0, 16365);
+    adc_set_calibration(0, 16365);
 
-  while (1) {
-    //        for (j = 20; j > 0; j--){
-    //            for (i = 20000; i > 0; i--);  // Delay
-    //            adc_record();
-    //        }
-    //        led_on();
-    //        adc_report_avg();
-    //        // adc_report_range();
-    //        led_off();
+    while (1) {
+        //        for (j = 20; j > 0; j--){
+        //            for (i = 20000; i > 0; i--);  // Delay
+        //            adc_record();
+        //        }
+        //        led_on();
+        //        adc_report_avg();
+        //        // adc_report_range();
+        //        led_off();
         read_scope_data();
-    if (refresh_term) {
+        if (refresh_term) {
             scope_refresh_term();
-      refresh_term = FALSE;
+            refresh_term = FALSE;
+        }
     }
-  }
 }
 
 // Timer A0_0 interrupt service routine
 void TA0_0_IRQHandler(void) {
-  TIMER_A0->CCTL[0] &= ~TIMER_A_CCTLN_CCIFG;  // Clear the CCR0 interrupt
-  refresh_term = TRUE;
+    TIMER_A0->CCTL[0] &= ~TIMER_A_CCTLN_CCIFG; // Clear the CCR0 interrupt
+    refresh_term = TRUE;
 }
 
 // Timer A0_N interrupt service routine for CCR1 - CCR4
 void TA0_N_IRQHandler(void) {
-  if (TIMER_A0->CCTL[1] & TIMER_A_CCTLN_CCIFG)  // check for CCR1 interrupt
-  {
-    TIMER_A0->CCTL[1] &= ~TIMER_A_CCTLN_CCIFG;  // clear CCR1 interrupt
-    // Action for ccr1 intr
-  }
+    if (TIMER_A0->CCTL[1] & TIMER_A_CCTLN_CCIFG) // check for CCR1 interrupt
+    {
+        TIMER_A0->CCTL[1] &= ~TIMER_A_CCTLN_CCIFG; // clear CCR1 interrupt
+                                                   // Action for ccr1 intr
+    }
 }
 
 // ADC14 interrupt service routine
-void ADC14_IRQHandler(void) {
-  adc_store_reading(ADC14->MEM[0]);
-}
+void ADC14_IRQHandler(void) { adc_store_reading(ADC14->MEM[0]); }
