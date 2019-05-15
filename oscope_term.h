@@ -18,6 +18,9 @@
 #define HIST_TITLE_X 6
 #define HIST_TITLE_Y 1
 #define VOLT_DIVISION 157
+#define GRAPH_LENGTH 33
+#define GRAPH_BOTTOM 20
+#define GRAPH_LEFT 42
 
 void refresh_terminal();
 
