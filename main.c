@@ -43,10 +43,13 @@ int main(void) {
         //        adc_report_avg();
         //        // adc_report_range();
         //        led_off();
-        //scope_read_data();
+        scope_read_data();
         // if (refresh_term) {
         scope_refresh_term();
         refresh_term = FALSE;
+        led_off();
+        delay_ms(500, FREQ);
+        led_on();
         // }
     }
 }

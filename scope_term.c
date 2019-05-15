@@ -12,34 +12,33 @@
 #include "uart.h"
 #include <stdint.h>
 
-
 void move_down(unsigned int val) {
-    unsigned char command[] = {ESC, '[', val, 'B'};
+    unsigned char command[4] = {ESC, '[', val, 'B'};
     uart_write_string(command, 4);
 }
 
 void move_up(unsigned int val) {
-    unsigned char command[] = {ESC, '[', val, 'A'};
+    unsigned char command[4] = {ESC, '[', val, 'A'};
     uart_write_string(command, 4);
 }
 
 void move_left(unsigned int val) {
-    unsigned char command[] = {ESC, '[', val, 'D'};
+    unsigned char command[4] = {ESC, '[', val, 'D'};
     uart_write_string(command, 4);
 }
 
 void move_right(unsigned int val) {
-    unsigned char command[] = {ESC, '[', val, 'C'};
+    unsigned char command[4] = {ESC, '[', val, 'C'};
     uart_write_string(command, 4);
 }
 
 void move_home() {
-    unsigned char command[] = {ESC, '[', 'H'};
+    unsigned char command[3] = {ESC, '[', 'H'};
     uart_write_string(command, 3);
 }
 
 void clear_screen() {
-    unsigned char command[] = {ESC, '[', '2', 'J'};
+    unsigned char command[4] = {ESC, '[', '2', 'J'};
     uart_write_string(command, 4);
 }
 
@@ -47,8 +46,8 @@ void move_cursor(unsigned int x, unsigned int y) {
     move_home();
     move_down(y);
     move_right(x);
-//    unsigned char command[] = {ESC, '[', x, ';', y, 'H'};
-//    uart_write_string(command, 6);
+    //    unsigned char command[] = {ESC, '[', x, ';', y, 'H'};
+    //    uart_write_string(command, 6);
 }
 
 void draw_horizontal(unsigned int length, char c) {
@@ -83,34 +82,34 @@ void print_border() {
 }
 
 void print_info() {
-  int y = INFO_Y_CORD;
-  move_cursor(INFO_X_CORD, y);
-  if (scope_get_mode() == SCOPE_MODE_AC) {
-    uart_write_string("AC MODE", 7);
-    y += 2;
+    int y = INFO_Y_CORD;
     move_cursor(INFO_X_CORD, y);
-    uart_write_string("AC PKPK: ", 9);
-    uart_write_int(scope_get_ac_pkpk());
-    y += 2;
-    move_cursor(INFO_X_CORD, y);
-    uart_write_string("AC FREQ: ", 9);
-    uart_write_int(scope_get_ac_freq());
-    y += 2;
-    move_cursor(INFO_X_CORD, y);
-    uart_write_string("AC PERIOD: ", 11);
-    uart_write_int(scope_get_ac_period());
+    if (scope_get_mode() == SCOPE_MODE_AC) {
+        uart_write_string("AC MODE", 7);
+        y += 2;
+        move_cursor(INFO_X_CORD, y);
+        uart_write_string("AC PKPK: ", 9);
+        uart_write_int(scope_get_ac_pkpk());
+        y += 2;
+        move_cursor(INFO_X_CORD, y);
+        uart_write_string("AC FREQ: ", 9);
+        uart_write_int(scope_get_ac_freq());
+        y += 2;
+        move_cursor(INFO_X_CORD, y);
+        uart_write_string("AC PERIOD: ", 11);
+        uart_write_int(scope_get_ac_period());
 
-  } else {
-    uart_write_string("DC MODE", 7);
-  }
-  y += 2;
-  move_cursor(INFO_X_CORD, y);
-  uart_write_string("DC OFFSET: ", 11);
-  uart_write_int(scope_get_ac_dc_offset());
-  y += 2;
-  move_cursor(INFO_X_CORD, y);
-  uart_write_string("NUM SAMPLES: ", 13);
-  uart_write_int(scope_get_num_samples());
+    } else {
+        uart_write_string("DC MODE", 7);
+    }
+    y += 2;
+    move_cursor(INFO_X_CORD, y);
+    uart_write_string("DC OFFSET: ", 11);
+    uart_write_int(scope_get_ac_dc_offset());
+    y += 2;
+    move_cursor(INFO_X_CORD, y);
+    uart_write_string("NUM SAMPLES: ", 13);
+    uart_write_int(scope_get_num_samples());
 }
 
 void print_graph_title() {
@@ -118,59 +117,54 @@ void print_graph_title() {
     uart_write_string("HISTOGRAM", 9);
 }
 
-void print_time_divisions() {
-
-}
+void print_time_divisions() {}
 
 void print_volt_divisions() {
-    int volt_mes_y = HIST_TITLE_Y +1;
-    int i,volts = 3000;
+    int volt_mes_y = HIST_TITLE_Y + 1;
+    int i, volts = 3000;
     move_cursor(77, volt_mes_y);
-    for(i=0; i <20; i+= 4){
-        uart_write_int(volts - i*(VOLT_DIVISION*4));
+    for (i = 0; i < 20; i += 4) {
+        uart_write_int(volts - i * (VOLT_DIVISION * 4));
         uart_write('V');
         volt_mes_y++;
         move_cursor(77, volt_mes_y);
     }
 }
 
-
 void print_bar(unsigned int val, unsigned int x, unsigned int y) {
-  int mes = 0, count = 0;
-  while (mes < val) {
-    mes += VOLT_DIVISION;
-    count++;
-  }
-  draw_vertical(count, x, y, '|');
+    int mes = 0, count = 0;
+    while (mes < val) {
+        mes += VOLT_DIVISION;
+        count++;
+    }
+    draw_vertical(count, x, y, '|');
 }
 
-void print_graph_border(){
+void print_graph_border() {
     print_graph_title();
     print_volt_divisions();
 }
-void print_DC_Graph(){
+void print_DC_Graph() {
     int height = 0, volts = 0;
-    if(scope_get_mode()== SCOPE_MODE_DC){
+    if (scope_get_mode() == SCOPE_MODE_DC) {
         print_time_divisions();
-        while (scope_get_dc_value() < volts){
+        while (scope_get_dc_value() < volts) {
             volts += VOLT_DIVISION;
-            height ++;
+            height++;
         }
-        move_cursor(GRAPH_LEFT, GRAPH_BOTTOM+height);
+        move_cursor(GRAPH_LEFT, GRAPH_BOTTOM + height);
         draw_horizontal(GRAPH_LENGTH, '-');
     }
 }
-void print_AC_Graph(){
-
-}
+void print_AC_Graph() {}
 
 void scope_refresh_term() {
-  clear_screen();
-  print_border();
-  print_info();
-  print_graph_border();
-  print_DC_Graph();
-  print_AC_Graph();
+    clear_screen();
+    print_border();
+    print_info();
+    print_graph_border();
+    print_DC_Graph();
+    print_AC_Graph();
 }
 
 void update_terminal() {

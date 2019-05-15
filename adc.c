@@ -40,7 +40,7 @@ inline void adc_init() {
 
 void adc_record() {
   unsigned int avg_val = 0;
-  unsigned int avg_val_mv = 0;
+//   unsigned int avg_val_mv = 0;
 
   adc_log_reading();
   avg_val = adc_get_avg();
@@ -97,7 +97,7 @@ void adc_set_calibration(unsigned int min, unsigned int max) {
 
 inline void adc_clear_min_max() {
   min_value = 16000;
-  max_value - 0;
+  max_value = 0;
 }
 
 void adc_calibrate_on_range() {
@@ -108,7 +108,7 @@ inline void adc_store_reading(unsigned int val) {
   adc_value = val;
 }
 
-unsigned int adc_log_reading() {
+void adc_log_reading() {
   int i;
   for (i = 0; i < AVG_LENGTH - 1; i++) {
     adc_history[i + 1] = adc_history[i];
