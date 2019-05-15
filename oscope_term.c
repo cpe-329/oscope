@@ -1,14 +1,16 @@
 /*
  * oscope_term.c
  *
- *  Created on: May 9, 2019
- *      Author: sfshaw
+ * Danica Fujiwara & Spencer Shaw
+ *
+ * CPE 329-17/18 Spring 2019
+ *
  */
 
 #include "oscope_term.h"
-#include <stdint.h>
 #include "oscope_data.h"
 #include "uart.h"
+#include <stdint.h>
 
 void update_terminal() {}
 

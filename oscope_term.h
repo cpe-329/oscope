@@ -1,8 +1,10 @@
 /*
  * oscope_term.h
  *
- *  Created on: May 9, 2019
- *      Author: sfshaw
+ * Danica Fujiwara & Spencer Shaw
+ *
+ * CPE 329-17/18 Spring 2019
+ *
  */
 
 #ifndef OSCOPE_TERM_H_
