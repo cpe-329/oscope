@@ -41,9 +41,9 @@ int main(void) {
     //        adc_report_avg();
     //        // adc_report_range();
     //        led_off();
-    read_oscope_data();
+        read_scope_data();
     if (refresh_term) {
-      oscope_refresh_term();
+            scope_refresh_term();
       refresh_term = FALSE;
     }
   }
