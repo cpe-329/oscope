@@ -10,7 +10,6 @@
 #include "oscope_data.h"
 #include "uart.h"
 
-void update_terminal() {}
 
 void move_down(unsigned int val) {
   unsigned char command[] = {ESC, '[', val, 'B'};
@@ -111,20 +110,42 @@ void print_graph_title() {
   uart_write_string("HISTOGRAM", 9);
 }
 
-void print_time_divisions() {}
+void print_time_divisions() {
 
-void print_volt_divisions() {}
+}
+
+void print_volt_divisions() {
+    int volt_mes_y = HIST_TITLE_Y +1;
+    int i,volts = 3000;
+    move_cursor(77, volt_mes_y);
+    for(i=0; i <20; i+= 4){
+        uart_write_int(volts - i*(157*4));
+        uart_write('V');
+        volt_mes_y++;
+        move_cursor(77, volt_mes_y);
+    }
+}
+
+
 void print_bar(unsigned int val, unsigned int x, unsigned int y) {
   int mes = 0, count = 0;
   while (mes < val) {
     mes += VOLT_DIVISION;
     count++;
   }
-  draw_vertical(count, x, y, "|");
+  draw_vertical(count, x, y, '|');
 }
 
 void refresh_terminal() {
   clear_screen();
   print_border();
   print_info();
+  print_DC_Graph();
+  print_AC_Graph();
+}
+
+void update_terminal() {
+    print_info();
+    print_DC_Graph();
+    print_AC_Graph();
 }
