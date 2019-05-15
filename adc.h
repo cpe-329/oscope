@@ -22,13 +22,13 @@ unsigned int adc_map_val(const unsigned int val);
 inline void adc_clear_min_max();
 void adc_set_calibration(unsigned int min, unsigned int max);
 void adc_calibrate_on_range();
-unsigned int adc_log_reading();
+inline void adc_store_reading(unsigned int val);
+void adc_log_reading();
 unsigned int adc_get_avg();
 
 inline unsigned int adc_get_max_value();
 inline void adc_set_max_value(unsigned int val);
 inline unsigned int adc_get_min_value();
 inline void adc_set_min_value(unsigned int val);
-
 
 #endif /* ADH_H_ */
