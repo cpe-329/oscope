@@ -7,8 +7,8 @@
  *
  */
 
-#include "oscope_term.h"
-#include "oscope_data.h"
+#include "scope_term.h"
+#include "scope_data.h"
 #include "uart.h"
 #include <stdint.h>
 

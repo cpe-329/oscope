@@ -16,6 +16,8 @@
 #include "my_msp.h"
 #include "spi.h"
 #include "uart.h"
+#include "scope_term.h"
+#include "scope_data.h"
 
 #define FREQ FREQ_48_MHZ
 

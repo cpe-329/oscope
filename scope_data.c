@@ -9,7 +9,7 @@
 
 #include <stdint.h>
 
-#include "oscope_data.h"
+#include "scope_data.h"
 
 static uint8_t scope_mode = SCOPE_MODE_DC;
 static unsigned int dc_value = 0;
