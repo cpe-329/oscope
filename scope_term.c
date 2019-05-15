@@ -44,8 +44,11 @@ void clear_screen() {
 }
 
 void move_cursor(unsigned int x, unsigned int y) {
-    unsigned char command[] = {ESC, '[', x, ';', y, 'H'};
-    uart_write_string(command, 4);
+    move_home();
+    move_down(y);
+    move_right(x);
+//    unsigned char command[] = {ESC, '[', x, ';', y, 'H'};
+//    uart_write_string(command, 6);
 }
 
 void draw_horizontal(unsigned int length, char c) {
@@ -62,7 +65,8 @@ void draw_vertical(unsigned int length, unsigned int x, unsigned int y,
     for (i = 0; i < length; i++) {
         uart_write(c);
         y++;
-        move_cursor(x, y);
+        move_down(1);
+        move_left(1);
     }
 }
 void print_border() {
