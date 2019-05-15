@@ -144,7 +144,7 @@ void print_DC_Graph(){
     int height = 0, volts = 0;
     if(scope_get_mode()== SCOPE_MODE_DC){
         print_time_divisions();
-        while (get_dc_offset() < volts){
+        while (scope_get_dc_value() < volts){
             volts += VOLT_DIVISION;
             height ++;
         }
@@ -156,7 +156,7 @@ void print_AC_Graph(){
 
 }
 
-void scope_refresh_terminal() {
+void scope_refresh_term() {
   clear_screen();
   print_border();
   print_info();

@@ -32,7 +32,7 @@ inline unsigned int scope_get_dc_value() {
 }
 
 // AC Mode data
-inline unsigned int scope_ac_dc_offset() {
+inline unsigned int scope_get_ac_dc_offset() {
     // mV from 0 to 3000
     return ac_dc_offset;
 }
@@ -70,7 +70,8 @@ inline uint8_t scope_get_histogram_units() {
 
 inline unsigned int scope_get_num_samples() { return num_samples; }
 // Number of samples taken since last term refresh
-void read_scope_data() {
+
+void scope_read_data() {
     unsigned int avg_val = 0;
     adc_log_reading();
     avg_val = adc_get_avg();

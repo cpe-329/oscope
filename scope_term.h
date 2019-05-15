@@ -24,7 +24,7 @@
 #define GRAPH_BOTTOM 20
 #define GRAPH_LEFT 42
 
-void scope_refresh_terminal();
+void scope_refresh_term();
 
 
 #endif /* OSCOPE_TERM_H_ */

@@ -43,7 +43,7 @@ int main(void) {
         //        adc_report_avg();
         //        // adc_report_range();
         //        led_off();
-        read_scope_data();
+        scope_read_data();
         if (refresh_term) {
             scope_refresh_term();
             refresh_term = FALSE;

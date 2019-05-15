@@ -92,7 +92,7 @@ unsigned int adc_map_val(const unsigned int val) {
 void adc_set_calibration(unsigned int min, unsigned int max) {
   calibration_shift = min;
   calibration_scale = (max - min) / MAX_READING_MV;
-  ad_clear_min_max();
+  adc_clear_min_max();
 }
 
 inline void adc_clear_min_max() {

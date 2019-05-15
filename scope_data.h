@@ -1,5 +1,5 @@
 /*
- * oscope_data.h
+ * scope_data.h
  *
  * Danica Fujiwara & Spencer Shaw
  *
@@ -18,7 +18,7 @@
 
 inline uint8_t scope_get_mode();
 inline unsigned int scope_get_dc_value();
-inline unsigned int scope_ac_dc_offset();
+inline unsigned int scope_get_ac_dc_offset();
 inline unsigned int scope_get_ac_pkpk();
 inline unsigned int scope_get_ac_freq();
 inline unsigned int scope_get_ac_period();
@@ -26,6 +26,6 @@ inline unsigned int scope_get_histogram(uint8_t i);
 inline unsigned int scope_get_histogram_div();
 inline uint8_t scope_get_histogram_units();
 inline unsigned int scope_get_num_samples();
-void read_scope_data();
+void scope_read_data();
 
 #endif /* SCOPE_DATA_H_ */

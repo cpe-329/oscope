@@ -43,6 +43,12 @@ inline void uart_init() {
   NVIC->ISER[0] = 1 << ((EUSCIA0_IRQn)&31);
   // Enable global interrupt
   __enable_irq();
+
+  uart_write('h');
+  uart_write('e');
+  uart_write('l');
+  uart_write('l');
+  uart_write('o');
 }
 
 inline void uart_write(unsigned char c) {
