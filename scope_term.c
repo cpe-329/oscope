@@ -72,10 +72,14 @@ void draw_vertical(unsigned int length, unsigned int x, unsigned int y,
 void print_border() {
     move_home();
     draw_horizontal(LENGTH, 'X');
-    draw_vertical(WIDTH, WIDTH, 0, 'X');
-    draw_vertical(WIDTH, 0, 0, 'X');
-    draw_horizontal(LENGTH, 'X');
-    draw_vertical(WIDTH - 2, 40, 1, 'X');
+    delay_ms_auto(35);
+    draw_vertical(WIDTH, LENGTH, 0, 'O');
+    delay_ms_auto(35);
+    draw_vertical(WIDTH, 0, 0, 'R');
+    delay_ms_auto(35);
+    draw_horizontal(LENGTH, 'S');
+    delay_ms_auto(35);
+    draw_vertical(WIDTH - 2, 40, 1, 'P');
 }
 
 void print_info() {
