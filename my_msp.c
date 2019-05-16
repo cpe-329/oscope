@@ -24,15 +24,15 @@ inline void init(const unsigned int freq) {
   init_dco();
   set_dco(freq);
 
-  // dac_init();
-
-  adc_init();
-  uart_init();
-
   led_init();
   rgb_init();
 
-  // timer_init();
+  timer_init();
+
+  // dac_init();
+  adc_init();
+  uart_init();
+
   // lcd_init();
   // keypad_init();
 }

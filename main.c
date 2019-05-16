@@ -27,6 +27,7 @@ volatile uint8_t got_fresh_char;
 
 // Whether to refresh terminal view
 uint8_t refresh_term = FALSE;
+uint8_t repaint_term = TRUE;
 
 int main(void) {
     //    volatile uint32_t i, j;
@@ -35,31 +36,27 @@ int main(void) {
     adc_set_calibration(0, 16365);
     paint_terminal();
     while (1) {
-        //        for (j = 20; j > 0; j--){
-        //            for (i = 20000; i > 0; i--);  // Delay
-        //            adc_record();
-        //        }
-        //        led_on();
-        //        adc_report_avg();
-        //        // adc_report_range();
-        //        led_off();
         scope_read_data();
+
+        led_on();
+        if (repaint_term) {
+            paint_terminal();
+            repaint_term = FALSE;
+        }
         // if (refresh_term) {
         scope_refresh_term();
         refresh_term = FALSE;
         scope_reset_num_samples();
-        led_off();
-        // delay_ms(500, FREQ);
-        led_on();
         // }
+        led_off();
     }
 }
 
 // Timer A0_0 interrupt service routine
 void TA0_0_IRQHandler(void) {
-    rgb_set(RGB_GREEN);
+    rgb_set(RGB_RED);
     TIMER_A0->CCTL[0] &= ~TIMER_A_CCTLN_CCIFG;  // Clear the CCR0 interrupt
-    refresh_term = TRUE;
+    repaint_term = TRUE;
     rgb_set(RGB_OFF);
 }
 
@@ -67,8 +64,11 @@ void TA0_0_IRQHandler(void) {
 void TA0_N_IRQHandler(void) {
     if (TIMER_A0->CCTL[1] & TIMER_A_CCTLN_CCIFG)  // check for CCR1 interrupt
     {
+        rgb_set(RGB_GREEN);
         TIMER_A0->CCTL[1] &= ~TIMER_A_CCTLN_CCIFG;  // clear CCR1 interrupt
                                                     // Action for ccr1 intr
+        refresh_term = TRUE;
+        rgb_set(RGB_OFF);
     }
 }
 

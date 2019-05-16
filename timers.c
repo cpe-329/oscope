@@ -32,8 +32,8 @@ void timer_init(void) {
     TIMER_A0->CCTL[0] = TIMER_A_CCTLN_CCIE;  // TACCR0 interrupt enabled
     TIMER_A0->CCTL[1] = TIMER_A_CCTLN_CCIE;  // TACCR1 interrupt enabled
 
-    TIMER_A0->CCR[0] = 1200;  // set CCR0 count
-                              //     TIMER_A0->CCR[1] = 60;   // set CCR1 count
+    TIMER_A0->CCR[0] = 65000;  // set CCR0 count
+    TIMER_A0->CCR[1] = 1200;    // set CCR1 count
 
     TIMER_A0->CTL = TIMER_A_CTL_TASSEL_2 |  // SMCLK,
                     TIMER_A_CTL_MC_1;       // UP mode, count up to CCR[0]
