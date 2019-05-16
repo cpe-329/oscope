@@ -187,5 +187,5 @@ void paint_terminal() {
     print_info();
     print_graph_title();
     print_volt_divisions();
-
+    move_home();
 }
