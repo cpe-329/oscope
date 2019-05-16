@@ -63,6 +63,7 @@ static inline void clear_RS();
 static inline void clear_RW();
 
 inline void lcd_display_keypad(uint8_t key);
-unsigned char lcd_translate_keypad(uint8_t key);
+// Translate keypad values to char
+unsigned char lcd_translate_keypad(const uint8_t key);
 
 #endif 
