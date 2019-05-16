@@ -84,11 +84,11 @@ void draw_vertical(unsigned int length,
 }
 void print_border() {
     move_home();
-    draw_horizontal(LENGTH, 'X');
-    draw_vertical(WIDTH-2, LENGTH-1, 1, 'X');
-    draw_vertical(WIDTH-2, 0, 1, 'X');
-    draw_horizontal(LENGTH, 'X');
-    draw_vertical(WIDTH - 2, 30, 1, 'X');
+    draw_horizontal(LENGTH, '=');
+    draw_vertical(WIDTH-2, LENGTH-1, 1, '|');
+    draw_vertical(WIDTH-2, 0, 1, '|');
+    draw_horizontal(LENGTH, '=');
+    draw_vertical(WIDTH - 2, 30, 1, '|');
 }
 
 void print_info() {
@@ -174,6 +174,7 @@ void print_DC_Graph() {
 void print_AC_Graph() {}
 
 void scope_refresh_term() {
+    hide_cursor();
     print_AC_Graph();
     print_DC_Graph();
     print_info();
