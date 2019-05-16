@@ -27,8 +27,8 @@ inline unsigned int scope_get_histogram_div();
 inline uint8_t scope_get_histogram_units();
 inline unsigned int scope_get_num_samples();
 inline void scope_reset_num_samples();
-void scope_update_histogram();
+inline void scope_update_histogram();
 void scope_read_data();
-void scope_refresh();
+inline void scope_refresh();
 
 #endif /* SCOPE_DATA_H_ */

@@ -22,8 +22,8 @@ static unsigned int ac_pkpk = 0;
 static unsigned int ac_freq = 0;
 static unsigned int ac_period = 0;
 static unsigned int histogram[HISTOGRAM_SIZE] = {};
-static unsigned int histogram_div = 0;
-uint8_t histogram_units = 0;
+// static unsigned int histogram_div = 0;
+// uint8_t histogram_units = 0;
 unsigned int num_samples = 0;
 
 // Mode selction
@@ -83,7 +83,7 @@ inline void scope_reset_num_samples() {
     num_samples = 0;
 }
 
-void scope_update_histogram() {
+inline void scope_update_histogram() {
     int i;
     for (i = 0; i < AVG_LENGTH - 1; i++) {
         histogram[i + 1] = histogram[i];
@@ -122,7 +122,7 @@ void scope_read_data() {
     adc_start_conversion();
 }
 
-void scope_refresh() {
+inline void scope_refresh() {
     // Update histogram data
     scope_update_histogram();
 
