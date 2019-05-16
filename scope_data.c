@@ -9,10 +9,10 @@
 
 #include <stdint.h>
 
-#include "scope_data.h"
 #include "adc.h"
 #include "delay.h"
 #include "led.h"
+#include "scope_data.h"
 
 static uint8_t scope_mode = SCOPE_MODE_DC;
 static unsigned int dc_value = 0;
@@ -73,15 +73,20 @@ inline uint8_t scope_get_histogram_units() {
     return histogram_units;
 }
 
+// Number of samples taken since last term refresh
 inline unsigned int scope_get_num_samples() {
     return num_samples;
 }
-// Number of samples taken since last term refresh
+
+inline void scope_reset_num_samples() {
+    num_samples = 0;
+}
 
 void scope_read_data() {
     unsigned int avg_val = 0;
     // Read in new data
     adc_log_reading();
+    num_samples += 1;
     // Get updated average
     avg_val = adc_get_avg();
 
@@ -102,7 +107,7 @@ void scope_read_data() {
             break;
         default:
             rgb_set(RGB_PURPLE);
-            delay_ms_auto(1000);
+            delay_ms_auto(10000);
             rgb_set(RGB_OFF);
     }
     adc_start_conversion();
