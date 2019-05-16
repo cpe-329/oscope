@@ -10,7 +10,6 @@
 #ifndef OSCOPE_TERM_H_
 #define OSCOPE_TERM_H_
 
-
 #define ESC 0x1B
 #define WIDTH 24
 #define LENGTH 80
@@ -25,9 +24,13 @@
 #define GRAPH_LEFT 42
 
 void scope_refresh_term();
+<<<<<<< HEAD
 void paint_terminal();
 void draw_vertical(unsigned int length, unsigned int x, unsigned int y,
                    char c);
 
+=======
+void draw_vertical(unsigned int length, unsigned int x, unsigned int y, char c);
+>>>>>>> 3a4a2b3c30845609bc44433c03f8e0f13cdb3221
 
 #endif /* OSCOPE_TERM_H_ */
