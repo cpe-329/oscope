@@ -169,18 +169,16 @@ void print_DC_Graph() {
 void print_AC_Graph() {}
 
 void scope_refresh_term() {
+    print_AC_Graph();
+    print_DC_Graph();
+    print_info();
+}
+
+void paint_terminal() {
     clear_screen();
     print_border();
     print_info();
     print_graph_title();
     print_volt_divisions();
-    //print_graph_border();
-    //print_DC_Graph();
-    //print_AC_Graph();
-}
 
-void update_terminal() {
-    print_info();
-    print_DC_Graph();
-    print_AC_Graph();
 }
