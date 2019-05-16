@@ -23,7 +23,9 @@ uint8_t histogram_units = 0;
 unsigned int num_samples = 0;
 
 // Mode selction
-inline uint8_t scope_get_mode() { return scope_mode; }
+inline uint8_t scope_get_mode() {
+    return scope_mode;
+}
 
 // DC Mode data
 inline unsigned int scope_get_dc_value() {
@@ -68,7 +70,9 @@ inline uint8_t scope_get_histogram_units() {
     return histogram_units;
 }
 
-inline unsigned int scope_get_num_samples() { return num_samples; }
+inline unsigned int scope_get_num_samples() {
+    return num_samples;
+}
 // Number of samples taken since last term refresh
 
 void scope_read_data() {

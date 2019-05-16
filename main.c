@@ -7,8 +7,8 @@
  *
  */
 
-#include "msp.h"
 #include <stdint.h>
+#include "msp.h"
 
 #include "adc.h"
 #include "delay.h"
@@ -57,16 +57,16 @@ int main(void) {
 // Timer A0_0 interrupt service routine
 void TA0_0_IRQHandler(void) {
     rgb_set(RGB_GREEN);
-    TIMER_A0->CCTL[0] &= ~TIMER_A_CCTLN_CCIFG; // Clear the CCR0 interrupt
+    TIMER_A0->CCTL[0] &= ~TIMER_A_CCTLN_CCIFG;  // Clear the CCR0 interrupt
     refresh_term = TRUE;
     rgb_set(RGB_OFF);
 }
 
 // Timer A0_N interrupt service routine for CCR1 - CCR4
 void TA0_N_IRQHandler(void) {
-    if (TIMER_A0->CCTL[1] & TIMER_A_CCTLN_CCIFG) // check for CCR1 interrupt
+    if (TIMER_A0->CCTL[1] & TIMER_A_CCTLN_CCIFG)  // check for CCR1 interrupt
     {
-        TIMER_A0->CCTL[1] &= ~TIMER_A_CCTLN_CCIFG; // clear CCR1 interrupt
+        TIMER_A0->CCTL[1] &= ~TIMER_A_CCTLN_CCIFG;  // clear CCR1 interrupt
                                                    // Action for ccr1 intr
     }
 }

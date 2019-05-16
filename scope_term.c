@@ -8,9 +8,9 @@
  */
 
 #include "scope_term.h"
+#include <stdint.h>
 #include "scope_data.h"
 #include "uart.h"
-#include <stdint.h>
 
 void move_down(unsigned int val) {
     unsigned char command[4] = {ESC, '[', val, 'B'};
@@ -57,7 +57,9 @@ void draw_horizontal(unsigned int length, char c) {
     }
 }
 
-void draw_vertical(unsigned int length, unsigned int x, unsigned int y,
+void draw_vertical(unsigned int length,
+                   unsigned int x,
+                   unsigned int y,
                    char c) {
     int i;
     move_cursor(x, y);
