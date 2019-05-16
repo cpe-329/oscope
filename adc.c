@@ -8,8 +8,8 @@
  */
 #include "msp.h"
 
-#include "led.h"
 #include "adc.h"
+#include "led.h"
 #include "uart.h"
 
 static unsigned int adc_value = 0;
