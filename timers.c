@@ -12,11 +12,11 @@
  */
 
 #include "timers.h"
+#include <stdint.h>
 #include "delay.h"
 #include "led.h"
 #include "msp.h"
 #include "my_msp.h"
-#include <stdint.h>
 
 volatile uint8_t led_flag = 1;
 
@@ -26,22 +26,22 @@ void timer_init(void) {
     P4->DIR |= P4_3;
 
     // setup TIMER_A0
-    TIMER_A0->CCTL[0] &= ~TIMER_A_CCTLN_CCIFG; // clear interrupt
-    TIMER_A0->CCTL[1] &= ~TIMER_A_CCTLN_CCIFG; // clear interrupt
+    TIMER_A0->CCTL[0] &= ~TIMER_A_CCTLN_CCIFG;  // clear interrupt
+    TIMER_A0->CCTL[1] &= ~TIMER_A_CCTLN_CCIFG;  // clear interrupt
 
-    TIMER_A0->CCTL[0] = TIMER_A_CCTLN_CCIE; // TACCR0 interrupt enabled
-    TIMER_A0->CCTL[1] = TIMER_A_CCTLN_CCIE; // TACCR1 interrupt enabled
+    TIMER_A0->CCTL[0] = TIMER_A_CCTLN_CCIE;  // TACCR0 interrupt enabled
+    TIMER_A0->CCTL[1] = TIMER_A_CCTLN_CCIE;  // TACCR1 interrupt enabled
 
-    TIMER_A0->CCR[0] = 1200; // set CCR0 count
-                             //     TIMER_A0->CCR[1] = 60;   // set CCR1 count
+    TIMER_A0->CCR[0] = 1200;  // set CCR0 count
+                              //     TIMER_A0->CCR[1] = 60;   // set CCR1 count
 
-    TIMER_A0->CTL = TIMER_A_CTL_TASSEL_2 | // SMCLK,
-                    TIMER_A_CTL_MC_1;      // UP mode, count up to CCR[0]
+    TIMER_A0->CTL = TIMER_A_CTL_TASSEL_2 |  // SMCLK,
+                    TIMER_A_CTL_MC_1;       // UP mode, count up to CCR[0]
 
-    NVIC->ISER[0] = 1 << ((TA0_0_IRQn)&31); // set NVIC interrupt
-    NVIC->ISER[0] = 1 << ((TA0_N_IRQn)&31); // TA0_0 and TA0_N
+    NVIC->ISER[0] = 1 << ((TA0_0_IRQn)&31);  // set NVIC interrupt
+    NVIC->ISER[0] = 1 << ((TA0_N_IRQn)&31);  // TA0_0 and TA0_N
 
-    __enable_irq(); // Enable global interrupt
+    __enable_irq();  // Enable global interrupt
 }
 // Timer A0_0 interrupt service routine
 
