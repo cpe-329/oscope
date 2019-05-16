@@ -100,9 +100,9 @@ void draw_vertical(unsigned int length,
 
 void print_border() {
     draw_horizontal(LENGTH-2,1,0, '=');
+    draw_horizontal(LENGTH-2,1,WIDTH-1, '=');
     draw_vertical(WIDTH, LENGTH-1, WIDTH-1, '|',0);
     draw_vertical(WIDTH, 0, WIDTH-1, '|',0);
-    draw_horizontal(LENGTH-2,1,WIDTH-1, '=');
     draw_vertical(WIDTH, DIVIDE_GRAPH, WIDTH-1, '|',0);
 }
 
@@ -158,11 +158,13 @@ void print_time_divisions() {
     else{
         uart_write_string("ms",2);
     }
-    move_cursor(x-7, TIME_Y);
+    x-=3;
+    move_cursor(x, TIME_Y);
     for (times = 0; times < 9; times++){
         uart_write_int(time);
         time+= scope_get_histogram_div();
-        move_cursor(x-7, TIME_Y);
+        x -= 5;
+        move_cursor(x, TIME_Y);
     }
 }
 
@@ -199,10 +201,12 @@ void print_bar(unsigned int val, unsigned int x, unsigned int y) {
         mes += VOLT_DIVISION;
         height++;
     }
-    if(height == 0){
+    if (height == 0){
         draw_horizontal(GRAPH_LENGTH, GRAPH_LEFT,GRAPH_BOTTOM, '-');
     }
-    draw_vertical(height, x, y, '|', BAR);
+    else{
+        draw_vertical(height, x, y, '|', BAR);
+    }
 }
 
 void print_graph_border() {
