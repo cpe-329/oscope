@@ -33,7 +33,7 @@ inline uint8_t scope_get_mode() {
 
 // DC Mode data
 inline unsigned int scope_get_dc_value() {
-    // mV from 0 to 3000
+    // mV from 0 to 300
     return dc_value;
 }
 
