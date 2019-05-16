@@ -18,10 +18,11 @@
 #define INFO_Y_CORD 2
 #define HIST_TITLE_X 55
 #define HIST_TITLE_Y 1
-#define VOLT_DIVISION 157
+#define DIVIDE_GRAPH 30
+#define VOLT_DIVISION 167
 #define GRAPH_LENGTH 33
 #define GRAPH_BOTTOM 20
-#define GRAPH_LEFT 42
+#define GRAPH_LEFT 32
 
 void scope_refresh_term();
 void paint_terminal();
