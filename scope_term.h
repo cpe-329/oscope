@@ -25,7 +25,7 @@
 #define GRAPH_LENGTH 40
 #define GRAPH_BOTTOM 20
 #define GRAPH_LEFT 32
-#define TIME_X_START 74
+#define TIME_X_START 75
 #define TIME_Y 22
 void scope_refresh_term();
 void paint_terminal();
