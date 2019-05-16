@@ -8,6 +8,7 @@
  */
 #include "msp.h"
 
+#include "led.h"
 #include "adc.h"
 #include "uart.h"
 
@@ -19,6 +20,8 @@ static unsigned int max_value = 0;
 static unsigned int min_value = 16000;
 
 inline void adc_init() {
+    rgb_set(RGB_GREEN);
+
     // GPIO Setup
     P5->SEL1 |= BIT4;  // Configure P5.4 for ADC
     P5->SEL0 |= BIT4;
@@ -36,6 +39,8 @@ inline void adc_init() {
 
     // Enable ADC interrupt in NVIC module
     NVIC->ISER[0] = 1 << ((ADC14_IRQn)&31);
+
+    rgb_set(RGB_OFF);
 }
 
 // Store last value and calculate avg

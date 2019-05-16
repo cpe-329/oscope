@@ -21,6 +21,8 @@
 volatile uint8_t led_flag = 1;
 
 void timer_init(void) {
+    rgb_set(RGB_YELLOW);
+
     P4->SEL0 |= P4_3;
     P4->SEL1 &= ~P4_3;
     P4->DIR |= P4_3;
@@ -42,6 +44,8 @@ void timer_init(void) {
     NVIC->ISER[0] = 1 << ((TA0_N_IRQn)&31);  // TA0_0 and TA0_N
 
     __enable_irq();  // Enable global interrupt
+
+    rgb_set(RGB_OFF);
 }
 // Timer A0_0 interrupt service routine
 
