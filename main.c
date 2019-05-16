@@ -67,9 +67,13 @@ void TA0_N_IRQHandler(void) {
     if (TIMER_A0->CCTL[1] & TIMER_A_CCTLN_CCIFG)  // check for CCR1 interrupt
     {
         TIMER_A0->CCTL[1] &= ~TIMER_A_CCTLN_CCIFG;  // clear CCR1 interrupt
-                                                   // Action for ccr1 intr
+                                                    // Action for ccr1 intr
     }
 }
 
 // ADC14 interrupt service routine
-void ADC14_IRQHandler(void) { adc_store_reading(ADC14->MEM[0]); }
+void ADC14_IRQHandler(void) {
+    rgb_set(RGB_BLUE);
+    adc_store_reading(ADC14->MEM[0]);
+    rgb_set(RGB_OFF);
+}

@@ -10,6 +10,9 @@
 #include <stdint.h>
 
 #include "scope_data.h"
+#include "adc.h"
+#include "delay.h"
+#include "led.h"
 
 static uint8_t scope_mode = SCOPE_MODE_DC;
 static unsigned int dc_value = 0;
@@ -77,23 +80,30 @@ inline unsigned int scope_get_num_samples() {
 
 void scope_read_data() {
     unsigned int avg_val = 0;
+    // Read in new data
     adc_log_reading();
+    // Get updated average
     avg_val = adc_get_avg();
 
+    // Record now min or max values
     if (avg_val > adc_get_max_value()) {
         adc_set_max_value(avg_val);
-    }
-    if (avg_val < adc_get_min_value()) {
+    } else if (avg_val < adc_get_min_value()) {
         adc_set_min_value(avg_val);
     }
-    switch (scope_mode) {
-    case SCOPE_MODE_DC:
-        dc_value = avg_val;
-        break;
-    case SCOPE_MODE_AC:
 
-        break;
-    default:
+    // For either scope mode
+    switch (scope_mode) {
+        case SCOPE_MODE_DC:
+            dc_value = avg_val;
+            break;
+        case SCOPE_MODE_AC:
+
+            break;
+        default:
+            rgb_set(RGB_PURPLE);
+            delay_ms_auto(1000);
+            rgb_set(RGB_OFF);
     }
     adc_start_conversion();
 }
