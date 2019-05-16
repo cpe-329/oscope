@@ -27,6 +27,7 @@ void scope_refresh_term();
 void paint_terminal();
 void draw_vertical(unsigned int length, unsigned int x, unsigned int y,
                    char c);
+void term_clear_screen();
 
 
 #endif /* OSCOPE_TERM_H_ */

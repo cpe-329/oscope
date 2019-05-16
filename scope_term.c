@@ -51,7 +51,7 @@ void hide_cursor(){
     uart_write_string(command,4);
 }
 
-void clear_screen() {
+void term_clear_screen() {
     unsigned char command[4] = {ESC, '[', '2', 'J'};
     uart_write_string(command, 4);
 }
@@ -181,7 +181,7 @@ void scope_refresh_term() {
 }
 
 void paint_terminal() {
-    clear_screen();
+    // term_clear_screen();
     hide_cursor();
     print_border();
     print_info();

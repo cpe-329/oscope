@@ -36,6 +36,7 @@ int main(void) {
     init(FREQ);
 
     adc_set_calibration(0, 16365);
+    term_clear_screen();
     paint_terminal();
     while (1) {
         scope_read_data();
