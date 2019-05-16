@@ -56,10 +56,10 @@ int main(void) {
 
 // Timer A0_0 interrupt service routine
 void TA0_0_IRQHandler(void) {
-    led_on();
+    rgb_set(RGB_GREEN);
     TIMER_A0->CCTL[0] &= ~TIMER_A_CCTLN_CCIFG; // Clear the CCR0 interrupt
     refresh_term = TRUE;
-    led_off();
+    rgb_set(RGB_OFF);
 }
 
 // Timer A0_N interrupt service routine for CCR1 - CCR4
