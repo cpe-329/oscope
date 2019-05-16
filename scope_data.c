@@ -13,6 +13,7 @@
 #include "delay.h"
 #include "led.h"
 #include "scope_data.h"
+#include "scope_term.h"
 
 static uint8_t scope_mode = SCOPE_MODE_DC;
 static unsigned int dc_value = 0;
@@ -82,6 +83,14 @@ inline void scope_reset_num_samples() {
     num_samples = 0;
 }
 
+void scope_update_histogram() {
+    int i;
+    for (i = 0; i < AVG_LENGTH - 1; i++) {
+        histogram[i + 1] = histogram[i];
+    }
+    histogram[0] = dc_value;
+}
+
 void scope_read_data() {
     unsigned int avg_val = 0;
     // Read in new data
@@ -100,7 +109,7 @@ void scope_read_data() {
     // For either scope mode
     switch (scope_mode) {
         case SCOPE_MODE_DC:
-            dc_value = avg_val;
+            dc_value = adc_map_val(avg_val);
             break;
         case SCOPE_MODE_AC:
 
@@ -111,4 +120,15 @@ void scope_read_data() {
             rgb_set(RGB_OFF);
     }
     adc_start_conversion();
+}
+
+void scope_refresh() {
+    // Update histogram data
+    scope_update_histogram();
+
+    // Refresh UART VT100 terminal
+    scope_refresh_term();
+
+    // Reset number of sample since last refresh
+    scope_reset_num_samples();
 }

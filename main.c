@@ -48,10 +48,8 @@ int main(void) {
             // refresh_count = 0;
         }
         if (refresh_term) {
-            scope_refresh_term();
-            // refresh_count += 1;
+            scope_refresh();
             refresh_term = FALSE;
-            scope_reset_num_samples();
         }
         led_off();
     }

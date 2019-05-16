@@ -10,6 +10,8 @@
 #ifndef ADC_H_
 #define ADC_H_
 
+#define ADC_INPUT_PIN P5_4
+
 #define AVG_LENGTH (4)
 #define MAX_READING_MV (3000)
 

@@ -23,8 +23,8 @@ inline void adc_init() {
     rgb_set(RGB_GREEN);
 
     // GPIO Setup
-    P5->SEL1 |= BIT4;  // Configure P5.4 for ADC
-    P5->SEL0 |= BIT4;
+    P5->SEL1 |= ADC_INPUT_PIN;  // Configure P5.4 for ADC
+    P5->SEL0 |= ADC_INPUT_PIN;
 
     // Sampling time, S&H=16, ADC14 on
     ADC14->CTL0 = ADC14_CTL0_SHT0_2 | ADC14_CTL0_SHP | ADC14_CTL0_ON;
