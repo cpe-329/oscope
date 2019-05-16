@@ -201,7 +201,7 @@ void print_bar(unsigned int val, unsigned int x, unsigned int y) {
         mes += VOLT_DIVISION;
         height++;
     }
-    if (height == 0){
+    if (val == 0){
         draw_horizontal(GRAPH_LENGTH, GRAPH_LEFT,GRAPH_BOTTOM, '-');
     }
     else{
