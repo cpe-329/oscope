@@ -102,9 +102,8 @@ unsigned int uart_get_int() {
 }
 
 void uart_write_volts(unsigned int val_mv) {
-    uart_write_int(val_mv / 1000);
+    uart_write_int(val_mv / 100);
     uart_write('.');
-    uart_write_int(val_mv % 1000 / 100);
     uart_write_int(val_mv % 100 / 10);
     uart_write_int(val_mv % 10);
     uart_write('V');
