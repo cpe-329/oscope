@@ -18,16 +18,17 @@
 #define INFO_Y_CORD 1
 #define HIST_TITLE_X 48
 #define HIST_TITLE_Y 1
+#define GRAPH_HEIGHT 19
+#define BAR 1
 #define DIVIDE_GRAPH 30
 #define VOLT_DIVISION 167
 #define GRAPH_LENGTH 40
 #define GRAPH_BOTTOM 20
 #define GRAPH_LEFT 32
-
+#define TIME_X_START 74
+#define TIME_Y 22
 void scope_refresh_term();
 void paint_terminal();
-void draw_vertical(unsigned int length, unsigned int x, unsigned int y,
-                   char c);
 void term_clear_screen();
 
 

@@ -76,27 +76,34 @@ void draw_horizontal(unsigned int length,
 void draw_vertical(unsigned int length,
                    unsigned int x,
                    unsigned int y,
-                   char c) {
+                   char c,
+                   int bar) {
     int i;
 
     move_cursor(x,y);
     for (i = 0; i < length; i++) {
         if (i ==0 || i == length-1){
-            uart_write('+');
+            if (bar){
+                uart_write(c);
+            }
+            else{
+                uart_write('+');
+            }
         }
         else{
             uart_write(c);
         }
-        y++;
+        y--;
         move_cursor(x,y);
     }
 }
+
 void print_border() {
     draw_horizontal(LENGTH-2,1,0, '=');
-    draw_vertical(WIDTH, LENGTH-1, 0, '|');
-    draw_vertical(WIDTH, 0, 0, '|');
+    draw_vertical(WIDTH, LENGTH-1, WIDTH-1, '|',0);
+    draw_vertical(WIDTH, 0, WIDTH-1, '|',0);
     draw_horizontal(LENGTH-2,1,WIDTH-1, '=');
-    draw_vertical(WIDTH, DIVIDE_GRAPH, 0, '|');
+    draw_vertical(WIDTH, DIVIDE_GRAPH, WIDTH-1, '|',0);
 }
 
 void print_info() {
@@ -142,7 +149,22 @@ void print_graph_title() {
     uart_write_string("HISTOGRAM", 9);
 }
 
-void print_time_divisions() {}
+void print_time_divisions() {
+    int times, time = 0, x = TIME_X_START;
+    move_cursor(x, TIME_Y);
+    if (scope_get_histogram_units() == 1){
+        uart_write_string("us", 2);
+    }
+    else{
+        uart_write_string("ms",2);
+    }
+    move_cursor(x-7, TIME_Y);
+    for (times = 0; times < 9; times++){
+        uart_write_int(time);
+        time+= scope_get_histogram_div();
+        move_cursor(x-7, TIME_Y);
+    }
+}
 
 void print_volt_divisions() {
     int volt_mes_y = HIST_TITLE_Y + 1;
@@ -165,14 +187,22 @@ void print_volt_divisions() {
         volts -= 500;
     }
 }
-
-void print_bar(unsigned int val, unsigned int x, unsigned int y) {
-    int mes = 0, count = 0;
-    while (mes < val) {
-        mes += VOLT_DIVISION;
-        count++;
+void clear_graph(){
+    int i;
+    for (i = 0; i < 19; i++){
+        draw_horizontal(GRAPH_LENGTH, GRAPH_LEFT, GRAPH_BOTTOM - i, ' ');
     }
-    draw_vertical(count, x, y, '|');
+}
+void print_bar(unsigned int val, unsigned int x, unsigned int y) {
+    int mes = 0, height = 0;
+    while (val > mes) {
+        mes += VOLT_DIVISION;
+        height++;
+    }
+    if(height == 0){
+        draw_horizontal(GRAPH_LENGTH, GRAPH_LEFT,GRAPH_BOTTOM, '-');
+    }
+    draw_vertical(height, x, y, '|', BAR);
 }
 
 void print_graph_border() {
@@ -180,14 +210,12 @@ void print_graph_border() {
     print_volt_divisions();
 }
 void print_DC_Graph() {
-    int height = 0, volts = 0;
+    int i;
     if (scope_get_mode() == SCOPE_MODE_DC) {
-        //print_time_divisions();
-        while (scope_get_dc_value() > volts) {
-            volts += VOLT_DIVISION;
-            height++;
+        clear_graph();
+        for(i=0; i < GRAPH_LENGTH;i++){
+            print_bar(scope_get_dc_value(), GRAPH_LEFT+i, GRAPH_BOTTOM);
         }
-        draw_horizontal(GRAPH_LENGTH,GRAPH_LEFT, GRAPH_BOTTOM - height, '-');
     }
 }
 void print_AC_Graph() {}
@@ -200,11 +228,12 @@ void scope_refresh_term() {
 }
 
 void paint_terminal() {
-    // term_clear_screen();
+    term_clear_screen();
     hide_cursor();
     print_border();
     print_info();
     print_graph_title();
     print_volt_divisions();
+    print_time_divisions();
     move_home();
 }
