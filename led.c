@@ -6,7 +6,7 @@
  * CPE 329-17/18 Spring 2019
  */
 
-#include "stdint.h"
+#include <stdint.h>
 #include "msp.h"
 #include "my_msp.h"
 #include "led.h"
@@ -39,7 +39,7 @@ void led_blink_ms(unsigned int ms){
 }
 
 // Setup RGB LED
-void rgb_init(void){
+inline void rgb_init(void){
     P1->SEL0 &= ~RGB_PINS;  // Set sel0 bits low for GPIO
     P1->SEL1 &= ~RGB_PINS;  // Set sel1 bits low for GPIO
     P2->DIR |= RGB_PINS;  // Set P2.0 - P2.2 to output mode
@@ -47,7 +47,7 @@ void rgb_init(void){
 }
 
 // Set 3 bits of RGB LED
-void rgb_set(int value){
+inline void rgb_set(int value){
     P2->OUT &= ~RGB_PINS;  // Clear previous RGB LED state
     P2->OUT |= (value & RGB_PINS);  // Set RGB LED state
 }
