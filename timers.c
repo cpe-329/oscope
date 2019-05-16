@@ -18,10 +18,10 @@
 #include "msp.h"
 #include "my_msp.h"
 
-#define REPAINT_DELAY 5000
+#define REPAINT_DELAY 2500
 
 volatile uint8_t led_flag = 1;
-static const uint8_t refresh_delay_delta = REPAINT_DELAY / 30;
+static const uint8_t refresh_delay_delta = REPAINT_DELAY / 10;
 
 void timer_init(void) {
     rgb_set(RGB_YELLOW);
