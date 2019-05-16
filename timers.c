@@ -18,7 +18,10 @@
 #include "msp.h"
 #include "my_msp.h"
 
+#define REPAINT_DELAY 5000
+
 volatile uint8_t led_flag = 1;
+static const uint8_t refresh_delay_delta = REPAINT_DELAY / 30;
 
 void timer_init(void) {
     rgb_set(RGB_YELLOW);
@@ -32,34 +35,26 @@ void timer_init(void) {
     TIMER_A0->CCTL[1] &= ~TIMER_A_CCTLN_CCIFG;  // clear interrupt
 
     TIMER_A0->CCTL[0] = TIMER_A_CCTLN_CCIE;  // TACCR0 interrupt enabled
-    // TIMER_A0->CCTL[1] = TIMER_A_CCTLN_CCIE;  // TACCR1 interrupt enabled
+    TIMER_A0->CCTL[1] = TIMER_A_CCTLN_CCIE;  // TACCR1 interrupt enabled
 
-    TIMER_A0->CCR[0] = 400;  // set CCR0 count
-    // TIMER_A0->CCR[1] = 1;    // set CCR1 count
+    TIMER_A0->CCR[0] = REPAINT_DELAY;  // set CCR0 count
+    TIMER_A0->CCR[1] = 1;              // set CCR1 count
 
     TIMER_A0->CTL = TIMER_A_CTL_TASSEL_1 |  // ACLK,
                     TIMER_A_CTL_MC_1;       // UP mode, count up to CCR[0]
 
     NVIC->ISER[0] = 1 << ((TA0_0_IRQn)&31);  // set NVIC interrupt
-    // NVIC->ISER[0] = 1 << ((TA0_N_IRQn)&31);  // TA0_0 and TA0_N
+    NVIC->ISER[0] = 1 << ((TA0_N_IRQn)&31);  // TA0_0 and TA0_N
 
     __enable_irq();  // Enable global interrupt
 
     rgb_set(RGB_OFF);
 }
-// Timer A0_0 interrupt service routine
 
-// //  Timer A0_N interrupt service routine for CCR1 - CCR4
-// void TA0_N_IRQHandler(void)
-// {
-// 	P2->OUT |= BIT1;
+inline void increment_refresh_delay() {
+    TIMER_A0->CCR[1] += refresh_delay_delta;  // increment CCR1 count
+}
 
-//     if(TIMER_A0->CCTL[1]&TIMER_A_CCTLN_CCIFG)   // check for CCR1 interrupt
-//     {
-//         TIMER_A0->CCTL[1] &= ~TIMER_A_CCTLN_CCIFG; // clear CCR1 interrupt
-
-//         led_flag = 0;
-//     }
-
-// 	P2->OUT &= ~BIT1;
-// }
+inline void reset_refresh_delay() {
+    TIMER_A0->CCR[1] = refresh_delay_delta;  // set CCR1 count
+}
