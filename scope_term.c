@@ -102,6 +102,9 @@ void print_border() {
 void print_info() {
     int y = INFO_Y_CORD;
     move_cursor(INFO_X_CORD, y);
+    uart_write_string("OSCILLOSCOPE", 12);
+    y+=2;
+    move_cursor(INFO_X_CORD, y);
     if (scope_get_mode() == SCOPE_MODE_AC) {
         uart_write_string("AC MODE", 7);
         y += 2;
@@ -180,11 +183,11 @@ void print_DC_Graph() {
     int height = 0, volts = 0;
     if (scope_get_mode() == SCOPE_MODE_DC) {
         //print_time_divisions();
-        while (scope_get_dc_value() < volts) {
+        while (scope_get_dc_value() > volts) {
             volts += VOLT_DIVISION;
             height++;
         }
-        draw_horizontal(GRAPH_LENGTH,GRAPH_LEFT, GRAPH_BOTTOM + height, '-');
+        draw_horizontal(GRAPH_LENGTH,GRAPH_LEFT, GRAPH_BOTTOM - height, '-');
     }
 }
 void print_AC_Graph() {}
