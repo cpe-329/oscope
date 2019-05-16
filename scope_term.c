@@ -10,26 +10,35 @@
 #include "scope_term.h"
 #include <stdint.h>
 #include "scope_data.h"
+#include "delay.h"
 #include "uart.h"
 
 void move_down(unsigned int val) {
-    unsigned char command[4] = {ESC, '[', val, 'B'};
-    uart_write_string(command, 4);
+    unsigned char command[2] = {ESC, '['};
+    uart_write_string(command, 2);
+    uart_write_int(val);
+    uart_write('B');
 }
 
 void move_up(unsigned int val) {
-    unsigned char command[4] = {ESC, '[', val, 'A'};
-    uart_write_string(command, 4);
+    unsigned char command[2] = {ESC, '['};
+    uart_write_string(command, 2);
+    uart_write_int(val);
+    uart_write('A');
 }
 
 void move_left(unsigned int val) {
-    unsigned char command[4] = {ESC, '[', val, 'D'};
-    uart_write_string(command, 4);
+    unsigned char command[2] = {ESC, '['};
+    uart_write_string(command, 2);
+    uart_write_int(val);
+    uart_write('D');
 }
 
 void move_right(unsigned int val) {
-    unsigned char command[4] = {ESC, '[', val, 'C'};
-    uart_write_string(command, 4);
+    unsigned char command[2] = {ESC, '['};
+    uart_write_string(command, 2);
+    uart_write_int(val);
+    uart_write('C');
 }
 
 void move_home() {
@@ -46,8 +55,6 @@ void move_cursor(unsigned int x, unsigned int y) {
     move_home();
     move_down(y);
     move_right(x);
-    //    unsigned char command[] = {ESC, '[', x, ';', y, 'H'};
-    //    uart_write_string(command, 6);
 }
 
 void draw_horizontal(unsigned int length, char c) {
@@ -62,21 +69,21 @@ void draw_vertical(unsigned int length,
                    unsigned int y,
                    char c) {
     int i;
-    move_cursor(x, y);
+
+    move_cursor(x,y);
     for (i = 0; i < length; i++) {
         uart_write(c);
         y++;
-        move_down(1);
-        move_left(1);
+        move_cursor(x,y);
     }
 }
 void print_border() {
     move_home();
     draw_horizontal(LENGTH, 'X');
-    draw_vertical(WIDTH, WIDTH, 0, 'X');
-    draw_vertical(WIDTH, 0, 0, 'X');
+    draw_vertical(WIDTH-2, LENGTH-1, 1, 'X');
+    draw_vertical(WIDTH-2, 0, 1, 'X');
     draw_horizontal(LENGTH, 'X');
-    draw_vertical(WIDTH - 2, 40, 1, 'X');
+    draw_vertical(WIDTH - 2, 30, 1, 'X');
 }
 
 void print_info() {
@@ -119,13 +126,18 @@ void print_time_divisions() {}
 
 void print_volt_divisions() {
     int volt_mes_y = HIST_TITLE_Y + 1;
-    int i, volts = 3000;
-    move_cursor(77, volt_mes_y);
-    for (i = 0; i < 20; i += 4) {
-        uart_write_int(volts - i * (VOLT_DIVISION * 4));
+    int i;
+    int volts = 3000;
+    move_cursor(75, volt_mes_y);
+    for (i = 0; i < 7; i++) {
+        uart_write_int(volts/1000);
+        if((volts/500) %2){
+            uart_write_string(".5", 2);
+        }
         uart_write('V');
-        volt_mes_y++;
-        move_cursor(77, volt_mes_y);
+        volt_mes_y+= 3;
+        move_cursor(75, volt_mes_y);
+        volts -= 500;
     }
 }
 
@@ -160,9 +172,11 @@ void scope_refresh_term() {
     clear_screen();
     print_border();
     print_info();
-    print_graph_border();
-    print_DC_Graph();
-    print_AC_Graph();
+    print_graph_title();
+    print_volt_divisions();
+    //print_graph_border();
+    //print_DC_Graph();
+    //print_AC_Graph();
 }
 
 void update_terminal() {

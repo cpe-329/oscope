@@ -15,8 +15,8 @@
 #define LENGTH 80
 /*home is (x = 0, y = 0)*/
 #define INFO_X_CORD 6
-#define INFO_Y_CORD 4
-#define HIST_TITLE_X 6
+#define INFO_Y_CORD 2
+#define HIST_TITLE_X 55
 #define HIST_TITLE_Y 1
 #define VOLT_DIVISION 157
 #define GRAPH_LENGTH 33

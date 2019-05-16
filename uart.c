@@ -68,7 +68,7 @@ void uart_write_string(unsigned char c[], unsigned int size) {
 }
 
 void uart_write_int(unsigned int acc) {
-  rgb_set(RGB_RED);
+
   if (acc >= 10) {
     uart_write_int(acc / 10);
   }
