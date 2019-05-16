@@ -62,8 +62,12 @@ void move_cursor(unsigned int x, unsigned int y) {
     move_right(x);
 }
 
-void draw_horizontal(unsigned int length, char c) {
+void draw_horizontal(unsigned int length,
+                     unsigned int x,
+                     unsigned int y,
+                     char c) {
     int i;
+    move_cursor(x,y);
     for (i = 0; i < length; i++) {
         uart_write(c);
     }
@@ -77,18 +81,22 @@ void draw_vertical(unsigned int length,
 
     move_cursor(x,y);
     for (i = 0; i < length; i++) {
-        uart_write(c);
+        if (i ==0 || i == length-1){
+            uart_write('+');
+        }
+        else{
+            uart_write(c);
+        }
         y++;
         move_cursor(x,y);
     }
 }
 void print_border() {
-    move_home();
-    draw_horizontal(LENGTH, '=');
-    draw_vertical(WIDTH-2, LENGTH-1, 1, '|');
-    draw_vertical(WIDTH-2, 0, 1, '|');
-    draw_horizontal(LENGTH, '=');
-    draw_vertical(WIDTH - 2, 30, 1, '|');
+    draw_horizontal(LENGTH-2,1,0, '=');
+    draw_vertical(WIDTH, LENGTH-1, 0, '|');
+    draw_vertical(WIDTH, 0, 0, '|');
+    draw_horizontal(LENGTH-2,1,WIDTH-1, '=');
+    draw_vertical(WIDTH, DIVIDE_GRAPH, 0, '|');
 }
 
 void print_info() {
@@ -108,14 +116,18 @@ void print_info() {
         move_cursor(INFO_X_CORD, y);
         uart_write_string("AC PERIOD: ", 11);
         uart_write_int(scope_get_ac_period());
+        y += 2;
+        move_cursor(INFO_X_CORD, y);
+        uart_write_string("DC OFFSET: ", 11);
+        uart_write_volts(scope_get_ac_dc_offset());
 
     } else {
         uart_write_string("DC MODE", 7);
+        y += 2;
+        move_cursor(INFO_X_CORD, y);
+        uart_write_string("DC OFFSET: ", 11);
+        uart_write_volts(scope_get_dc_value());
     }
-    y += 2;
-    move_cursor(INFO_X_CORD, y);
-    uart_write_string("DC OFFSET: ", 11);
-    uart_write_int(scope_get_ac_dc_offset());
     y += 2;
     move_cursor(INFO_X_CORD, y);
     uart_write_string("NUM SAMPLES: ", 13);
@@ -133,15 +145,20 @@ void print_volt_divisions() {
     int volt_mes_y = HIST_TITLE_Y + 1;
     int i;
     int volts = 3000;
-    move_cursor(75, volt_mes_y);
+    move_cursor(74, volt_mes_y);
     for (i = 0; i < 7; i++) {
         uart_write_int(volts/1000);
         if((volts/500) %2){
             uart_write_string(".5", 2);
+            uart_write('V');
+            volt_mes_y+= 3;
+            move_cursor(75, volt_mes_y);
         }
-        uart_write('V');
-        volt_mes_y+= 3;
-        move_cursor(75, volt_mes_y);
+        else{
+            uart_write('V');
+            volt_mes_y+= 3;
+            move_cursor(74, volt_mes_y);
+        }
         volts -= 500;
     }
 }
@@ -162,13 +179,12 @@ void print_graph_border() {
 void print_DC_Graph() {
     int height = 0, volts = 0;
     if (scope_get_mode() == SCOPE_MODE_DC) {
-        print_time_divisions();
+        //print_time_divisions();
         while (scope_get_dc_value() < volts) {
             volts += VOLT_DIVISION;
             height++;
         }
-        move_cursor(GRAPH_LEFT, GRAPH_BOTTOM + height);
-        draw_horizontal(GRAPH_LENGTH, '-');
+        draw_horizontal(GRAPH_LENGTH,GRAPH_LEFT, GRAPH_BOTTOM + height, '-');
     }
 }
 void print_AC_Graph() {}
