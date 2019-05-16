@@ -33,7 +33,7 @@ int main(void) {
     init(FREQ);
 
     adc_set_calibration(0, 16365);
-
+    paint_terminal();
     while (1) {
         //        for (j = 20; j > 0; j--){
         //            for (i = 20000; i > 0; i--);  // Delay

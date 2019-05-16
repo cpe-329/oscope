@@ -25,6 +25,7 @@
 #define GRAPH_LEFT 42
 
 void scope_refresh_term();
+void paint_terminal();
 void draw_vertical(unsigned int length, unsigned int x, unsigned int y,
                    char c);
 
