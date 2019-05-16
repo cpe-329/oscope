@@ -38,10 +38,10 @@ inline void led_off(void);
 void led_blink_ms(unsigned int ms);
 
 // Setup RGB LED
-void rgb_init(void);
+inline void rgb_init(void);
 
 // Set 3 bits of RGB LED
-void rgb_set(int value);
+inline void rgb_set(int value);
 
 // Blink all combinations of LEDs
 inline void test_leds();

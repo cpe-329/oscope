@@ -77,5 +77,6 @@
 
 // Initialize all used periphrials
 inline void init(const unsigned int freq);
+inline void init_all_pins();
 
 #endif
