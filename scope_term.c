@@ -46,6 +46,11 @@ void move_home() {
     uart_write_string(command, 3);
 }
 
+void hide_cursor(){
+    unsigned char command[4] = {ESC, '[', '8','m'};
+    uart_write_string(command,4);
+}
+
 void clear_screen() {
     unsigned char command[4] = {ESC, '[', '2', 'J'};
     uart_write_string(command, 4);
@@ -176,6 +181,7 @@ void scope_refresh_term() {
 
 void paint_terminal() {
     clear_screen();
+    hide_cursor();
     print_border();
     print_info();
     print_graph_title();
