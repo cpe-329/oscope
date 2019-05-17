@@ -31,7 +31,7 @@ inline void led_off(void) {
     P1->OUT &= ~LED1_PIN;
 }
 inline void led_val(uint8_t val) {
-    if (val) {
+    if (val != 0) {
         led_on();
     } else {
         led_off();

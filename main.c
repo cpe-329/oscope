@@ -11,11 +11,11 @@
 #include "msp.h"
 
 #include "adc.h"
+#include "button.h"
 #include "delay.h"
 #include "led.h"
 #include "my_msp.h"
 #include "scope_data.h"
-#include "button.h"
 #include "scope_term.h"
 #include "spi.h"
 #include "timers.h"
@@ -34,7 +34,7 @@ uint8_t repaint_term = TRUE;
 int main(void) {
     init(FREQ);
 
-    adc_set_calibration(ADC_CALI_MIN,ADC_CALI_MAX);
+    adc_set_calibration(ADC_CALI_MIN, ADC_CALI_MAX);
     term_clear_screen();
     paint_terminal();
 
@@ -43,28 +43,23 @@ int main(void) {
         scope_read_data();
 
         // Check button to switch mode
-        if (button_get()) {
-            led_on();
+        if (button_get() != 0) {
             scope_switch_mode();
             repaint_term = TRUE;
-            delay_ms(100, FREQ);
-            led_off();
+            // delay_ms(100, FREQ);
         }
 
         // Repaint entire term only if needed
-        if (repaint_term) {  //| (refresh_count > 120)) {
+        if (repaint_term) { 
             paint_terminal();
             repaint_term = FALSE;
+            refresh_term = FALSE;
             // refresh_count = 0;
-        }
-
-        // led_on();
-        // Refresh data displayed in term
-        if (refresh_term) {
+        } else if (refresh_term) {
+            // Refresh data displayed in term
             scope_refresh();
             refresh_term = FALSE;
         }
-        // led_off();
     }
 }
 

@@ -9,9 +9,9 @@
 
 #include "button.h"
 #include <stdint.h>
+#include "led.h"
 #include "msp.h"
 #include "my_msp.h"
-#include "led.h"
 
 static uint8_t button_val = 0;
 
@@ -25,22 +25,26 @@ inline void button_init() {
 
     // button_val = P1->IN & BUTTON_PIN;
 
-
+    P1->SEL0 &= ~MANUAL_PIN;
     P1->SEL1 &= ~MANUAL_PIN;
 
     P1->DIR &= ~MANUAL_PIN;
     P1->REN |= MANUAL_PIN;
-    P1->OUT |= MANUAL_PIN;
+    P1->OUT &= ~MANUAL_PIN;
 
     button_val = P1->IN & MANUAL_PIN;
 }
 
 inline uint8_t button_get() {
     uint8_t released;
-    uint8_t new_val = P1->IN & MANUAL_PIN;
-    released = (button_val == 0) && (new_val > 0);
+    uint8_t new_val = (P1->IN & MANUAL_PIN) != 0;
+    released = (button_val == 0) && (new_val != 0);
     button_val = new_val;
-  
-    // return released;
-    return new_val;
+    if (new_val != 0) {
+        led_on();
+    } else {
+        led_off();
+    }
+    return released;
+    // return new_val;
 }
