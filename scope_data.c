@@ -89,7 +89,7 @@ inline void scope_reset_num_samples() {
 }
 
 inline void scope_reset_num_peaks() {
-    ac_freq = num_peaks / REPAINT_PERIOD;
+    ac_freq = num_peaks; // REPAINT_PERIOD;
     num_peaks = 0;
 }
 
