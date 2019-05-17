@@ -69,7 +69,7 @@ int main(void) {
         } else if (refresh_term) {
             // Refresh data displayed in term
             scope_refresh_data();
-
+            P2->OUT ^= RGB_GREEN;
             // Refresh UART VT100 terminal
             scope_refresh_term();
 
@@ -95,8 +95,7 @@ void TA0_0_IRQHandler(void) {
 void TA0_N_IRQHandler(void) {
     if (TIMER_A0->CCTL[1] & TIMER_A_CCTLN_CCIFG)  // check for CCR1 interrupt
     {
-        // rgb_set(RGB_GREEN);
-        P2->OUT ^= RGB_GREEN;
+        //rgb_set(RGB_GREEN);
         TIMER_A0->CCTL[1] &= ~TIMER_A_CCTLN_CCIFG;  // clear CCR1 interrupt
         increment_refresh_delay();
         // Action for ccr1 intr
