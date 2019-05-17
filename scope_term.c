@@ -142,6 +142,13 @@ void print_info() {
     move_cursor(INFO_X_CORD, y);
     uart_write_string("NUM SAMPLES: ", 13);
     uart_write_int(scope_get_num_samples());
+    if (scope_get_mode() == SCOPE_MODE_DC){
+        for (i = 0; i < 3; i++){
+            y += 2;
+            move_cursor(INFO_X_CORD, y);
+            uart_write_string("             ", 13);
+        }
+    }
 }
 
 void print_graph_title() {
