@@ -146,7 +146,7 @@ void scope_read_data() {
         case SCOPE_MODE_AC:
             // AC Mode
             ac_pkpk = adc_map_val(min_val + (ac_pkpk >> 2));
-            ac_dc_offset = adc_map_val(max_val - min_val);
+            ac_dc_offset = adc_map_val((max_val - min_val)/2);
 
             count_peaks(avg_val);
             // TODO:
