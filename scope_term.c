@@ -9,8 +9,8 @@
 
 #include "scope_term.h"
 #include <stdint.h>
-#include "scope_data.h"
 #include "delay.h"
+#include "scope_data.h"
 #include "uart.h"
 
 void move_down(unsigned int val) {
@@ -46,9 +46,9 @@ void move_home() {
     uart_write_string(command, 3);
 }
 
-void hide_cursor(){
-    unsigned char command[4] = {ESC, '[', '8','m'};
-    uart_write_string(command,4);
+void hide_cursor() {
+    unsigned char command[4] = {ESC, '[', '8', 'm'};
+    uart_write_string(command, 4);
 }
 
 void term_clear_screen() {
@@ -67,7 +67,7 @@ void draw_horizontal(unsigned int length,
                      unsigned int y,
                      char c) {
     int i;
-    move_cursor(x,y);
+    move_cursor(x, y);
     for (i = 0; i < length; i++) {
         uart_write(c);
     }
@@ -80,37 +80,35 @@ void draw_vertical(unsigned int length,
                    int bar) {
     int i;
 
-    move_cursor(x,y);
+    move_cursor(x, y);
     for (i = 0; i < length; i++) {
-        if (i ==0 || i == length-1){
-            if (bar){
+        if (i == 0 || i == length - 1) {
+            if (bar) {
                 uart_write(c);
-            }
-            else{
+            } else {
                 uart_write('+');
             }
-        }
-        else{
+        } else {
             uart_write(c);
         }
         y--;
-        move_cursor(x,y);
+        move_cursor(x, y);
     }
 }
 
 void print_border() {
-    draw_horizontal(LENGTH-2,1,0, '=');
-    draw_horizontal(LENGTH-2,1,WIDTH-1, '=');
-    draw_vertical(WIDTH, LENGTH-1, WIDTH-1, '|',0);
-    draw_vertical(WIDTH, 0, WIDTH-1, '|',0);
-    draw_vertical(WIDTH, DIVIDE_GRAPH, WIDTH-1, '|',0);
+    draw_horizontal(LENGTH - 2, 1, 0, '=');
+    draw_horizontal(LENGTH - 2, 1, WIDTH - 1, '=');
+    draw_vertical(WIDTH, LENGTH - 1, WIDTH - 1, '|', 0);
+    draw_vertical(WIDTH, 0, WIDTH - 1, '|', 0);
+    draw_vertical(WIDTH, DIVIDE_GRAPH, WIDTH - 1, '|', 0);
 }
 
 void print_info() {
-    int i,y = INFO_Y_CORD;
+    int i, y = INFO_Y_CORD;
     move_cursor(INFO_X_CORD, y);
     uart_write_string("OSCILLOSCOPE", 12);
-    y+=2;
+    y += 2;
     move_cursor(INFO_X_CORD, y);
     if (scope_get_mode() == SCOPE_MODE_AC) {
         uart_write_string("AC MODE", 7);
@@ -118,12 +116,12 @@ void print_info() {
         move_cursor(INFO_X_CORD, y);
         uart_write_string("AC PKPK: ", 9);
         uart_write_int(scope_get_ac_pkpk());
-        uart_write_string("    ", 4);
+        uart_write_string("      ", 6);
         y += 2;
         move_cursor(INFO_X_CORD, y);
         uart_write_string("AC FREQ: ", 9);
         uart_write_int(scope_get_ac_freq());
-        uart_write_string("    ", 4);
+        uart_write_string("       ", 7);
         y += 2;
         move_cursor(INFO_X_CORD, y);
         uart_write_string("AC PERIOD: ", 11);
@@ -146,8 +144,8 @@ void print_info() {
     move_cursor(INFO_X_CORD, y);
     uart_write_string("NUM SAMPLES: ", 13);
     uart_write_int(scope_get_num_samples());
-    if (scope_get_mode() == SCOPE_MODE_DC){
-        for (i = 0; i < 3; i++){
+    if (scope_get_mode() == SCOPE_MODE_DC) {
+        for (i = 0; i < 3; i++) {
             y += 2;
             move_cursor(INFO_X_CORD, y);
             uart_write_string("                 ", 17);
@@ -163,17 +161,16 @@ void print_graph_title() {
 void print_time_divisions() {
     int times, time = 0, x = TIME_X_START;
     move_cursor(x, TIME_Y);
-    if (scope_get_histogram_units() == 1){
+    if (scope_get_histogram_units() == 1) {
         uart_write_string("us", 2);
+    } else {
+        uart_write_string("ms", 2);
     }
-    else{
-        uart_write_string("ms",2);
-    }
-    x-=5;
+    x -= 5;
     move_cursor(x, TIME_Y);
-    for (times = 0; times < 8; times++){
+    for (times = 0; times < HISTOGRAM_SIZE; times++) {
         uart_write_int(time);
-        time+= scope_get_histogram_div();
+        time += scope_get_histogram_div();
         x -= 5;
         move_cursor(x, TIME_Y);
     }
@@ -186,7 +183,7 @@ void print_volt_divisions() {
     move_cursor(74, volt_mes_y);
     for (i = 0; i < 7; i++) {
         uart_write_volts(volts);
-        volt_mes_y+= 3;
+        volt_mes_y += 3;
         move_cursor(74, volt_mes_y);
         volts -= 55;
     }
@@ -198,13 +195,12 @@ void print_bar(unsigned int val, unsigned int x, unsigned int y) {
         mes += VOLT_DIVISION;
         height++;
     }
-    if (val < VOLT_DIVISION){
+    if (val < VOLT_DIVISION) {
         draw_vertical(1, x, y, '-', BAR);
-        draw_vertical(GRAPH_HEIGHT-1, x, y-1, ' ', BAR);
-    }
-    else{
+        draw_vertical(GRAPH_HEIGHT - 1, x, y - 1, ' ', BAR);
+    } else {
         draw_vertical(height, x, y, '|', BAR);
-        draw_vertical(GRAPH_HEIGHT-height, x, y-height, ' ', BAR);
+        draw_vertical(GRAPH_HEIGHT - height, x, y - height, ' ', BAR);
     }
 }
 
@@ -212,37 +208,39 @@ void print_graph_border() {
     print_graph_title();
     print_volt_divisions();
 }
-void print_DC_Graph() {
-    int i;
-    if (scope_get_mode() == SCOPE_MODE_DC) {
-        for(i=8; i >= 1; i--){
-            print_bar(scope_get_dc_value(), GRAPH_LEFT + i*5, GRAPH_BOTTOM);
-        }
+// void print_DC_Graph() {
+//     int i;
+//     if (scope_get_mode() == SCOPE_MODE_DC) {
+//         for(i=HISTOGRAM_SIZE; i >= 1; i--){
+//             print_bar(scope_get_histogram(i), GRAPH_LEFT + i*5,
+//             GRAPH_BOTTOM);
+//         }
 
-    }
-}
-void print_AC_Graph() {
+//     }
+// }
+void print_Graph() {
     int i;
-    if (scope_get_mode() == SCOPE_MODE_AC){
-        for(i=0; i < 8; i++){
-            print_bar(scope_get_histogram(i), GRAPH_LEFT+(8-i)*5, GRAPH_BOTTOM);
-        }
+    // if (scope_get_mode() == SCOPE_MODE_AC){
+    for (i = 0; i < HISTOGRAM_SIZE; i++) {
+        print_bar(scope_get_histogram(i), GRAPH_LEFT + (HISTOGRAM_SIZE - i) * 5,
+                  GRAPH_BOTTOM);
     }
+    // }
 }
 
 void scope_refresh_term() {
     hide_cursor();
-    if (scope_get_mode() == SCOPE_MODE_AC){
-    print_AC_Graph();
-    }
-    else{
-    print_DC_Graph();
-    }
+    // if (scope_get_mode() == SCOPE_MODE_AC){
+    print_Graph();
+    // }
+    // else{
+    // print_DC_Graph();
+    // }
     print_info();
 }
 
 void paint_terminal() {
-    //term_clear_screen();
+    // term_clear_screen();
     hide_cursor();
     print_border();
     print_info();
