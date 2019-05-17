@@ -11,6 +11,7 @@
 #define SCOPE_DATA_H_
 
 #include <stdint.h>
+
 #define SCOPE_MODE_AC (0)
 #define SCOPE_MODE_DC (1)
 
@@ -27,7 +28,6 @@ inline unsigned int scope_get_histogram(uint8_t i);
 inline unsigned int scope_get_histogram_div();
 inline uint8_t scope_get_histogram_units();
 inline unsigned int scope_get_num_samples();
-
 
 // Internal functions
 inline void scope_reset_num_samples();

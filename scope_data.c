@@ -140,11 +140,13 @@ void scope_read_data() {
     // For either scope mode
     switch (scope_mode) {
         case SCOPE_MODE_DC:
+            // DC MODE
             dc_value = adc_map_val(avg_val);
             break;
         case SCOPE_MODE_AC:
-            ac_pkpk = max_val - min_val;
-            ac_dc_offset = min_val + (ac_pkpk >> 2);
+            // AC Mode
+            ac_pkpk = adc_map_val(min_val + (ac_pkpk >> 2));
+            ac_dc_offset = adc_map_val(max_val - min_val);
 
             count_peaks(avg_val);
             // TODO:
