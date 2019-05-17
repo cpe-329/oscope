@@ -107,7 +107,7 @@ void print_border() {
 }
 
 void print_info() {
-    int y = INFO_Y_CORD;
+    int i,y = INFO_Y_CORD;
     move_cursor(INFO_X_CORD, y);
     uart_write_string("OSCILLOSCOPE", 12);
     y+=2;
@@ -146,7 +146,7 @@ void print_info() {
         for (i = 0; i < 3; i++){
             y += 2;
             move_cursor(INFO_X_CORD, y);
-            uart_write_string("             ", 13);
+            uart_write_string("                 ", 17);
         }
     }
 }
