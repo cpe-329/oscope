@@ -28,6 +28,9 @@ inline uint8_t scope_get_histogram_units();
 inline unsigned int scope_get_num_samples();
 inline void scope_reset_num_samples();
 inline void scope_update_histogram();
+
+// Main functions for scope
+inline void scope_switch_mode();
 void scope_read_data();
 inline void scope_refresh();
 

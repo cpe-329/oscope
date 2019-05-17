@@ -91,6 +91,16 @@ inline void scope_update_histogram() {
     histogram[0] = dc_value;
 }
 
+inline void scope_switch_mode() {
+    switch (scope_mode) {
+        case SCOPE_MODE_DC:
+            scope_mode = SCOPE_MODE_AC;
+            break;
+        default:
+            scope_mode = SCOPE_MODE_DC;
+    }
+}
+
 void scope_read_data() {
     unsigned int avg_val = 0;
     // Read in new data

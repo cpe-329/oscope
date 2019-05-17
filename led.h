@@ -11,6 +11,7 @@
 
 #include "msp.h"
 #include "my_msp.h"
+#include <stdint.h>
 
 #define LED1_PIN P1_0
 
@@ -35,6 +36,7 @@ inline void led_init(void);
 inline void led_toggle(void);
 inline void led_on(void);
 inline void led_off(void);
+inline void led_val(uint8_t val);
 void led_blink_ms(unsigned int ms);
 
 // Setup RGB LED

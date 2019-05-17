@@ -15,6 +15,7 @@
 #include "led.h"
 #include "my_msp.h"
 #include "scope_data.h"
+#include "button.h"
 #include "scope_term.h"
 #include "spi.h"
 #include "timers.h"
@@ -41,7 +42,11 @@ int main(void) {
     while (1) {
         scope_read_data();
 
-        led_on();
+        // Check button to switch mode
+        if (button_get()) {
+            scope_switch_mode();
+        }
+
         if (repaint_term) {  //| (refresh_count > 120)) {
             paint_terminal();
             repaint_term = FALSE;

@@ -19,6 +19,7 @@
 #include "spi.h"
 #include "timers.h"
 #include "uart.h"
+#include "button.h"
 
 inline void init(const unsigned int freq) {
     DISABLE_WATCHDOG
@@ -30,6 +31,8 @@ inline void init(const unsigned int freq) {
 
     led_init();
     rgb_init();
+
+    button_init();
 
     timer_init();
 
