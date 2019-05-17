@@ -50,14 +50,28 @@ int main(void) {
         }
 
         // Repaint entire term only if needed
-        if (repaint_term) { 
+        if (repaint_term) {
+            // Update histogram data
+            scope_update_histogram();
+
+            // Repaint UART VT100 terminal
             paint_terminal();
+
+            // Reset number of sample since last refresh
+            scope_reset_num_samples();
             repaint_term = FALSE;
             refresh_term = FALSE;
-            // refresh_count = 0;
         } else if (refresh_term) {
             // Refresh data displayed in term
-            scope_refresh();
+
+            // Update histogram data
+            scope_update_histogram();
+
+            // Refresh UART VT100 terminal
+            scope_refresh_term();
+
+            // Reset number of sample since last refresh
+            scope_reset_num_samples();
             refresh_term = FALSE;
         }
     }

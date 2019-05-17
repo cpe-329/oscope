@@ -160,14 +160,3 @@ void scope_read_data() {
     }
     adc_start_conversion();
 }
-
-inline void scope_refresh() {
-    // Update histogram data
-    scope_update_histogram();
-
-    // Refresh UART VT100 terminal
-    scope_refresh_term();
-
-    // Reset number of sample since last refresh
-    scope_reset_num_samples();
-}
