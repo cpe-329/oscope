@@ -104,7 +104,53 @@ void print_border() {
     draw_vertical(WIDTH, DIVIDE_GRAPH, WIDTH - 1, '|', 0);
 }
 
-void print_info() {
+void print_info_text() {
+    int i, y = INFO_Y_CORD  + 2;
+    move_cursor(INFO_X_CORD, y);
+    if (scope_get_mode() == SCOPE_MODE_AC) {
+        uart_write_string("AC MODE", 7);
+        y += 2;
+        move_cursor(INFO_X_CORD, y);
+        uart_write_string("AC PKPK: ", 9);
+        uart_write_volts(scope_get_ac_pkpk());
+        uart_write_string("  ", 2);
+        y += 2;
+        move_cursor(INFO_X_CORD, y);
+        uart_write_string("AC FREQ: ", 9);
+        uart_write_int(scope_get_ac_freq());
+        uart_write_string("        ", 8);
+        y += 2;
+        move_cursor(INFO_X_CORD, y);
+        uart_write_string("AC PERIOD: ", 11);
+        uart_write_int(scope_get_ac_period());
+        uart_write_string("ms   ", 5);
+        y += 2;
+        move_cursor(INFO_X_CORD, y);
+        uart_write_string("DC OFFSET: ", 11);
+        uart_write_volts(scope_get_ac_dc_offset());
+
+    } else {
+        uart_write_string("DC MODE", 7);
+        y += 2;
+        move_cursor(INFO_X_CORD, y);
+        uart_write_string("DC OFFSET: ", 11);
+        uart_write_volts(scope_get_dc_value());
+    }
+    y += 2;
+    move_cursor(INFO_X_CORD, y);
+    uart_write_string("NUM SAMPLES: ", 13);
+    uart_write_int(scope_get_num_samples());
+    uart_write_string("    ", 4);
+    if (scope_get_mode() == SCOPE_MODE_DC) {
+        for (i = 0; i < 3; i++) {
+            y += 2;
+            move_cursor(INFO_X_CORD, y);
+            uart_write_string("                  ", 18);
+        }
+    }
+}
+
+void print_info_values() {
     int i, y = INFO_Y_CORD  + 2;
     move_cursor(INFO_X_CORD, y);
     if (scope_get_mode() == SCOPE_MODE_AC) {
@@ -219,14 +265,14 @@ void print_Graph() {
 void scope_refresh_term() {
     hide_cursor();
     print_Graph();
-    print_info();
+    print_info_values();
 }
 
 void paint_terminal() {
     // term_clear_screen();
     hide_cursor();
     print_border();
-    print_info();
+    print_info_text();
     print_graph_title();
     print_volt_divisions();
     print_time_divisions();

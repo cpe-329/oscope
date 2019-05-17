@@ -13,7 +13,7 @@
 #include "msp.h"
 #include "my_msp.h"
 
-static uint8_t button_val = 0;
+volatile static uint8_t button_val = 0;
 
 inline void button_init() {
     // P1->SEL0 &= ~BUTTON_PIN;
@@ -46,5 +46,4 @@ inline uint8_t button_get() {
         led_off();
     }
     return released;
-    // return new_val;
 }
