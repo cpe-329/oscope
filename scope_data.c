@@ -17,7 +17,7 @@
 
 static uint8_t scope_mode = SCOPE_MODE_DC;
 static unsigned int dc_value = 0;
-// static unsigned int ac_dc_offset = 0;
+static unsigned int ac_dc_offset = 0;
 static unsigned int ac_pkpk = 0;
 static unsigned int ac_freq = 0;
 static unsigned int ac_period = 0;
@@ -45,7 +45,7 @@ inline unsigned int scope_get_dc_value() {
 // AC Mode data
 inline unsigned int scope_get_ac_dc_offset() {
     // mV from 0 to 3000
-    return dc_value;
+    return ac_dc_offset;
 }
 
 inline unsigned int scope_get_ac_pkpk() {
@@ -145,27 +145,18 @@ void scope_read_data() {
     } else if (avg_val < min_val) {
         min_val = avg_val;
     }
-
+    // DC MODE
+    dc_value = adc_map_val(avg_val);
     // For either scope mode
-    switch (scope_mode) {
-        case SCOPE_MODE_DC:
-            // DC MODE
-            dc_value = adc_map_val(avg_val);
-            break;
-        case SCOPE_MODE_AC:
+    if(scope_mode == SCOPE_MODE_AC){
             // AC Mode
             ac_pkpk = adc_map_val(max_val - min_val);
-            dc_value = ac_pkpk >> 1;
+            ac_dc_offset = ac_pkpk >> 1;
             peak_delta = ac_pkpk >> 3;
             count_peaks(avg_val);
             // TODO:
             // ac_freq = num_peaks;  // / SAMPLE_TIME;
             ac_period = 1 / (1000 * ac_freq);
-            break;
-        default:
-            rgb_set(RGB_PURPLE);
-            delay_ms_auto(10000);
-            rgb_set(RGB_OFF);
     }
     adc_start_conversion();
 }
