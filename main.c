@@ -51,8 +51,7 @@ int main(void) {
 
         // Repaint entire term only if needed
         if (repaint_term) {
-            // Update histogram data
-            scope_update_histogram();
+            scope_refresh_data();
 
             // Repaint UART VT100 terminal
             paint_terminal();
@@ -65,9 +64,7 @@ int main(void) {
             refresh_term = FALSE;
         } else if (refresh_term) {
             // Refresh data displayed in term
-
-            // Update histogram data
-            scope_update_histogram();
+            scope_refresh_data();
 
             // Refresh UART VT100 terminal
             scope_refresh_term();
@@ -86,7 +83,6 @@ void TA0_0_IRQHandler(void) {
     reset_refresh_delay();
     repaint_term = TRUE;
     refresh_term = TRUE;
-    delay_ms(100, FREQ);
     rgb_set(RGB_OFF);
 }
 

@@ -115,7 +115,7 @@ inline void count_peaks(unsigned int val) {
 
 inline void scope_update_histogram() {
     int i;
-    for (i = HISTOGRAM_SIZE -1; i > 0; i -= 1) {
+    for (i = HISTOGRAM_SIZE - 1; i > 0; i -= 1) {
         histogram[i] = histogram[i - 1];
     }
     histogram[0] = dc_value;
@@ -145,18 +145,27 @@ void scope_read_data() {
     } else if (avg_val < min_val) {
         min_val = avg_val;
     }
+    count_peaks(avg_val);
+    
+    adc_start_conversion();
+}
+
+void scope_refresh_data() {
+    unsigned int avg_val = adc_get_avg();
+
+    // Update histogram data
+    scope_update_histogram();
+
     // DC MODE
     dc_value = adc_map_val(avg_val);
-    // For either scope mode
-    if(scope_mode == SCOPE_MODE_AC){
-            // AC Mode
-            ac_pkpk = adc_map_val(max_val - min_val);
-            ac_dc_offset = ac_pkpk >> 1;
-            peak_delta = ac_pkpk >> 3;
-            count_peaks(avg_val);
-            // TODO:
-            // ac_freq = num_peaks;  // / SAMPLE_TIME;
-            ac_period = 1 / (1000 * ac_freq);
+
+    // AC Mode
+    if (scope_mode == SCOPE_MODE_AC) {
+        // AC Mode
+        ac_pkpk = adc_map_val(max_val - min_val);
+        ac_dc_offset = ac_pkpk >> 1;
+        peak_delta = ac_pkpk >> 3;
+
+        ac_period = 1 / (1000 * ac_freq);
     }
-    adc_start_conversion();
 }
