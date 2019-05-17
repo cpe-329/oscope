@@ -142,6 +142,7 @@ void print_info() {
     move_cursor(INFO_X_CORD, y);
     uart_write_string("NUM SAMPLES: ", 13);
     uart_write_int(scope_get_num_samples());
+    uart_write_string("    ",4);
     if (scope_get_mode() == SCOPE_MODE_DC) {
         for (i = 0; i < 3; i++) {
             y += 2;
@@ -206,34 +207,18 @@ void print_graph_border() {
     print_graph_title();
     print_volt_divisions();
 }
-// void print_DC_Graph() {
-//     int i;
-//     if (scope_get_mode() == SCOPE_MODE_DC) {
-//         for(i=HISTOGRAM_SIZE; i >= 1; i--){
-//             print_bar(scope_get_histogram(i), GRAPH_LEFT + i*5,
-//             GRAPH_BOTTOM);
-//         }
 
-//     }
-// }
 void print_Graph() {
     int i;
-    // if (scope_get_mode() == SCOPE_MODE_AC){
     for (i = 0; i < HISTOGRAM_SIZE; i++) {
         print_bar(scope_get_histogram(i), GRAPH_LEFT + (HISTOGRAM_SIZE - i) * 5,
                   GRAPH_BOTTOM);
     }
-    // }
 }
 
 void scope_refresh_term() {
     hide_cursor();
-    // if (scope_get_mode() == SCOPE_MODE_AC){
     print_Graph();
-    // }
-    // else{
-    // print_DC_Graph();
-    // }
     print_info();
 }
 
