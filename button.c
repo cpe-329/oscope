@@ -30,7 +30,7 @@ inline void button_init() {
 
     P1->DIR &= ~MANUAL_PIN;
     P1->REN |= MANUAL_PIN;
-    P1->OUT &= ~MANUAL_PIN;
+    P1->OUT |= MANUAL_PIN;
 
     button_val = P1->IN & MANUAL_PIN;
 }
