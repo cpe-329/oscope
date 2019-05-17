@@ -141,7 +141,7 @@ void print_info_text() {
 }
 
 void print_info_values() {
-    int i, y = INFO_Y_CORD + 2;
+    int y = INFO_Y_CORD + 2;
     move_cursor(INFO_X_CORD, y);
     if (scope_get_mode() == SCOPE_MODE_AC) {
         y += 2;

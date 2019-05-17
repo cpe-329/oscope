@@ -30,7 +30,7 @@ volatile uint8_t got_fresh_char;
 // Whether to refresh terminal view
 volatile uint8_t refresh_term = FALSE;
 volatile uint8_t repaint_term = TRUE;
-volatile uint8_t calculate_data = ;
+volatile uint8_t calculate_data = FALSE;
 
 int main(void) {
     init(FREQ);
@@ -43,11 +43,7 @@ int main(void) {
         // Read data from scope
         scope_read_data();
 
-        if (calculate_data) {
-            scope_reset_min_max();
-            scope_reset_num_peaks();
-            calculate_data = FALSE;
-        }
+
         // Check button to switch mode
         if (button_get() != 0) {
             scope_switch_mode();
@@ -68,14 +64,23 @@ int main(void) {
             refresh_term = FALSE;
         } else if (refresh_term) {
             // Refresh data displayed in term
+
+            rgb_set(RGB_RED);
             scope_refresh_data();
-            P2->OUT ^= RGB_GREEN;
+            rgb_set(RGB_GREEN);
             // Refresh UART VT100 terminal
             scope_refresh_term();
+            rgb_set(RGB_OFF);
 
             // Reset number of sample since last refresh
             scope_reset_num_samples();
             refresh_term = FALSE;
+        }
+
+        if (calculate_data) {
+            scope_reset_min_max();
+            scope_reset_num_peaks();
+            calculate_data = FALSE;
         }
     }
 }
@@ -83,7 +88,7 @@ int main(void) {
 // Timer A0_0 interrupt service routine
 void TA0_0_IRQHandler(void) {
     //    rgb_set(RGB_RED);
-    P2->OUT ^= RGB_RED;
+    //P2->OUT ^= RGB_RED;
     TIMER_A0->CCTL[0] &= ~TIMER_A_CCTLN_CCIFG;  // Clear the CCR0 interrupt
     reset_refresh_delay();
     calculate_data = TRUE;
