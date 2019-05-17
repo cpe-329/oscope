@@ -19,16 +19,16 @@
 #include "my_msp.h"
 
 #define REPAINT_DELAY (4000)
-#define REFRESH_DELAY_DELTA (200)
+#define REFRESH_DELAY_DELTA (50)
 // volatile uint8_t led_flag = 1;
 // static const uint8_t refresh_delay_delta = ;
 
 void timer_init(void) {
     rgb_set(RGB_YELLOW);
 
-    P4->SEL0 |= P4_3;
-    P4->SEL1 &= ~P4_3;
-    P4->DIR |= P4_3;
+    // P4->SEL0 |= P4_3;
+    // P4->SEL1 &= ~P4_3;
+    // P4->DIR |= P4_3;
 
     // setup TIMER_A0
     TIMER_A0->CCTL[0] &= ~TIMER_A_CCTLN_CCIFG;  // clear interrupt
