@@ -16,20 +16,36 @@
 static uint8_t button_val = 0;
 
 inline void button_init() {
-    P1->SEL0 &= ~BUTTON_PIN;
-    P1->SEL1 &= ~BUTTON_PIN;
+    // P1->SEL0 &= ~BUTTON_PIN;
+    // P1->SEL1 &= ~BUTTON_PIN;
 
-    P1->DIR &= ~BUTTON_PIN;
-    P1->REN |= BUTTON_PIN;
+    // P1->DIR &= ~BUTTON_PIN;
+    // P1->REN |= BUTTON_PIN;
+    // P1->OUT &= ~BUTTON_PIN;
 
-    button_val = P1->IN & BUTTON_PIN;
+    // button_val = P1->IN & BUTTON_PIN;
+
+
+    P1->SEL1 &= ~MANUAL_PIN;
+
+    P1->DIR &= ~MANUAL_PIN;
+    P1->REN |= MANUAL_PIN;
+    P1->OUT &= ~MANUAL_PIN;
+
+    button_val = P1->IN & MANUAL_PIN;
 }
 
 inline uint8_t button_get() {
-    uint8_t result;
-    uint8_t new_val = P1->IN & BUTTON_PIN;
-    result = (~button_val) && new_val;
+    uint8_t released;
+    uint8_t new_val = P1->IN & MANUAL_PIN;
+    released = (button_val == 0) && (new_val > 0);
     button_val = new_val;
-    led_val(new_val);
-    return result;
+    if (new_val > 0) {
+        led_on();
+    }
+    else{
+        led_off();
+    }
+    // return released;
+    return new_val;
 }

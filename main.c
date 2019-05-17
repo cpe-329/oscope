@@ -45,6 +45,7 @@ int main(void) {
         // Check button to switch mode
         if (button_get()) {
             scope_switch_mode();
+            repaint_term = TRUE;
         }
 
         // Repaint entire term only if needed
