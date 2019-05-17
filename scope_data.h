@@ -14,8 +14,9 @@
 #define SCOPE_MODE_AC (0)
 #define SCOPE_MODE_DC (1)
 
-#define HISTOGRAM_SIZE (9)
+#define HISTOGRAM_SIZE (8)
 
+// Data accessors
 inline uint8_t scope_get_mode();
 inline unsigned int scope_get_dc_value();
 inline unsigned int scope_get_ac_dc_offset();
