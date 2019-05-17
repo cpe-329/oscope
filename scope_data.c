@@ -71,12 +71,12 @@ inline unsigned int scope_get_histogram(uint8_t i) {
 inline unsigned int scope_get_histogram_div() {
     // ms or us from 1 to 999
     // assert(histogram_div * 9 <= 1000)
-    return 13;  // histogram_div;
+    return 50;  // histogram_div;
 }
 
 inline uint8_t scope_get_histogram_units() {
     // 0 for ms, 1 for us
-    return 1;  // histogram_units;
+    return 0;  // histogram_units;
 }
 
 // Number of samples taken since last term refresh
