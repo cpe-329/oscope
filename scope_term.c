@@ -105,10 +105,7 @@ void print_border() {
 }
 
 void print_info() {
-    int i, y = INFO_Y_CORD;
-    move_cursor(INFO_X_CORD, y);
-    uart_write_string("OSCILLOSCOPE", 12);
-    y += 2;
+    int i, y = INFO_Y_CORD  + 2;
     move_cursor(INFO_X_CORD, y);
     if (scope_get_mode() == SCOPE_MODE_AC) {
         uart_write_string("AC MODE", 7);
@@ -156,6 +153,8 @@ void print_info() {
 void print_graph_title() {
     move_cursor(HIST_TITLE_X, HIST_TITLE_Y);
     uart_write_string("HISTOGRAM", 9);
+    move_cursor(INFO_X_CORD, INFO_Y_CORD);
+    uart_write_string("OSCILLOSCOPE", 12);
 }
 
 void print_time_divisions() {
