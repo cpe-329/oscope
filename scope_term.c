@@ -115,8 +115,8 @@ void print_info() {
         y += 2;
         move_cursor(INFO_X_CORD, y);
         uart_write_string("AC PKPK: ", 9);
-        uart_write_int(scope_get_ac_pkpk());
-        uart_write_string("      ", 6);
+        uart_write_volts(scope_get_ac_pkpk());
+        uart_write_string("  ", 2);
         y += 2;
         move_cursor(INFO_X_CORD, y);
         uart_write_string("AC FREQ: ", 9);
