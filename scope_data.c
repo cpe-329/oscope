@@ -29,12 +29,12 @@ static unsigned int num_peaks = 0;
 static unsigned int max_val = 0;
 static unsigned int min_val = 16000;
 static uint8_t finding_peak = FALSE;
+static unsigned int peak_delta = 0;
 
 // Mode selction
 inline uint8_t scope_get_mode() {
     return scope_mode;
 }
-
 
 // DC Mode data
 inline unsigned int scope_get_dc_value() {
@@ -89,8 +89,10 @@ inline void scope_reset_num_samples() {
 }
 
 inline void scope_reset_num_peaks() {
+    ac_freq = num_peaks / REPAINT_PERIOD;
     num_peaks = 0;
 }
+
 inline void scope_reset_min_max() {
     min_val = 16000;
     max_val = 0;
@@ -99,8 +101,15 @@ inline void scope_reset_min_max() {
 inline void count_peaks(unsigned int val) {
     if (finding_peak) {
         // Finding peak
-
-    } else {  // Finding trough
+        if (val > max_val - peak_delta) {
+            num_peaks += 1;
+            finding_peak = FALSE;
+        }
+    } else {
+        // Finding trough
+        if (val < min_val + peak_delta) {
+            finding_peak = TRUE;
+        }
     }
 }
 
@@ -147,11 +156,11 @@ void scope_read_data() {
             // AC Mode
             ac_pkpk = adc_map_val(max_val - min_val);
             dc_value = ac_pkpk >> 1;
-
+            peak_delta = ac_pkpk >> 3;
             count_peaks(avg_val);
             // TODO:
-            ac_freq = num_peaks;  // / SAMPLE_TIME;
-            ac_period = 0;
+            // ac_freq = num_peaks;  // / SAMPLE_TIME;
+            ac_period = 1 / (1000 * ac_freq);
             break;
         default:
             rgb_set(RGB_PURPLE);

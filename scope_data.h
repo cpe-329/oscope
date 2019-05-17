@@ -17,6 +17,8 @@
 
 #define HISTOGRAM_SIZE (8)
 
+#define REPAINT_PERIOD (1)
+
 // Data accessors
 inline uint8_t scope_get_mode();
 inline unsigned int scope_get_dc_value();

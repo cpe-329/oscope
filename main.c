@@ -59,6 +59,8 @@ int main(void) {
 
             // Reset number of sample since last refresh
             scope_reset_num_samples();
+            scope_reset_min_max();
+            scope_reset_num_peaks();
             repaint_term = FALSE;
             refresh_term = FALSE;
         } else if (refresh_term) {
@@ -79,11 +81,11 @@ int main(void) {
 
 // Timer A0_0 interrupt service routine
 void TA0_0_IRQHandler(void) {
-    // rgb_set(RGB_RED);
+    rgb_set(RGB_RED);
     TIMER_A0->CCTL[0] &= ~TIMER_A_CCTLN_CCIFG;  // Clear the CCR0 interrupt
     reset_refresh_delay();
     repaint_term = TRUE;
-    // rgb_set(RGB_OFF);
+    rgb_set(RGB_OFF);
 }
 
 // Timer A0_N interrupt service routine for CCR1 - CCR4
