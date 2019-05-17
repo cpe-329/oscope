@@ -34,7 +34,7 @@ uint8_t repaint_term = TRUE;
 int main(void) {
     init(FREQ);
 
-    adc_set_calibration(0, 16365);
+    adc_set_calibration(ADC_CALI_MIN,ADC_CALI_MAX);
     term_clear_screen();
     paint_terminal();
 
