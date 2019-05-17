@@ -86,12 +86,13 @@ void TA0_N_IRQHandler(void) {
         increment_refresh_delay();
         // Action for ccr1 intr
         refresh_term = TRUE;
+        rgb_set(RGB_OFF);
     }
 }
 
 // ADC14 interrupt service routine
 void ADC14_IRQHandler(void) {
-    rgb_set(RGB_GREEN);
+    rgb_set(RGB_BLUE);
     adc_store_reading(ADC14->MEM[0]);
     rgb_set(RGB_OFF);
 }
