@@ -15,7 +15,7 @@
 #include "scope_data.h"
 #include "scope_term.h"
 
-static uint8_t scope_mode = SCOPE_MODE_DC;
+static uint8_t scope_mode = SCOPE_MODE_AC;
 static unsigned int dc_value = 0;
 static unsigned int ac_dc_offset = 0;
 static unsigned int ac_pkpk = 0;
@@ -28,7 +28,7 @@ static unsigned int num_samples = 0;
 static unsigned int num_peaks = 0;
 static unsigned int max_val = 0;
 static unsigned int min_val = 16000;
-static uint8_t finding_peak = FALSE;
+static uint8_t finding_peak = TRUE;
 static unsigned int peak_delta = 0;
 
 // Mode selction
