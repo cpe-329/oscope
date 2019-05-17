@@ -17,7 +17,7 @@
 
 static uint8_t scope_mode = SCOPE_MODE_DC;
 static unsigned int dc_value = 0;
-static unsigned int ac_dc_offset = 0;
+// static unsigned int ac_dc_offset = 0;
 static unsigned int ac_pkpk = 0;
 static unsigned int ac_freq = 0;
 static unsigned int ac_period = 0;
@@ -45,7 +45,7 @@ inline unsigned int scope_get_dc_value() {
 // AC Mode data
 inline unsigned int scope_get_ac_dc_offset() {
     // mV from 0 to 3000
-    return ac_dc_offset;
+    return dc_value;
 }
 
 inline unsigned int scope_get_ac_pkpk() {
@@ -146,7 +146,7 @@ void scope_read_data() {
         case SCOPE_MODE_AC:
             // AC Mode
             ac_pkpk = adc_map_val(max_val - min_val);
-            ac_dc_offset = ac_pkpk >> 1;
+            dc_value = ac_pkpk >> 1;
 
             count_peaks(avg_val);
             // TODO:

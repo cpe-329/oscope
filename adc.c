@@ -15,7 +15,7 @@
 static unsigned int adc_value = 0;
 static unsigned int calibration_shift = 0;
 static unsigned int calibration_scale = 5;
-static unsigned int adc_history[AVG_LENGTH] = {0, 0, 0, 0};
+static unsigned int adc_history[AVG_LENGTH]; // = {0, 0, 0, 0};
 static unsigned int max_value = 0;
 static unsigned int min_value = 16000;
 
