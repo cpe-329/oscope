@@ -102,12 +102,12 @@ inline void count_peaks(unsigned int val) {
     if (finding_peak) {
         // Finding peak
         if (val > max_val - peak_delta) {
-            num_peaks += 1;
             finding_peak = FALSE;
         }
     } else {
         // Finding trough
         if (val < min_val + peak_delta) {
+            num_peaks += 1;
             finding_peak = TRUE;
         }
     }
@@ -164,7 +164,7 @@ void scope_refresh_data() {
         // AC Mode
         ac_pkpk = adc_map_val(max_val - min_val);
         ac_dc_offset = ac_pkpk >> 1;
-        peak_delta = ac_pkpk >> 3;
+        peak_delta = ac_pkpk >> 2;
 
         ac_period = 1 / (1000 * ac_freq);
     }
