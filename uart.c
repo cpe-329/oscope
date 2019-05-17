@@ -107,5 +107,5 @@ void uart_write_volts(unsigned int val_mv) {
     uart_write_int(val_mv % 100 / 10);
     uart_write_int(val_mv % 10);
     uart_write('V');
-    uart_write_nl();
+    //uart_write_nl();
 }
