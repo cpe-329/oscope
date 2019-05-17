@@ -121,7 +121,7 @@ void print_info() {
         move_cursor(INFO_X_CORD, y);
         uart_write_string("AC FREQ: ", 9);
         uart_write_int(scope_get_ac_freq());
-        uart_write_string("       ", 7);
+        uart_write_string("        ", 8);
         y += 2;
         move_cursor(INFO_X_CORD, y);
         uart_write_string("AC PERIOD: ", 11);
@@ -148,7 +148,7 @@ void print_info() {
         for (i = 0; i < 3; i++) {
             y += 2;
             move_cursor(INFO_X_CORD, y);
-            uart_write_string("                 ", 17);
+            uart_write_string("                  ", 18);
         }
     }
 }

@@ -26,7 +26,7 @@ inline void adc_init() {
     P5->SEL1 |= ADC_INPUT_PIN;  // Configure P5.4 for ADC
     P5->SEL0 |= ADC_INPUT_PIN;
 
-    // P5->REN &= ~ADC_INPUT_PIN;
+    P5->REN &= ~ADC_INPUT_PIN;
 
     // Sampling time, S&H=16, ADC14 on
     ADC14->CTL0 = ADC14_CTL0_SHT0_2 | ADC14_CTL0_SHP | ADC14_CTL0_ON;
