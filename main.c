@@ -86,6 +86,7 @@ void TA0_0_IRQHandler(void) {
     reset_refresh_delay();
     repaint_term = TRUE;
     refresh_term = TRUE;
+    delay_ms(100, FREQ)
     rgb_set(RGB_OFF);
 }
 
