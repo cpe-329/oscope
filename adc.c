@@ -43,47 +43,47 @@ inline void adc_init() {
     rgb_set(RGB_OFF);
 }
 
-// Store last value and calculate avg
-void adc_record() {
-    unsigned int avg_val = 0;
-    //   unsigned int avg_val_mv = 0;
+// // Store last value and calculate avg
+// void adc_record() {
+//     unsigned int avg_val = 0;
+//     //   unsigned int avg_val_mv = 0;
 
-    adc_log_reading();
-    avg_val = adc_get_avg();
+//     adc_log_reading();
+//     avg_val = adc_get_avg();
 
-    if (avg_val > max_value) {
-        max_value = avg_val;
-    }
-    if (avg_val < min_value) {
-        min_value = avg_val;
-    }
+//     if (avg_val > max_value) {
+//         max_value = avg_val;
+//     }
+//     if (avg_val < min_value) {
+//         min_value = avg_val;
+//     }
 
-    adc_start_conversion();
-}
+//     adc_start_conversion();
+// }
 
-void adc_report_avg() {
-    unsigned int avg_val = adc_get_avg();
-    unsigned int avg_val_mv = adc_map_val(avg_val);
+// void adc_report_avg() {
+//     unsigned int avg_val = adc_get_avg();
+//     unsigned int avg_val_mv = adc_map_val(avg_val);
 
-    uart_write_volts(avg_val_mv);
-}
+//     uart_write_volts(avg_val_mv);
+// }
 
-void adc_report_range() {
-    uart_write('m');
-    uart_write('i');
-    uart_write('n');
-    uart_write(':');
-    uart_write(' ');
-    uart_write_int(min_value);
-    uart_write_nl();
-    uart_write('m');
-    uart_write('a');
-    uart_write('x');
-    uart_write(':');
-    uart_write(' ');
-    uart_write_int(max_value);
-    uart_write_nl();
-}
+// void adc_report_range() {
+//     uart_write('m');
+//     uart_write('i');
+//     uart_write('n');
+//     uart_write(':');
+//     uart_write(' ');
+//     uart_write_int(min_value);
+//     uart_write_nl();
+//     uart_write('m');
+//     uart_write('a');
+//     uart_write('x');
+//     uart_write(':');
+//     uart_write(' ');
+//     uart_write_int(max_value);
+//     uart_write_nl();
+// }
 
 // Start sampling/conversion
 inline void adc_start_conversion() {
@@ -134,17 +134,17 @@ unsigned int adc_get_avg() {
     return sum / AVG_LENGTH;
 }
 
-inline unsigned int adc_get_max_value() {
-    return max_value;
-}
-inline void adc_set_max_value(unsigned int val) {
-    max_value = val;
-}
+// inline unsigned int adc_get_max_value() {
+//     return max_value;
+// }
+// inline void adc_set_max_value(unsigned int val) {
+//     max_value = val;
+// }
 
-inline unsigned int adc_get_min_value() {
-    return min_value;
-}
+// inline unsigned int adc_get_min_value() {
+//     return min_value;
+// }
 
-inline void adc_set_min_value(unsigned int val) {
-    min_value = val;
-}
+// inline void adc_set_min_value(unsigned int val) {
+//     min_value = val;
+// }

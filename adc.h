@@ -13,12 +13,12 @@
 #define ADC_INPUT_PIN P5_4
 
 #define AVG_LENGTH (4)
-#define MAX_READING_MV (300)
+#define MAX_READING_MV (320)
 
 inline void adc_init();
-void adc_record();
-void adc_report_avg();
-void adc_report_range();
+// void adc_record();
+// void adc_report_avg();
+// void adc_report_range();
 inline void adc_start_conversion();
 unsigned int adc_map_val(const unsigned int val);
 inline void adc_clear_min_max();
@@ -28,9 +28,9 @@ inline void adc_store_reading(unsigned int val);
 void adc_log_reading();
 unsigned int adc_get_avg();
 
-inline unsigned int adc_get_max_value();
-inline void adc_set_max_value(unsigned int val);
-inline unsigned int adc_get_min_value();
-inline void adc_set_min_value(unsigned int val);
+// inline unsigned int adc_get_max_value();
+// inline void adc_set_max_value(unsigned int val);
+// inline unsigned int adc_get_min_value();
+// inline void adc_set_min_value(unsigned int val);
 
 #endif /* ADH_H_ */
