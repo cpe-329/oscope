@@ -13,7 +13,9 @@
 #define ADC_INPUT_PIN P5_4
 
 #define AVG_LENGTH (4)
-#define MAX_READING_MV (300)
+#define MAX_READING_MV (330)
+#define ADC_CALI_MAX 16500
+#define ADC_CALI_MIN 0
 
 inline void adc_init();
 void adc_record();

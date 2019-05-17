@@ -35,7 +35,7 @@ int main(void) {
     //    volatile uint32_t i, j;
     init(FREQ);
 
-    adc_set_calibration(0, 16365);
+    adc_set_calibration(ADC_CALI_MIN,ADC_CALI_MAX);
     term_clear_screen();
     paint_terminal();
     while (1) {

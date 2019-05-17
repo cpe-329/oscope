@@ -21,10 +21,10 @@
 #define GRAPH_HEIGHT 19
 #define BAR 1
 #define DIVIDE_GRAPH 30
-#define VOLT_DIVISION 167
-#define GRAPH_LENGTH 40
+#define VOLT_DIVISION 18
+#define GRAPH_LENGTH 41
 #define GRAPH_BOTTOM 20
-#define GRAPH_LEFT 32
+#define GRAPH_LEFT 30
 #define TIME_X_START 75
 #define TIME_Y 22
 void scope_refresh_term();

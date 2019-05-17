@@ -158,9 +158,9 @@ void print_time_divisions() {
     else{
         uart_write_string("ms",2);
     }
-    x-=3;
+    x-=5;
     move_cursor(x, TIME_Y);
-    for (times = 0; times < 9; times++){
+    for (times = 0; times < 8; times++){
         uart_write_int(time);
         time+= scope_get_histogram_div();
         x -= 5;
@@ -171,41 +171,29 @@ void print_time_divisions() {
 void print_volt_divisions() {
     int volt_mes_y = HIST_TITLE_Y + 1;
     int i;
-    int volts = 3000;
+    int volts = 330;
     move_cursor(74, volt_mes_y);
     for (i = 0; i < 7; i++) {
-        uart_write_int(volts/1000);
-        if((volts/500) %2){
-            uart_write_string(".5", 2);
-            uart_write('V');
-            volt_mes_y+= 3;
-            move_cursor(75, volt_mes_y);
-        }
-        else{
-            uart_write('V');
-            volt_mes_y+= 3;
-            move_cursor(74, volt_mes_y);
-        }
-        volts -= 500;
+        uart_write_volts(volts);
+        volt_mes_y+= 3;
+        move_cursor(74, volt_mes_y);
+        volts -= 55;
     }
 }
-void clear_graph(){
-    int i;
-    for (i = 0; i < 19; i++){
-        draw_horizontal(GRAPH_LENGTH, GRAPH_LEFT, GRAPH_BOTTOM - i, ' ');
-    }
-}
+
 void print_bar(unsigned int val, unsigned int x, unsigned int y) {
     int mes = 0, height = 0;
     while (val > mes) {
         mes += VOLT_DIVISION;
         height++;
     }
-    if (val == 0){
-        draw_horizontal(GRAPH_LENGTH, GRAPH_LEFT,GRAPH_BOTTOM, '-');
+    if (val < VOLT_DIVISION){
+        draw_vertical(1, x, y, '-', BAR);
+        draw_vertical(GRAPH_HEIGHT-1, x, y-1, ' ', BAR);
     }
     else{
         draw_vertical(height, x, y, '|', BAR);
+        draw_vertical(GRAPH_HEIGHT-height, x, y-height, ' ', BAR);
     }
 }
 
@@ -216,13 +204,20 @@ void print_graph_border() {
 void print_DC_Graph() {
     int i;
     if (scope_get_mode() == SCOPE_MODE_DC) {
-        clear_graph();
-        for(i=0; i < GRAPH_LENGTH;i++){
-            print_bar(scope_get_dc_value(), GRAPH_LEFT+i, GRAPH_BOTTOM);
+        for(i=8; i >= 1; i--){
+            print_bar(scope_get_dc_value(), GRAPH_LEFT + i*5, GRAPH_BOTTOM);
+        }
+
+    }
+}
+void print_AC_Graph() {
+    int i;
+    if (scope_get_mode() == SCOPE_MODE_AC){
+        for(i=8; i >=0; i--){
+            print_bar(scope_get_histogram(i), GRAPH_LEFT+i*5, GRAPH_BOTTOM);
         }
     }
 }
-void print_AC_Graph() {}
 
 void scope_refresh_term() {
     hide_cursor();
@@ -232,7 +227,7 @@ void scope_refresh_term() {
 }
 
 void paint_terminal() {
-    term_clear_screen();
+    //term_clear_screen();
     hide_cursor();
     print_border();
     print_info();
