@@ -115,8 +115,8 @@ inline void count_peaks(unsigned int val) {
 
 inline void scope_update_histogram() {
     int i;
-    for (i = 0; i < HISTOGRAM_SIZE - 1; i++) {
-        histogram[i + 1] = histogram[i];
+    for (i = HISTOGRAM_SIZE -1; i > 0; i -= 1) {
+        histogram[i] = histogram[i - 1];
     }
     histogram[0] = dc_value;
 }
