@@ -99,7 +99,6 @@ void draw_vertical(unsigned int length,
 }
 
 void print_border() {
-    move_home();
     draw_horizontal(LENGTH-2,1,0, '=');
     draw_horizontal(LENGTH-2,1,WIDTH-1, '=');
     draw_vertical(WIDTH, LENGTH-1, WIDTH-1, '|',0);
@@ -119,18 +118,22 @@ void print_info() {
         move_cursor(INFO_X_CORD, y);
         uart_write_string("AC PKPK: ", 9);
         uart_write_int(scope_get_ac_pkpk());
+        uart_write_string("    ", 4);
         y += 2;
         move_cursor(INFO_X_CORD, y);
         uart_write_string("AC FREQ: ", 9);
         uart_write_int(scope_get_ac_freq());
+        uart_write_string("    ", 4);
         y += 2;
         move_cursor(INFO_X_CORD, y);
         uart_write_string("AC PERIOD: ", 11);
         uart_write_int(scope_get_ac_period());
+        uart_write_string("    ", 2);
         y += 2;
         move_cursor(INFO_X_CORD, y);
         uart_write_string("DC OFFSET: ", 11);
         uart_write_volts(scope_get_ac_dc_offset());
+        uart_write_string("    ", 2);
 
     } else {
         uart_write_string("DC MODE", 7);
@@ -221,16 +224,20 @@ void print_DC_Graph() {
 void print_AC_Graph() {
     int i;
     if (scope_get_mode() == SCOPE_MODE_AC){
-        for(i=8; i >=0; i--){
-            print_bar(scope_get_histogram(i), GRAPH_LEFT+i*5, GRAPH_BOTTOM);
+        for(i=0; i < 8; i++){
+            print_bar(scope_get_histogram(i), GRAPH_LEFT+(8-i)*5, GRAPH_BOTTOM);
         }
     }
 }
 
 void scope_refresh_term() {
     hide_cursor();
+    if (scope_get_mode() == SCOPE_MODE_AC){
     print_AC_Graph();
+    }
+    else{
     print_DC_Graph();
+    }
     print_info();
 }
 
@@ -242,5 +249,6 @@ void paint_terminal() {
     print_graph_title();
     print_volt_divisions();
     print_time_divisions();
+    scope_refresh_term();
     move_home();
 }
