@@ -126,7 +126,7 @@ void print_info() {
         move_cursor(INFO_X_CORD, y);
         uart_write_string("AC PERIOD: ", 11);
         uart_write_int(scope_get_ac_period());
-        uart_write_sting("ms   ", 5);
+        uart_write_string("ms   ", 5);
         y += 2;
         move_cursor(INFO_X_CORD, y);
         uart_write_string("DC OFFSET: ", 11);
