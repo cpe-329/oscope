@@ -40,12 +40,7 @@ inline uint8_t button_get() {
     uint8_t new_val = P1->IN & MANUAL_PIN;
     released = (button_val == 0) && (new_val > 0);
     button_val = new_val;
-    if (new_val > 0) {
-        led_on();
-    }
-    else{
-        led_off();
-    }
+  
     // return released;
     return new_val;
 }

@@ -44,8 +44,11 @@ int main(void) {
 
         // Check button to switch mode
         if (button_get()) {
+            led_on();
             scope_switch_mode();
             repaint_term = TRUE;
+            delay_ms(100, FREQ);
+            led_off();
         }
 
         // Repaint entire term only if needed
