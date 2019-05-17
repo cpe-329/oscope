@@ -38,5 +38,6 @@ inline void scope_update_histogram();
 inline void scope_switch_mode();
 void scope_read_data();
 void scope_refresh_data();
+void scope_reset_min_max();
 
 #endif /* SCOPE_DATA_H_ */

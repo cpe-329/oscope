@@ -226,7 +226,7 @@ void paint_terminal() {
     // term_clear_screen();
     hide_cursor();
     print_border();
-    print_info();
+    //print_info();
     print_graph_title();
     print_volt_divisions();
     print_time_divisions();
