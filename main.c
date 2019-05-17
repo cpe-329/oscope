@@ -85,6 +85,7 @@ void TA0_0_IRQHandler(void) {
     TIMER_A0->CCTL[0] &= ~TIMER_A_CCTLN_CCIFG;  // Clear the CCR0 interrupt
     reset_refresh_delay();
     repaint_term = TRUE;
+    refresh_term = TRUE;
     rgb_set(RGB_OFF);
 }
 
