@@ -24,12 +24,17 @@ static unsigned int ac_period = 0;
 static unsigned int histogram[HISTOGRAM_SIZE] = {};
 // static unsigned int histogram_div = 0;
 // uint8_t histogram_units = 0;
-unsigned int num_samples = 0;
+static unsigned int num_samples = 0;
+static unsigned int num_peaks = 0;
+static unsigned int max_val = 0;
+static unsigned int min_val = 16000;
+static uint8_t finding_peak = FALSE;
 
 // Mode selction
 inline uint8_t scope_get_mode() {
     return scope_mode;
 }
+
 
 // DC Mode data
 inline unsigned int scope_get_dc_value() {
@@ -83,6 +88,22 @@ inline void scope_reset_num_samples() {
     num_samples = 0;
 }
 
+inline void scope_reset_num_peaks() {
+    num_peaks = 0;
+}
+inline void scope_reset_min_max() {
+    min_val = 16000;
+    max_val = 0;
+}
+
+inline void count_peaks(unsigned int val) {
+    if (finding_peak) {
+        // Finding peak
+
+    } else {  // Finding trough
+    }
+}
+
 inline void scope_update_histogram() {
     int i;
     for (i = 0; i < AVG_LENGTH - 1; i++) {
@@ -110,10 +131,10 @@ void scope_read_data() {
     avg_val = adc_get_avg();
 
     // Record now min or max values
-    if (avg_val > adc_get_max_value()) {
-        adc_set_max_value(avg_val);
-    } else if (avg_val < adc_get_min_value()) {
-        adc_set_min_value(avg_val);
+    if (avg_val > max_val) {
+        max_val = avg_val;
+    } else if (avg_val < min_val) {
+        min_val = avg_val;
     }
 
     // For either scope mode
@@ -122,7 +143,13 @@ void scope_read_data() {
             dc_value = adc_map_val(avg_val);
             break;
         case SCOPE_MODE_AC:
+            ac_pkpk = max_val - min_val;
+            ac_dc_offset = min_val + (ac_pkpk >> 2);
 
+            count_peaks(avg_val);
+            // TODO:
+            ac_freq = num_peaks;  // / SAMPLE_TIME;
+            ac_period = 0;
             break;
         default:
             rgb_set(RGB_PURPLE);

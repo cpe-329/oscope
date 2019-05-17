@@ -29,17 +29,17 @@ volatile uint8_t got_fresh_char;
 
 // Whether to refresh terminal view
 uint8_t refresh_term = FALSE;
-// uint8_t refresh_count = 0;
 uint8_t repaint_term = TRUE;
 
 int main(void) {
-    //    volatile uint32_t i, j;
     init(FREQ);
 
     adc_set_calibration(0, 16365);
     term_clear_screen();
     paint_terminal();
+
     while (1) {
+        // Read data from scope
         scope_read_data();
 
         // Check button to switch mode
@@ -47,16 +47,20 @@ int main(void) {
             scope_switch_mode();
         }
 
+        // Repaint entire term only if needed
         if (repaint_term) {  //| (refresh_count > 120)) {
             paint_terminal();
             repaint_term = FALSE;
             // refresh_count = 0;
         }
+
+        // led_on();
+        // Refresh data displayed in term
         if (refresh_term) {
             scope_refresh();
             refresh_term = FALSE;
         }
-        led_off();
+        // led_off();
     }
 }
 
@@ -78,13 +82,12 @@ void TA0_N_IRQHandler(void) {
         increment_refresh_delay();
         // Action for ccr1 intr
         refresh_term = TRUE;
-        rgb_set(RGB_OFF);
     }
 }
 
 // ADC14 interrupt service routine
 void ADC14_IRQHandler(void) {
-    rgb_set(RGB_BLUE);
+    rgb_set(RGB_GREEN);
     adc_store_reading(ADC14->MEM[0]);
     rgb_set(RGB_OFF);
 }
