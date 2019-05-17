@@ -99,6 +99,7 @@ void draw_vertical(unsigned int length,
 }
 
 void print_border() {
+    move_home();
     draw_horizontal(LENGTH-2,1,0, '=');
     draw_horizontal(LENGTH-2,1,WIDTH-1, '=');
     draw_vertical(WIDTH, LENGTH-1, WIDTH-1, '|',0);
