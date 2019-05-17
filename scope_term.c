@@ -154,45 +154,31 @@ void print_info_values() {
     int i, y = INFO_Y_CORD  + 2;
     move_cursor(INFO_X_CORD, y);
     if (scope_get_mode() == SCOPE_MODE_AC) {
-        uart_write_string("AC MODE", 7);
         y += 2;
-        move_cursor(INFO_X_CORD, y);
-        uart_write_string("AC PKPK: ", 9);
+        move_cursor(INFO_X_CORD +9, y);
         uart_write_volts(scope_get_ac_pkpk());
         uart_write_string("  ", 2);
         y += 2;
-        move_cursor(INFO_X_CORD, y);
-        uart_write_string("AC FREQ: ", 9);
+        move_cursor(INFO_X_CORD + 9, y);
         uart_write_int(scope_get_ac_freq());
         uart_write_string("        ", 8);
         y += 2;
-        move_cursor(INFO_X_CORD, y);
-        uart_write_string("AC PERIOD: ", 11);
+        move_cursor(INFO_X_CORD + 11, y);
         uart_write_int(scope_get_ac_period());
         uart_write_string("ms   ", 5);
         y += 2;
-        move_cursor(INFO_X_CORD, y);
-        uart_write_string("DC OFFSET: ", 11);
+        move_cursor(INFO_X_CORD+11, y);
         uart_write_volts(scope_get_ac_dc_offset());
 
     } else {
-        uart_write_string("DC MODE", 7);
         y += 2;
-        move_cursor(INFO_X_CORD, y);
-        uart_write_string("DC OFFSET: ", 11);
+        move_cursor(INFO_X_CORD +11, y);
         uart_write_volts(scope_get_dc_value());
     }
     y += 2;
-    move_cursor(INFO_X_CORD, y);
-    uart_write_string("NUM SAMPLES: ", 13);
+    move_cursor(INFO_X_CORD +13, y);
     uart_write_int(scope_get_num_samples());
     uart_write_string("    ", 4);
-    if (scope_get_mode() == SCOPE_MODE_DC) {
-        for (i = 0; i < 3; i++) {
-            y += 2;
-            move_cursor(INFO_X_CORD, y);
-            uart_write_string("                  ", 18);
-        }
     }
 }
 
