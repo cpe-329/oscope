@@ -25,19 +25,19 @@ inline void button_init() {
 
     // button_val = P1->IN & BUTTON_PIN;
 
-    P1->SEL0 &= ~MANUAL_PIN;
-    P1->SEL1 &= ~MANUAL_PIN;
+    P1->SEL0 &= ~TRIGGER_PIN;
+    P1->SEL1 &= ~TRIGGER_PIN;
 
-    P1->DIR &= ~MANUAL_PIN;
-    P1->REN |= MANUAL_PIN;
-    P1->OUT &= ~MANUAL_PIN;
+    P1->DIR &= ~TRIGGER_PIN;
+    P1->REN |= TRIGGER_PIN;
+    P1->OUT &= ~TRIGGER_PIN;
 
-    button_val = P1->IN & MANUAL_PIN;
+    button_val = P1->IN & TRIGGER_PIN;
 }
 
 inline uint8_t button_get() {
     uint8_t released;
-    uint8_t new_val = (P1->IN & MANUAL_PIN) != 0;
+    uint8_t new_val = (P1->IN & TRIGGER_PIN) != 0;
     released = (button_val == 0) && (new_val != 0);
     button_val = new_val;
     if (new_val != 0) {
