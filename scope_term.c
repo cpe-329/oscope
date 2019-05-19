@@ -13,30 +13,28 @@
 #include "scope_data.h"
 #include "uart.h"
 
+static unsigned char com[2] = {ESC, '['};
+
 void move_down(unsigned int val) {
-    unsigned char command[2] = {ESC, '['};
-    uart_write_string(command, 2);
+    uart_write_string(com, 2);
     uart_write_int(val);
     uart_write('B');
 }
 
 void move_up(unsigned int val) {
-    unsigned char command[2] = {ESC, '['};
-    uart_write_string(command, 2);
+    uart_write_string(com, 2);
     uart_write_int(val);
     uart_write('A');
 }
 
 void move_left(unsigned int val) {
-    unsigned char command[2] = {ESC, '['};
-    uart_write_string(command, 2);
+    uart_write_string(com, 2);
     uart_write_int(val);
     uart_write('D');
 }
 
 void move_right(unsigned int val) {
-    unsigned char command[2] = {ESC, '['};
-    uart_write_string(command, 2);
+    uart_write_string(com, 2);
     uart_write_int(val);
     uart_write('C');
 }
@@ -57,9 +55,14 @@ void term_clear_screen() {
 }
 
 void move_cursor(unsigned int x, unsigned int y) {
-    move_home();
-    move_down(y);
-    move_right(x);
+    uart_write_string(com, 2);
+    uart_write_int(x);
+    uart_write(';');
+    uart_write_int(y);
+    uart_write('H');
+//    move_home();
+//    move_down(y);
+//    move_right(x);
 }
 
 void draw_horizontal(unsigned int length,
