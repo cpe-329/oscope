@@ -56,13 +56,10 @@ void term_clear_screen() {
 
 void move_cursor(unsigned int x, unsigned int y) {
     uart_write_string(com, 2);
-    uart_write_int(x);
-    uart_write(';');
     uart_write_int(y);
+    uart_write(';');
+    uart_write_int(x);
     uart_write('H');
-//    move_home();
-//    move_down(y);
-//    move_right(x);
 }
 
 void draw_horizontal(unsigned int length,
@@ -100,11 +97,11 @@ void draw_vertical(unsigned int length,
 }
 
 void print_border() {
-    draw_horizontal(LENGTH - 2, 1, 0, '=');
-    draw_horizontal(LENGTH - 2, 1, WIDTH - 1, '=');
-    draw_vertical(WIDTH, LENGTH - 1, WIDTH - 1, '|', 0);
-    draw_vertical(WIDTH, 0, WIDTH - 1, '|', 0);
-    draw_vertical(WIDTH, DIVIDE_GRAPH, WIDTH - 1, '|', 0);
+    draw_horizontal(LENGTH - 2, 2, 1, '=');
+    draw_horizontal(LENGTH - 2, 2, WIDTH, '=');
+    draw_vertical(WIDTH, LENGTH, WIDTH, '|', 0);
+    draw_vertical(WIDTH, 1, WIDTH, '|', 0);
+    draw_vertical(WIDTH, DIVIDE_GRAPH, WIDTH, '|', 0);
 }
 
 void print_info_text() {
