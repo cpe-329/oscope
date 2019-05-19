@@ -14,7 +14,7 @@
 #include "uart.h"
 
 inline void uart_init() {
-    rgb_set(RGB_BLUE);
+    // rgb_set(RGB_BLUE);
 
     has_new = FALSE;
     new_char = 0;
@@ -46,13 +46,13 @@ inline void uart_init() {
     // Enable global interrupt
     __enable_irq();
 
-    uart_write('h');
-    uart_write('e');
-    uart_write('l');
-    uart_write('l');
-    uart_write('o');
-    uart_write_nl();
-    rgb_set(RGB_OFF);
+    // uart_write('h');
+    // uart_write('e');
+    // uart_write('l');
+    // uart_write('l');
+    // uart_write('o');
+    // uart_write_nl();
+    // rgb_set(RGB_OFF);
 }
 
 inline void uart_write(unsigned char c) {
@@ -85,7 +85,7 @@ void uart_write_nl() {
 unsigned int uart_get_int() {
     int accumulator = 0;
     new_char = 255;
-    rgb_set(RGB_BLUE);
+    // rgb_set(RGB_BLUE);
     while (new_char != ESCAPE_VAL) {
         if (has_new) {
             if (new_char == ESCAPE_VAL) {
