@@ -34,7 +34,7 @@
 volatile bool refresh_term = false;
 volatile bool repaint_term = true;
 volatile bool data_fresh = false;
-volatile bool calculate_data = false;
+volatile bool one_sec_interval = false;
 volatile uint8_t repaint_counter = 0;
 
 int main(void) {
@@ -70,7 +70,7 @@ int main(void) {
             rgb_clear(RGB_RED);
 
             // Reset number of sample since last refresh
-            scope_reset_num_samples();
+            scope_reset_locks();
             repaint_term = false;
             refresh_term = false;
             repaint_counter = 0;
@@ -88,11 +88,11 @@ int main(void) {
             refresh_term = false;
         }
 
-        if (calculate_data) {
+        if (one_sec_interval) {
             scope_store_peak_data();
             scope_reset_min_max();
             scope_reset_num_peaks();
-            calculate_data = false;
+            one_sec_interval = false;
         }
     }
 }
@@ -103,7 +103,7 @@ void TA0_0_IRQHandler(void) {
     TIMER_A0->CCTL[0] &= ~TIMER_A_CCTLN_CCIFG;  // Clear the CCR0 interrupt
     repaint_counter += 1;
     reset_refresh_delay();
-    calculate_data = true;
+    one_sec_interval = true;
     refresh_term = true;
     // rgb_set(RGB_OFF);
 }

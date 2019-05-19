@@ -19,7 +19,7 @@
 #include "my_msp.h"
 
 #define REPAINT_DELAY (2051)
-#define REFRESH_DELAY_DELTA (300)
+#define REFRESH_DELAY_DELTA (2050)
 
 void timer_init(void) {
     rgb_set(RGB_YELLOW);
