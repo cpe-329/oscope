@@ -19,9 +19,7 @@
 #include "my_msp.h"
 
 #define REPAINT_DELAY (2051)
-#define REFRESH_DELAY_DELTA (50)
-// volatile uint8_t led_flag = 1;
-// static const uint8_t refresh_delay_delta = ;
+#define REFRESH_DELAY_DELTA (300)
 
 void timer_init(void) {
     rgb_set(RGB_YELLOW);
