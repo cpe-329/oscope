@@ -7,6 +7,7 @@
  *
  */
 
+#include <stdbool.h>
 #include <stdint.h>
 #include "msp.h"
 
@@ -23,14 +24,18 @@
 
 #define FREQ FREQ_48_MHZ
 
+#define REPAINT_COUNT_MAX (5)
+
 // Data received from UART
-volatile unsigned char char_data;
-volatile uint8_t got_fresh_char;
+// volatile unsigned char char_data;
+// volatile uint8_t got_fresh_char;
 
 // Whether to refresh terminal view
-volatile uint8_t refresh_term = FALSE;
-volatile uint8_t repaint_term = TRUE;
-volatile uint8_t calculate_data = FALSE;
+volatile bool refresh_term = false;
+volatile bool repaint_term = true;
+volatile bool data_fresh = false;
+volatile bool calculate_data = false;
+volatile uint8_t repaint_counter = 0;
 
 int main(void) {
     init(FREQ);
@@ -41,15 +46,20 @@ int main(void) {
 
     while (1) {
         // Read data from scope
+        // if (data_fresh) {
         scope_read_data();
-
+        data_fresh = false;
+        // }
         // Check button to switch mode
         if (button_get() != 0) {
             scope_switch_mode();
-            repaint_term = TRUE;
+            repaint_term = true;
             // delay_ms(100, FREQ);
         }
 
+        if (repaint_counter >= REPAINT_COUNT_MAX) {
+            repaint_term = true;
+        }
         // Repaint entire term only if needed
         if (repaint_term) {
             scope_refresh_data();
@@ -57,12 +67,13 @@ int main(void) {
             // Repaint UART VT100 terminal
             rgb_set(RGB_RED);
             paint_terminal();
-            rgb_set(RGB_OFF);
+            rgb_clear(RGB_RED);
 
             // Reset number of sample since last refresh
             scope_reset_num_samples();
-            repaint_term = FALSE;
-            refresh_term = FALSE;
+            repaint_term = false;
+            refresh_term = false;
+            repaint_counter = 0;
         } else if (refresh_term) {
             // Refresh data displayed in term
             scope_refresh_data();
@@ -70,17 +81,18 @@ int main(void) {
             rgb_set(RGB_GREEN);
             // Refresh UART VT100 terminal
             scope_refresh_term();
-            rgb_set(RGB_OFF);
+            rgb_clear(RGB_GREEN);
 
             // Reset number of sample since last refresh
             scope_reset_num_samples();
-            refresh_term = FALSE;
+            refresh_term = false;
         }
 
         if (calculate_data) {
+            scope_store_peak_data();
             scope_reset_min_max();
             scope_reset_num_peaks();
-            calculate_data = FALSE;
+            calculate_data = false;
         }
     }
 }
@@ -89,9 +101,10 @@ int main(void) {
 void TA0_0_IRQHandler(void) {
     // rgb_set(RGB_RED);
     TIMER_A0->CCTL[0] &= ~TIMER_A_CCTLN_CCIFG;  // Clear the CCR0 interrupt
+    repaint_counter += 1;
     reset_refresh_delay();
-    calculate_data = TRUE;
-    refresh_term = TRUE;
+    calculate_data = true;
+    refresh_term = true;
     // rgb_set(RGB_OFF);
 }
 
@@ -99,18 +112,19 @@ void TA0_0_IRQHandler(void) {
 void TA0_N_IRQHandler(void) {
     if (TIMER_A0->CCTL[1] & TIMER_A_CCTLN_CCIFG)  // check for CCR1 interrupt
     {
-        // rgb_set(RGB_GREEN);
+        // rgb_set(RGB_RED);
         TIMER_A0->CCTL[1] &= ~TIMER_A_CCTLN_CCIFG;  // clear CCR1 interrupt
         increment_refresh_delay();
         // Action for ccr1 intr
-        refresh_term = TRUE;
-        // rgb_set(RGB_OFF);
+        refresh_term = true;
+        // rgb_clear(RGB_RED);
     }
 }
 
 // ADC14 interrupt service routine
 void ADC14_IRQHandler(void) {
-    // rgb_set(RGB_BLUE);
+    rgb_set(RGB_BLUE);
+    data_fresh = true;
     adc_store_reading(ADC14->MEM[0]);
-    // rgb_set(RGB_OFF);
+    rgb_clear(RGB_BLUE);
 }
