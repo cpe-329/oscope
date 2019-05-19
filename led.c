@@ -53,9 +53,13 @@ inline void rgb_init(void) {
 }
 
 // Set 3 bits of RGB LED
-inline void rgb_set(int value) {
-    P2->OUT &= ~RGB_PINS;           // Clear previous RGB LED state
+inline void rgb_set(uint8_t value) {
+    // P2->OUT &= ~RGB_PINS;           // Clear previous RGB LED state
     P2->OUT |= (value & RGB_PINS);  // Set RGB LED state
+}
+
+inline void rgb_clear(uint8_t value) {
+    P2->OUT &= ~(value & RGB_PINS);  // Clear previous RGB LED state
 }
 
 // Blink all combinations of LEDs
