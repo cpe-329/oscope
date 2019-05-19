@@ -39,5 +39,6 @@ inline void scope_switch_mode();
 void scope_read_data();
 void scope_refresh_data();
 void scope_reset_min_max();
+void scope_store_peak_data();
 
 #endif /* SCOPE_DATA_H_ */

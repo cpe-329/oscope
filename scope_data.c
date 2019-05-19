@@ -22,14 +22,15 @@ volatile static unsigned int ac_pkpk = 0;
 volatile static unsigned int ac_freq = 0;
 volatile static unsigned int ac_period = 0;
 volatile static unsigned int histogram[HISTOGRAM_SIZE] = {};
-// static unsigned int histogram_div = 0;
-// uint8_t histogram_units = 0;
+static unsigned int histogram_div = 148;
+uint8_t histogram_units = 0;
 volatile static unsigned int num_samples = 0;
 volatile static unsigned int num_peaks = 0;
 volatile static unsigned int max_val = 0;
 volatile static unsigned int min_val = 16000;
 volatile static uint8_t finding_peak = TRUE;
 volatile static unsigned int peak_delta = 0;
+volatile static fast_ac_pkpk = 0;
 
 // Mode selction
 inline uint8_t scope_get_mode() {
@@ -71,12 +72,12 @@ inline unsigned int scope_get_histogram(uint8_t i) {
 inline unsigned int scope_get_histogram_div() {
     // ms or us from 1 to 999
     // assert(histogram_div * 9 <= 1000)
-    return 50;  // histogram_div;
+    return histogram_div;
 }
 
 inline uint8_t scope_get_histogram_units() {
     // 0 for ms, 1 for us
-    return 0;  // histogram_units;
+    return histogram_units;
 }
 
 // Number of samples taken since last term refresh
@@ -84,12 +85,16 @@ inline unsigned int scope_get_num_samples() {
     return num_samples;
 }
 
+void scope_store_peak_data() {
+    ac_pkpk = fast_ac_pkpk;
+    ac_freq = num_peaks;  // REPAINT_PERIOD;
+}
+
 inline void scope_reset_num_samples() {
     num_samples = 0;
 }
 
 inline void scope_reset_num_peaks() {
-    ac_freq = num_peaks; // REPAINT_PERIOD;
     num_peaks = 0;
 }
 
@@ -139,14 +144,14 @@ void scope_read_data() {
     // Get updated average
     avg_val = adc_get_avg();
 
-    // Record now min or max values
+    // Record new min or max values
     if (avg_val > max_val) {
         max_val = avg_val;
     } else if (avg_val < min_val) {
         min_val = avg_val;
     }
     count_peaks(avg_val);
-    
+
     adc_start_conversion();
 }
 
@@ -156,16 +161,16 @@ void scope_refresh_data() {
     // Update histogram data
     scope_update_histogram();
 
-    // DC MODE
+    // AC/DC MODE
     dc_value = adc_map_val(avg_val);
 
     // AC Mode
     if (scope_mode == SCOPE_MODE_AC) {
         // AC Mode
-        ac_pkpk = adc_map_val(max_val - min_val);
+        fast_ac_pkpk = adc_map_val(max_val - min_val);
         ac_dc_offset = ac_pkpk >> 1;
-        peak_delta = ac_pkpk >> 2;
+        peak_delta = fast_ac_pkpk >> 2;
 
-        ac_period = 1 / (1000 * ac_freq);
+        ac_period = 1000 / ac_freq;
     }
 }
