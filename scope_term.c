@@ -114,13 +114,13 @@ void print_info_text() {
         uart_write_string("AC PKPK: ", 9);
         y += 2;
         move_cursor(INFO_X_CORD, y);
+        uart_write_string("DC OFFSET: ", 11);
+        y += 2;
+        move_cursor(INFO_X_CORD, y);
         uart_write_string("AC FREQ: ", 9);
         y += 2;
         move_cursor(INFO_X_CORD, y);
         uart_write_string("AC PERIOD: ", 11);
-        y += 2;
-        move_cursor(INFO_X_CORD, y);
-        uart_write_string("DC OFFSET: ", 11);
 
     } else {
         uart_write_string("  DC MODE", 9);
@@ -149,16 +149,17 @@ void print_info_values() {
         uart_write_volts(scope_get_ac_pkpk());
         uart_write_string("  ", 2);
         y += 2;
+        move_cursor(INFO_X_CORD + 11, y);
+        uart_write_volts(scope_get_ac_dc_offset());
+        y += 2;
         move_cursor(INFO_X_CORD + 9, y);
         uart_write_int(scope_get_ac_freq());
-        uart_write_string("        ", 8);
+        uart_write_string ("Hz",2);
+        uart_write_string("     ", 5);
         y += 2;
         move_cursor(INFO_X_CORD + 11, y);
         uart_write_int(scope_get_ac_period());
         uart_write_string("ms   ", 5);
-        y += 2;
-        move_cursor(INFO_X_CORD + 11, y);
-        uart_write_volts(scope_get_ac_dc_offset());
 
     } else {
         y += 2;
