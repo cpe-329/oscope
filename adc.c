@@ -42,7 +42,9 @@ inline void adc_init() {
     // Enable ADC interrupt in NVIC module
     NVIC->ISER[0] = 1 << ((ADC14_IRQn)&31);
 
-    rgb_set(RGB_OFF);
+    adc_start_conversion();
+    
+    rgb_clear(RGB_GREEN);
 }
 
 // // Store last value and calculate avg
