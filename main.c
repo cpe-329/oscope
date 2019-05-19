@@ -26,16 +26,12 @@
 
 #define REPAINT_COUNT_MAX (5)
 
-// Data received from UART
-// volatile unsigned char char_data;
-// volatile uint8_t got_fresh_char;
-
-// Whether to refresh terminal view
+volatile bool adc_data_fresh = false;
 volatile bool refresh_term = false;
 volatile bool repaint_term = true;
-volatile bool data_fresh = false;
+
 volatile bool one_sec_interval = false;
-volatile uint8_t repaint_counter = 0;
+volatile uint8_t seconds_counter = 0;
 
 int main(void) {
     init(FREQ);
@@ -46,9 +42,9 @@ int main(void) {
 
     while (1) {
         // Read data from scope
-        // if (data_fresh) {
+        // if (adc_data_fresh) {
         scope_read_data();
-        data_fresh = false;
+        adc_data_fresh = false;
         // }
         // Check button to switch mode
         if (button_get() != 0) {
@@ -57,8 +53,13 @@ int main(void) {
             // delay_ms(100, FREQ);
         }
 
-        if (repaint_counter >= REPAINT_COUNT_MAX) {
+        if (scope_get_mode() == SCOPE_MODE_AC){
+            refresh_term = false;
+        }
+
+        if (seconds_counter >= REPAINT_COUNT_MAX) {
             repaint_term = true;
+            seconds_counter = 0;
         }
         // Repaint entire term only if needed
         if (repaint_term) {
@@ -73,8 +74,7 @@ int main(void) {
             scope_reset_locks();
             repaint_term = false;
             refresh_term = false;
-            repaint_counter = 0;
-        } else if (refresh_term) {
+        } else if (refresh_term || one_sec_interval) {
             // Refresh data displayed in term
             scope_refresh_data();
 
@@ -98,33 +98,32 @@ int main(void) {
 }
 
 // Timer A0_0 interrupt service routine
+// Every 1 second
 void TA0_0_IRQHandler(void) {
     // rgb_set(RGB_RED);
     TIMER_A0->CCTL[0] &= ~TIMER_A_CCTLN_CCIFG;  // Clear the CCR0 interrupt
-    repaint_counter += 1;
+    seconds_counter += 1;
     reset_refresh_delay();
     one_sec_interval = true;
-    refresh_term = true;
-    // rgb_set(RGB_OFF);
 }
 
 // Timer A0_N interrupt service routine for CCR1 - CCR4
 void TA0_N_IRQHandler(void) {
     if (TIMER_A0->CCTL[1] & TIMER_A_CCTLN_CCIFG)  // check for CCR1 interrupt
     {
-        // rgb_set(RGB_RED);
+        rgb_set(RGB_RED);
         TIMER_A0->CCTL[1] &= ~TIMER_A_CCTLN_CCIFG;  // clear CCR1 interrupt
         increment_refresh_delay();
         // Action for ccr1 intr
         refresh_term = true;
-        // rgb_clear(RGB_RED);
+        rgb_clear(RGB_RED);
     }
 }
 
 // ADC14 interrupt service routine
 void ADC14_IRQHandler(void) {
     rgb_set(RGB_BLUE);
-    data_fresh = true;
+    adc_data_fresh = true;
     adc_store_reading(ADC14->MEM[0]);
     rgb_clear(RGB_BLUE);
 }

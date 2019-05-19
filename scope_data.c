@@ -143,9 +143,11 @@ inline void scope_switch_mode() {
     switch (scope_mode) {
         case SCOPE_MODE_DC:
             scope_mode = SCOPE_MODE_AC;
+            // timers_stop_fast();
             break;
         default:
             scope_mode = SCOPE_MODE_DC;
+            timers_resume_fast();
     }
 }
 
