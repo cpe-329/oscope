@@ -6,6 +6,7 @@
  * CPE 329-17/18 Spring 2019
  */
 #include <stdint.h>
+#include <stdbool.h>
 
 #include "delay.h"
 #include "led.h"
@@ -16,7 +17,7 @@
 inline void uart_init() {
     // rgb_set(RGB_BLUE);
 
-    has_new = FALSE;
+    has_new = false;
     new_char = 0;
 
     // Configure UART pins
@@ -93,10 +94,10 @@ unsigned int uart_get_int() {
             } else if (new_char >= '0' && new_char <= '9') {
                 accumulator = (10 * accumulator) + (new_char - '0');
             }
-            has_new = FALSE;
+            has_new = false;
         }
     }
-    has_new = FALSE;
+    has_new = false;
     new_char = 0;
     return accumulator;
 }

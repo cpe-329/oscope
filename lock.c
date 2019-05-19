@@ -6,6 +6,8 @@
  * CPE 329-17/18 Spring 2019
  */
 
+#include <stdbool.h>
+
 #include "lock.h"
 #include "delay.h"
 #include "led.h"
@@ -31,7 +33,7 @@ uint8_t lock(const passcode_t passcode){
     // First digit
     new_dig = keypad_blocking_getkey(LOCK_HOLD_MS);
     if(new_dig == 10){
-        return FALSE;
+        return false;
     }
     lcd_write(lcd_translate_keypad(new_dig));
     led_blink_ms(ONE_S_MS);
@@ -40,7 +42,7 @@ uint8_t lock(const passcode_t passcode){
     // Second digit
     new_dig = keypad_blocking_getkey(LOCK_HOLD_MS);
     if(new_dig == 10){
-        return FALSE;
+        return false;
     }
     lcd_write(lcd_translate_keypad(new_dig));
     led_blink_ms(ONE_S_MS);
@@ -49,7 +51,7 @@ uint8_t lock(const passcode_t passcode){
     // Third digit
     new_dig = keypad_blocking_getkey(LOCK_HOLD_MS);
     if(new_dig == 10){
-        return FALSE;
+        return false;
     }
     lcd_write(lcd_translate_keypad(new_dig));
     led_blink_ms(ONE_S_MS);
@@ -58,16 +60,16 @@ uint8_t lock(const passcode_t passcode){
     // Fourth digit
     new_dig = keypad_blocking_getkey(LOCK_HOLD_MS);
     if(new_dig == 10){
-        return FALSE;
+        return false;
     }
     lcd_write(lcd_translate_keypad(new_dig));
     led_blink_ms(ONE_S_MS);
     guess.dig4 = new_dig;
 
     if(check_passcode(passcode, guess)){
-        return TRUE;
+        return true;
     } else {
-        return FALSE;
+        return false;
     }
 }
 

@@ -8,6 +8,7 @@
  */
 
 #include <stdint.h>
+#include <stdbool.h>
 
 #include "adc.h"
 #include "delay.h"
@@ -28,7 +29,7 @@ volatile static unsigned int num_samples = 0;
 volatile static unsigned int num_peaks = 0;
 volatile static unsigned int max_val = 0;
 volatile static unsigned int min_val = 16000;
-volatile static uint8_t finding_peak = TRUE;
+volatile static uint8_t finding_peak = true;
 volatile static unsigned int peak_delta = 0;
 volatile static fast_ac_pkpk = 0;
 
@@ -107,13 +108,13 @@ inline void count_peaks(unsigned int val) {
     if (finding_peak) {
         // Finding peak
         if (val > max_val - peak_delta) {
-            finding_peak = FALSE;
+            finding_peak = false;
         }
     } else {
         // Finding trough
         if (val < min_val + peak_delta) {
             num_peaks += 1;
-            finding_peak = TRUE;
+            finding_peak = true;
         }
     }
 }
