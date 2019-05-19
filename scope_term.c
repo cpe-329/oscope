@@ -151,11 +151,12 @@ void print_info_values() {
         y += 2;
         move_cursor(INFO_X_CORD + 11, y);
         uart_write_volts(scope_get_ac_dc_offset());
+        uart_write_string("      ", 6);
+
         y += 2;
         move_cursor(INFO_X_CORD + 9, y);
         uart_write_int(scope_get_ac_freq());
-        uart_write_string ("Hz",2);
-        uart_write_string("     ", 5);
+        uart_write_string ("Hz      ",8);
         y += 2;
         move_cursor(INFO_X_CORD + 11, y);
         uart_write_int(scope_get_ac_period());
