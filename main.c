@@ -64,7 +64,7 @@ int main(void) {
             // Reset number of sample since last refresh
             repaint_term = false;
         }
-        if (refresh_term || (scope_get_mode() && one_sec_interval)) {
+        if (refresh_term || ((scope_get_mode() == SCOPE_MODE_AC) && one_sec_interval)) {
             // Refresh data displayed in term
             scope_refresh_data();
 
