@@ -15,25 +15,25 @@
 
 static unsigned char com[2] = {ESC, '['};
 
-void move_down(unsigned int val) {
+void inline move_down(unsigned int val) {
     uart_write_string(com, 2);
     uart_write_int(val);
     uart_write('B');
 }
 
-void move_up(unsigned int val) {
+void inline move_up(unsigned int val) {
     uart_write_string(com, 2);
     uart_write_int(val);
     uart_write('A');
 }
 
-void move_left(unsigned int val) {
+void inline move_left(unsigned int val) {
     uart_write_string(com, 2);
     uart_write_int(val);
     uart_write('D');
 }
 
-void move_right(unsigned int val) {
+void inline move_right(unsigned int val) {
     uart_write_string(com, 2);
     uart_write_int(val);
     uart_write('C');
@@ -62,7 +62,7 @@ void move_cursor(unsigned int x, unsigned int y) {
     uart_write('H');
 }
 
-void draw_horizontal(unsigned int length,
+void inline draw_horizontal(unsigned int length,
                      unsigned int x,
                      unsigned int y,
                      char c) {
@@ -73,7 +73,7 @@ void draw_horizontal(unsigned int length,
     }
 }
 
-void draw_vertical(unsigned int length,
+void inline draw_vertical(unsigned int length,
                    unsigned int x,
                    unsigned int y,
                    char c,
@@ -108,34 +108,41 @@ void print_info_text() {
     int i, y = INFO_Y_CORD + 2;
     move_cursor(INFO_X_CORD, y);
     if (scope_get_mode() == SCOPE_MODE_AC) {
-        uart_write_string("  AC MODE", 9);
+        uart_write_string("  AC Mode", 9);
         y += 2;
         move_cursor(INFO_X_CORD, y);
-        uart_write_string("AC PKPK: ", 9);
+        uart_write_string("True RMS: ", 10);
         y += 2;
         move_cursor(INFO_X_CORD, y);
-        uart_write_string("DC OFFSET: ", 11);
+        uart_write_string("AC Pkpk: ", 9);
         y += 2;
         move_cursor(INFO_X_CORD, y);
-        uart_write_string("AC FREQ: ", 9);
+        uart_write_string("DC Offset: ", 11);
         y += 2;
         move_cursor(INFO_X_CORD, y);
-        uart_write_string("AC PERIOD: ", 11);
+        uart_write_string("AC Freq: ", 9);
+        y += 2;
+        move_cursor(INFO_X_CORD, y);
+        uart_write_string("AC Period: ", 11);
+        move_cursor(HIST_TITLE_X+10, HIST_TITLE_Y);
+        uart_write_string("True RMS  ", 10);
 
     } else {
-        uart_write_string("  DC MODE", 9);
+        uart_write_string("  DC Mode", 9);
         y += 2;
         move_cursor(INFO_X_CORD, y);
-        uart_write_string("DC OFFSET: ", 11);
+        uart_write_string("DC Offset: ", 11);
+        move_cursor(HIST_TITLE_X + 10, HIST_TITLE_Y);
+        uart_write_string("DC Offset ", 10);
     }
     y += 2;
     move_cursor(INFO_X_CORD, y);
     uart_write_string("Num Samples: ", 13);
     if (scope_get_mode() == SCOPE_MODE_DC) {
-        for (i = 0; i < 3; i++) {
+        for (i = 0; i < 4; i++) {
             y += 2;
             move_cursor(INFO_X_CORD, y);
-            uart_write_string("                  ", 18);
+            uart_write_string("                   ", 19);
         }
     }
 }
@@ -146,8 +153,12 @@ void print_info_values() {
     if (scope_get_mode() == SCOPE_MODE_AC) {
         y += 2;
         move_cursor(INFO_X_CORD + 9, y);
+        uart_write_volts(scope_get_true_rms());
+        uart_write_string("    ", 4);
+        y += 2;
+        move_cursor(INFO_X_CORD + 9, y);
         uart_write_volts(scope_get_ac_pkpk());
-        uart_write_string("  ", 2);
+        uart_write_string("    ", 4);
         y += 2;
         move_cursor(INFO_X_CORD + 11, y);
         uart_write_volts(scope_get_ac_dc_offset());
@@ -173,11 +184,11 @@ void print_info_values() {
     uart_write_string("    ", 4);
 }
 
-void print_graph_title() {
+void inline print_graph_title() {
     move_cursor(HIST_TITLE_X, HIST_TITLE_Y);
     uart_write_string("Histogram", 9);
     move_cursor(INFO_X_CORD, INFO_Y_CORD);
-    uart_write_string("Oscilloscop", 12);
+    uart_write_string("Oscilloscope", 12);
 }
 
 void print_time_divisions() {
@@ -189,16 +200,15 @@ void print_time_divisions() {
         uart_write_string("ms", 2);
     }
     x -= 5;
-    move_cursor(x, TIME_Y);
     for (times = 0; times < HISTOGRAM_SIZE; times++) {
+        move_cursor(x, TIME_Y);
         uart_write_int(time);
         time += scope_get_histogram_div();
         x -= 5;
-        move_cursor(x, TIME_Y);
     }
 }
 
-void print_volt_divisions() {
+void inline print_volt_divisions() {
     int volt_mes_y = HIST_TITLE_Y + 1;
     int i;
     int volts = 330;
@@ -226,7 +236,7 @@ void print_bar(unsigned int val, unsigned int x, unsigned int y) {
     }
 }
 
-void print_graph_border() {
+void  inline print_graph_border() {
     print_graph_title();
     print_volt_divisions();
 }
@@ -240,7 +250,6 @@ void print_Graph() {
 }
 
 void scope_refresh_term() {
-    hide_cursor();
     print_Graph();
     print_info_values();
 }

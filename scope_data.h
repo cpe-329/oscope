@@ -29,6 +29,7 @@ inline unsigned int scope_get_ac_dc_offset();
 inline unsigned int scope_get_ac_pkpk();
 inline unsigned int scope_get_ac_freq();
 inline unsigned int scope_get_ac_period();
+inline unsigned int scope_get_true_rms();
 inline unsigned int scope_get_histogram(uint8_t i);
 inline unsigned int scope_get_histogram_div();
 inline uint8_t scope_get_histogram_units();
