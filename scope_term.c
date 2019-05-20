@@ -111,7 +111,7 @@ void print_info_text() {
         uart_write_string("  AC Mode", 9);
         y += 2;
         move_cursor(INFO_X_CORD, y);
-        uart_write_string("True RMS: ", 10);
+        uart_write_string("True RMS: ", 11);
         y += 2;
         move_cursor(INFO_X_CORD, y);
         uart_write_string("AC Pkpk: ", 9);
