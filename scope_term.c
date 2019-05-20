@@ -130,7 +130,7 @@ void print_info_text() {
     }
     y += 2;
     move_cursor(INFO_X_CORD, y);
-    uart_write_string("NUM SAMPLES: ", 13);
+    uart_write_string("Num Samples: ", 13);
     if (scope_get_mode() == SCOPE_MODE_DC) {
         for (i = 0; i < 3; i++) {
             y += 2;
@@ -175,9 +175,9 @@ void print_info_values() {
 
 void print_graph_title() {
     move_cursor(HIST_TITLE_X, HIST_TITLE_Y);
-    uart_write_string("HISTOGRAM", 9);
+    uart_write_string("Histogram", 9);
     move_cursor(INFO_X_CORD, INFO_Y_CORD);
-    uart_write_string("OSCILLOSCOPE", 12);
+    uart_write_string("Oscilloscop", 12);
 }
 
 void print_time_divisions() {
