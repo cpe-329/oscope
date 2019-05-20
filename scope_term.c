@@ -39,17 +39,17 @@ void inline move_right(unsigned int val) {
     uart_write('C');
 }
 
-void move_home() {
+void inline move_home() {
     unsigned char command[3] = {ESC, '[', 'H'};
     uart_write_string(command, 3);
 }
 
-void hide_cursor() {
+void inline hide_cursor() {
     unsigned char command[4] = {ESC, '[', '8', 'm'};
     uart_write_string(command, 4);
 }
 
-void term_clear_screen() {
+void inline term_clear_screen() {
     unsigned char command[4] = {ESC, '[', '2', 'J'};
     uart_write_string(command, 4);
 }
