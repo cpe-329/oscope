@@ -184,7 +184,7 @@ void print_time_divisions() {
     int times, time = 0, x = TIME_X_START;
     move_cursor(x, TIME_Y);
     if (scope_get_histogram_units() == 1) {
-        uart_write_string("us", 2);
+        uart_write_string(" s", 2);
     } else {
         uart_write_string("ms", 2);
     }
