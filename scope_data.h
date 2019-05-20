@@ -17,6 +17,11 @@
 
 #define HISTOGRAM_SIZE (8)
 
+#define SCOPE_DC_HIST_DIV (120)
+#define SCOPE_AC_HIST_DIV (1)
+#define SCOPE_HIST_UNITS_MS (0)
+#define SCOPE_HIST_UNITS_S (1)
+
 // Data accessors
 inline uint8_t scope_get_mode();
 inline unsigned int scope_get_dc_value();

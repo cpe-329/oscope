@@ -24,7 +24,7 @@
 
 #define FREQ FREQ_48_MHZ
 
-#define REPAINT_COUNT_MAX (5)
+#define SECONDS_COUNT_MAX (4)
 
 volatile bool adc_data_fresh = false;
 volatile bool refresh_term = false;
@@ -41,58 +41,58 @@ int main(void) {
     paint_terminal();
 
     while (1) {
-        // Read data from scope
-        // if (adc_data_fresh) {
-        scope_read_data();
-        adc_data_fresh = false;
-        // }
         // Check button to switch mode
-        if (button_get() != 0) {
+        if (button_get()) {
             scope_switch_mode();
             repaint_term = true;
             // delay_ms(100, FREQ);
         }
 
-        if (scope_get_mode() == SCOPE_MODE_AC){
-            refresh_term = false;
-        }
-
-        if (seconds_counter >= REPAINT_COUNT_MAX) {
+        // Schedule repaint of entire term
+        if (seconds_counter >= SECONDS_COUNT_MAX) {
             repaint_term = true;
             seconds_counter = 0;
         }
+
         // Repaint entire term only if needed
         if (repaint_term) {
-            scope_refresh_data();
-
             // Repaint UART VT100 terminal
-            rgb_set(RGB_RED);
+            led_on();
             paint_terminal();
-            rgb_clear(RGB_RED);
+            led_off();
 
             // Reset number of sample since last refresh
-            scope_reset_locks();
             repaint_term = false;
-            refresh_term = false;
-        } else if (refresh_term || one_sec_interval) {
+        }
+        if (refresh_term || (scope_get_mode() && one_sec_interval)) {
             // Refresh data displayed in term
             scope_refresh_data();
 
-            rgb_set(RGB_GREEN);
+            led_on();
             // Refresh UART VT100 terminal
             scope_refresh_term();
-            rgb_clear(RGB_GREEN);
+            led_off();
 
             // Reset number of sample since last refresh
             scope_reset_num_samples();
             refresh_term = false;
         }
 
+        // Reset statistics once a second
         if (one_sec_interval) {
             scope_store_peak_data();
             scope_reset_min_max();
             scope_reset_num_peaks();
+            scope_reset_locks();
             one_sec_interval = false;
+        }
+
+        // Read data from scope
+        if (adc_data_fresh) {
+            scope_read_data();
+
+            adc_data_fresh = false;
+            adc_start_conversion();
         }
     }
 }
@@ -101,29 +101,31 @@ int main(void) {
 // Every 1 second
 void TA0_0_IRQHandler(void) {
     // rgb_set(RGB_RED);
+    rgb_toggle(RGB_RED);
     TIMER_A0->CCTL[0] &= ~TIMER_A_CCTLN_CCIFG;  // Clear the CCR0 interrupt
     seconds_counter += 1;
     reset_refresh_delay();
     one_sec_interval = true;
+    // rgb_clear(RGB_RED);
 }
 
 // Timer A0_N interrupt service routine for CCR1 - CCR4
 void TA0_N_IRQHandler(void) {
     if (TIMER_A0->CCTL[1] & TIMER_A_CCTLN_CCIFG)  // check for CCR1 interrupt
     {
-        rgb_set(RGB_RED);
+        rgb_set(RGB_GREEN);
         TIMER_A0->CCTL[1] &= ~TIMER_A_CCTLN_CCIFG;  // clear CCR1 interrupt
         increment_refresh_delay();
         // Action for ccr1 intr
         refresh_term = true;
-        rgb_clear(RGB_RED);
+        rgb_clear(RGB_GREEN);
     }
 }
 
 // ADC14 interrupt service routine
 void ADC14_IRQHandler(void) {
     rgb_set(RGB_BLUE);
-    adc_data_fresh = true;
     adc_store_reading(ADC14->MEM[0]);
+    adc_data_fresh = true;
     rgb_clear(RGB_BLUE);
 }

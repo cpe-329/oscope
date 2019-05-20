@@ -15,6 +15,7 @@
 #include "led.h"
 #include "scope_data.h"
 #include "scope_term.h"
+#include "timers.h"
 
 volatile static uint8_t scope_mode = SCOPE_MODE_AC;
 volatile static unsigned int dc_value = 0;
@@ -23,7 +24,7 @@ volatile static unsigned int ac_pkpk = 0;
 volatile static unsigned int ac_freq = 0;
 volatile static unsigned int ac_period = 0;
 volatile static unsigned int histogram[HISTOGRAM_SIZE] = {};
-static unsigned int histogram_div = 148;
+static unsigned int histogram_div = SCOPE_DC_HIST_DIV;
 uint8_t histogram_units = 0;
 volatile static unsigned int num_samples = 0;
 
@@ -32,10 +33,12 @@ volatile static unsigned int num_peaks = 0;
 volatile static unsigned int max_val = 0;
 volatile static unsigned int min_val = 16000;
 
-volatile static bool finding_peak = true;
+volatile static unsigned int max_prev = 0;
+volatile static unsigned int min_prev = 16000;
+
 volatile static unsigned int peak_delta = 0;
-volatile static fast_ac_pkpk = 0;
-volatile static bool min_max_valid = false;
+volatile static unsigned int fast_ac_pkpk = 0;
+volatile static unsigned int min_max_valid = false;
 volatile static bool dc_offset_valid = false;
 
 // Mode selction
@@ -82,7 +85,7 @@ inline unsigned int scope_get_histogram_div() {
 }
 
 inline uint8_t scope_get_histogram_units() {
-    // 0 for ms, 1 for us
+    // 0 for ms, 1 for s
     return histogram_units;
 }
 
@@ -105,6 +108,8 @@ inline void scope_reset_num_peaks() {
 }
 
 inline void scope_reset_min_max() {
+    min_prev = min_val;
+    max_prev = max_val;
     min_val = 16000;
     max_val = 0;
 }
@@ -115,18 +120,17 @@ inline void scope_reset_locks() {
 }
 
 inline void count_peaks(unsigned int val) {
-    if (dc_offset_valid) {
-        if (finding_peak) {
-            // Finding peak
-            if (val > max_val - peak_delta) {
-                finding_peak = false;
-            }
-        } else {
-            // Finding trough
-            if (val < min_val + peak_delta) {
-                num_peaks += 1;
-                finding_peak = true;
-            }
+    static bool finding_peak = true;
+    if (finding_peak) {
+        // Finding peak
+        if (val > max_prev - peak_delta) {
+            finding_peak = false;
+        }
+    } else {
+        // Finding trough
+        if (val < min_prev + peak_delta) {
+            num_peaks += 1;
+            finding_peak = true;
         }
     }
 }
@@ -143,11 +147,16 @@ inline void scope_switch_mode() {
     switch (scope_mode) {
         case SCOPE_MODE_DC:
             scope_mode = SCOPE_MODE_AC;
-            // timers_stop_fast();
-            break;
+            histogram_div = SCOPE_AC_HIST_DIV;
+            histogram_units = SCOPE_HIST_UNITS_S;
+            timers_resume_fast();
+            return;
         default:
             scope_mode = SCOPE_MODE_DC;
-            timers_resume_fast();
+            histogram_div = SCOPE_DC_HIST_DIV;
+            histogram_units = SCOPE_HIST_UNITS_MS;
+            timers_stop_fast();
+            return;
     }
 }
 
@@ -156,6 +165,7 @@ void scope_read_data() {
     // Read in new data
     adc_log_reading();
     num_samples += 1;
+
     // Get updated average
     avg_val = adc_get_avg();
 
@@ -167,8 +177,6 @@ void scope_read_data() {
     }
     min_max_valid = max_val > min_val;
     count_peaks(avg_val);
-
-    adc_start_conversion();
 }
 
 void scope_refresh_data() {
@@ -185,11 +193,11 @@ void scope_refresh_data() {
         // AC Mode
         fast_ac_pkpk = adc_map_val(max_val - min_val);
 
-        if (min_max_valid) {
+        // if (min_max_valid) {
             ac_dc_offset = (ac_pkpk >> 1) + min_val;
-            dc_offset_valid =
-                (min_val < ac_dc_offset) && (max_val > ac_dc_offset);
-        }
+        //     dc_offset_valid =
+        //         (min_val < ac_dc_offset) && (max_val > ac_dc_offset);
+        // }
         peak_delta = fast_ac_pkpk >> 2;
 
         ac_period = 1000 / ac_freq;
