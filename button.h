@@ -11,6 +11,7 @@
 #define BUTTON_H_
 
 #include <stdint.h>
+#include <stdbool.h>
 
 #define BUTTON_PIN P1_1
 #define MANUAL_PIN P1_5
@@ -18,6 +19,6 @@
 #define TRIGGER_PIN BUTTON_PIN
 
 inline void button_init();
-inline uint8_t button_get();
+inline bool button_get();
 
 #endif /* BUTTON_H_ */

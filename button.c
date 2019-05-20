@@ -8,6 +8,7 @@
  */
 
 #include "button.h"
+#include <stdbool.h>
 #include <stdint.h>
 #include "led.h"
 #include "msp.h"
@@ -16,15 +17,6 @@
 volatile static uint8_t button_val = 0;
 
 inline void button_init() {
-    // P1->SEL0 &= ~BUTTON_PIN;
-    // P1->SEL1 &= ~BUTTON_PIN;
-
-    // P1->DIR &= ~BUTTON_PIN;
-    // P1->REN |= BUTTON_PIN;
-    // P1->OUT &= ~BUTTON_PIN;
-
-    // button_val = P1->IN & BUTTON_PIN;
-
     P1->SEL0 &= ~TRIGGER_PIN;
     P1->SEL1 &= ~TRIGGER_PIN;
 
@@ -35,10 +27,9 @@ inline void button_init() {
     button_val = P1->IN & TRIGGER_PIN;
 }
 
-inline uint8_t button_get() {
-    uint8_t released;
-    uint8_t new_val = (P1->IN & TRIGGER_PIN) != 0;
-    released = (button_val == 0) && (new_val != 0);
+inline bool button_get() {
+    bool new_val = (P1->IN & TRIGGER_PIN) != 0;
+    bool released = (button_val == 0) && (new_val != 0);
     button_val = new_val;
     return released;
 }
