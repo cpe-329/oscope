@@ -73,6 +73,10 @@ inline unsigned int scope_get_ac_period() {
     return ac_period;
 }
 
+inline unsigned int scope_get_true_rms(){
+    return ((ac_pkpk/2)*0.7071);
+}
+
 inline unsigned int scope_get_histogram(uint8_t i) {
     // mV from 0 to 3000
     return histogram[i];
