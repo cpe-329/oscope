@@ -45,6 +45,7 @@ inline void rgb_init(void);
 // Set 3 bits of RGB LED
 inline void rgb_set(uint8_t value);
 inline void rgb_clear(uint8_t value);
+inline void rgb_toggle(uint8_t value);
 
 // Blink all combinations of LEDs
 inline void test_leds();

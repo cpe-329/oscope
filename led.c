@@ -18,6 +18,8 @@ inline void led_init(void) {
     P1->SEL1 &= ~LED1_PIN;  // Set sel1 bit low for GPIO
     P1->DIR |= LED1_PIN;    // Set P1.0 to output mode
     P1->OUT &= ~LED1_PIN;   //  Set LED1 state to off
+
+    test_leds();
 }
 
 // Toggle LED1
@@ -60,6 +62,10 @@ inline void rgb_set(uint8_t value) {
 
 inline void rgb_clear(uint8_t value) {
     P2->OUT &= ~(value & RGB_PINS);  // Clear previous RGB LED state
+}
+
+inline void rgb_toggle(uint8_t value) {
+    P2->OUT ^= (value & RGB_PINS);
 }
 
 // Blink all combinations of LEDs
