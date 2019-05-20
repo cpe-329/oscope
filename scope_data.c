@@ -160,6 +160,7 @@ inline void scope_switch_mode() {
     }
 }
 
+// Process latest value from ADC 
 void scope_read_data() {
     unsigned int avg_val = 0;
     // Read in new data
@@ -175,10 +176,10 @@ void scope_read_data() {
     } else if (avg_val < min_val) {
         min_val = avg_val;
     }
-    min_max_valid = max_val > min_val;
     count_peaks(avg_val);
 }
 
+// Prep for screen refresh
 void scope_refresh_data() {
     unsigned int avg_val = adc_get_avg();
 
@@ -194,11 +195,10 @@ void scope_refresh_data() {
         fast_ac_pkpk = adc_map_val(max_val - min_val);
 
         // if (min_max_valid) {
-            ac_dc_offset = (ac_pkpk >> 1) + min_val;
+        ac_dc_offset = adc_map_val((ac_pkpk >> 1) + min_val);
         //     dc_offset_valid =
         //         (min_val < ac_dc_offset) && (max_val > ac_dc_offset);
         // }
-        peak_delta = fast_ac_pkpk >> 2;
 
         ac_period = 1000 / ac_freq;
     }
