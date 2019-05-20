@@ -203,6 +203,7 @@ void print_time_divisions() {
     for (times = 0; times < HISTOGRAM_SIZE; times++) {
         move_cursor(x, TIME_Y);
         uart_write_int(time);
+        uart_write_string("  ", 2);
         time += scope_get_histogram_div();
         x -= 5;
     }
