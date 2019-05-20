@@ -42,8 +42,10 @@ inline void adc_init() {
     // Enable ADC interrupt in NVIC module
     NVIC->ISER[0] = 1 << ((ADC14_IRQn)&31);
 
-    adc_start_conversion();
+    adc_set_calibration(ADC_CALI_MIN, ADC_CALI_MAX);
     
+    adc_start_conversion();
+
     rgb_clear(RGB_GREEN);
 }
 
