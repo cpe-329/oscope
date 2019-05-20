@@ -111,7 +111,7 @@ void print_info_text() {
         uart_write_string("  AC Mode", 9);
         y += 2;
         move_cursor(INFO_X_CORD, y);
-        uart_write_string("True RMS: ", 10);
+        uart_write_string("True RMS: ", 11);
         y += 2;
         move_cursor(INFO_X_CORD, y);
         uart_write_string("AC Pkpk: ", 9);
@@ -203,6 +203,7 @@ void print_time_divisions() {
     for (times = 0; times < HISTOGRAM_SIZE; times++) {
         move_cursor(x, TIME_Y);
         uart_write_int(time);
+        uart_write_string("  ", 2);
         time += scope_get_histogram_div();
         x -= 5;
     }
