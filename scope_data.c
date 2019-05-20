@@ -24,7 +24,7 @@ volatile static unsigned int ac_pkpk = 0;
 volatile static unsigned int ac_freq = 0;
 volatile static unsigned int ac_period = 0;
 volatile static unsigned int histogram[HISTOGRAM_SIZE] = {};
-static unsigned int histogram_div = SCOPE_DC_HIST_DIV;
+static unsigned int histogram_div = SCOPE_AC_HIST_DIV;
 uint8_t histogram_units = 0;
 volatile static unsigned int num_samples = 0;
 
