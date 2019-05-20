@@ -98,16 +98,11 @@ inline unsigned int scope_get_num_samples() {
     return num_samples;
 }
 
-void scope_store_peak_data() {
-    ac_pkpk = fast_ac_pkpk;
-    ac_freq = num_peaks;  // REPAINT_PERIOD;
-}
-
 inline void scope_reset_num_samples() {
     num_samples = 0;
 }
 
-inline void scope_reset_num_peaks() {
+inline void scope_cycle_peak_data() {
     num_peaks = 0;
 }
 
@@ -116,11 +111,6 @@ inline void scope_reset_min_max() {
     max_prev = max_val;
     min_val = 16000;
     max_val = 0;
-}
-
-inline void scope_reset_locks() {
-    min_max_valid = false;
-    dc_offset_valid = false;
 }
 
 inline void count_peaks(unsigned int val) {
@@ -165,7 +155,7 @@ inline void scope_switch_mode() {
 }
 
 // Process latest value from ADC 
-void scope_read_data() {
+inline void scope_read_data() {
     unsigned int avg_val = 0;
     // Read in new data
     adc_log_reading();
