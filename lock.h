@@ -1,8 +1,8 @@
 /*
  * lock.h
- * 
+ *
  * Danica Fujiwara & Spencer Shaw
- * 
+ *
  * CPE 329-17/18 Spring 2019
  */
 
@@ -35,10 +35,12 @@ void unlock_message();
 uint8_t check_passcode(passcode_t actual, passcode_t guess);
 
 // Construct a passcode
-passcode_t passcode_init(uint8_t dig1, uint8_t dig2, uint8_t dig3, uint8_t dig4);
+passcode_t passcode_init(uint8_t dig1,
+                         uint8_t dig2,
+                         uint8_t dig3,
+                         uint8_t dig4);
 
 // Construct and empty passcode
 passcode_t passcode_empty();
-
 
 #endif

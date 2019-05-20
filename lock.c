@@ -1,21 +1,21 @@
 /*
  * lock.c
- * 
+ *
  * Danica Fujiwara & Spencer Shaw
- * 
+ *
  * CPE 329-17/18 Spring 2019
  */
 
 #include <stdbool.h>
 
-#include "lock.h"
 #include "delay.h"
-#include "led.h"
-#include "lcd.h"
 #include "keypad.h"
+#include "lcd.h"
+#include "led.h"
+#include "lock.h"
 
 // Execute the lock routine
-uint8_t lock(const passcode_t passcode){
+uint8_t lock(const passcode_t passcode) {
     // Stores the user's guess
     passcode_t guess;
     // Stores the last input value
@@ -32,7 +32,7 @@ uint8_t lock(const passcode_t passcode){
 
     // First digit
     new_dig = keypad_blocking_getkey(LOCK_HOLD_MS);
-    if(new_dig == 10){
+    if (new_dig == 10) {
         return false;
     }
     lcd_write(lcd_translate_keypad(new_dig));
@@ -41,7 +41,7 @@ uint8_t lock(const passcode_t passcode){
 
     // Second digit
     new_dig = keypad_blocking_getkey(LOCK_HOLD_MS);
-    if(new_dig == 10){
+    if (new_dig == 10) {
         return false;
     }
     lcd_write(lcd_translate_keypad(new_dig));
@@ -50,23 +50,23 @@ uint8_t lock(const passcode_t passcode){
 
     // Third digit
     new_dig = keypad_blocking_getkey(LOCK_HOLD_MS);
-    if(new_dig == 10){
+    if (new_dig == 10) {
         return false;
     }
     lcd_write(lcd_translate_keypad(new_dig));
     led_blink_ms(ONE_S_MS);
     guess.dig3 = new_dig;
-    
+
     // Fourth digit
     new_dig = keypad_blocking_getkey(LOCK_HOLD_MS);
-    if(new_dig == 10){
+    if (new_dig == 10) {
         return false;
     }
     lcd_write(lcd_translate_keypad(new_dig));
     led_blink_ms(ONE_S_MS);
     guess.dig4 = new_dig;
 
-    if(check_passcode(passcode, guess)){
+    if (check_passcode(passcode, guess)) {
         return true;
     } else {
         return false;
@@ -74,7 +74,7 @@ uint8_t lock(const passcode_t passcode){
 }
 
 // Display the locked message
-void lock_message(){
+void lock_message() {
     lcd_cursor_off();
     lcd_clear();
 
@@ -99,7 +99,7 @@ void lock_message(){
 }
 
 // Display the unlocked message
-void unlock_message(){
+void unlock_message() {
     lcd_cursor_off();
     lcd_clear();
     // lcd_home();  // ?
@@ -118,18 +118,16 @@ void unlock_message(){
 }
 
 // Check two passcodes for equality
-uint8_t check_passcode(passcode_t actual, passcode_t guess){
-    return ((actual.dig1 == guess.dig1) &
-            (actual.dig2 == guess.dig2) &
-            (actual.dig3 == guess.dig3) &
-            (actual.dig4 == guess.dig4));
+uint8_t check_passcode(passcode_t actual, passcode_t guess) {
+    return ((actual.dig1 == guess.dig1) & (actual.dig2 == guess.dig2) &
+            (actual.dig3 == guess.dig3) & (actual.dig4 == guess.dig4));
 }
 
 // Construct a passcode
-passcode_t passcode_init(uint8_t dig1, 
+passcode_t passcode_init(uint8_t dig1,
                          uint8_t dig2,
                          uint8_t dig3,
-                         uint8_t dig4){
+                         uint8_t dig4) {
     passcode_t passcode;
     passcode.dig1 = dig1;
     passcode.dig2 = dig2;
@@ -139,7 +137,6 @@ passcode_t passcode_init(uint8_t dig1,
 }
 
 // Construct and empty passcode
-passcode_t passcode_empty(){
+passcode_t passcode_empty() {
     return passcode_init(12, 12, 12, 12);
 }
-
