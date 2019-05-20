@@ -19,7 +19,7 @@
 
 volatile static uint8_t scope_mode = SCOPE_MODE_AC;
 volatile static unsigned int dc_value = 0;
-volatile static unsigned int ac_dc_offset = 0;
+volatile static unsigned int ac_true_rms = 0;
 volatile static unsigned int ac_pkpk = 0;
 volatile static unsigned int ac_freq = 0;
 volatile static unsigned int ac_period = 0;
@@ -52,9 +52,14 @@ inline unsigned int scope_get_dc_value() {
     return dc_value;
 }
 
+inline unsigned int scope_get_true_rms() {
+    // mV from 0 to 300
+    return ac_true_rms;
+}
+
 // AC Mode data
 inline unsigned int scope_get_ac_dc_offset() {
-    // mV from 0 to 3000
+    // mV from 0 to 300
     return ac_dc_offset;
 }
 
@@ -78,7 +83,7 @@ inline unsigned int scope_get_true_rms(){
 }
 
 inline unsigned int scope_get_histogram(uint8_t i) {
-    // mV from 0 to 3000
+    // mV from 0 to 300
     return histogram[i];
 }
 
@@ -193,6 +198,8 @@ void scope_refresh_data() {
         //     dc_offset_valid =
         //         (min_val < ac_dc_offset) && (max_val > ac_dc_offset);
         // }
+
+        ac_true_rms = (ac_pkpk >> 1) * 0.7071;
 
         ac_period = 1000 / ac_freq;
     }
