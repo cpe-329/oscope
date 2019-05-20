@@ -19,7 +19,7 @@
 #include "my_msp.h"
 
 #define REPAINT_DELAY (2051)
-#define REFRESH_DELAY_DELTA (270)
+#define REFRESH_DELAY_DELTA (256)
 
 void timer_init(void) {
     rgb_set(RGB_YELLOW);
@@ -58,9 +58,9 @@ inline void reset_refresh_delay() {
 }
 
 inline void timers_stop_fast(){
-    TIMER_A0->CCR[1] = REPAINT_DELAY + 10;  
+     TIMER_A0->CCTL[1] = TIMER_A_CCTLN_CCIE;  // TACCR1 interrupt enabled
 }
 
 inline void timers_resume_fast(){
-    TIMER_A0->CCR[1] = 1;
+     TIMER_A0->CCTL[1] = 0;  // TACCR1 interrupt enabled
 }
