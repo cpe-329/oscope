@@ -39,7 +39,7 @@ int main(void) {
     adc_set_calibration(ADC_CALI_MIN, ADC_CALI_MAX);
     term_clear_screen();
     paint_terminal();
-
+    scope_switch_mode();
     while (1) {
         // Check button to switch mode
         if (button_get()) {
