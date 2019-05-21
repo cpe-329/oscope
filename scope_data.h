@@ -36,6 +36,8 @@ inline unsigned int scope_get_histogram(uint8_t i);
 inline unsigned int scope_get_histogram_div();
 inline uint8_t scope_get_histogram_units();
 inline unsigned int scope_get_num_samples();
+inline unsigned int scope_get_min_val();
+inline unsigned int scope_get_max_val();
 
 // Internal functions
 inline void scope_reset_num_samples();

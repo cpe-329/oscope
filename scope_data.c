@@ -98,6 +98,16 @@ inline uint8_t scope_get_histogram_units() {
     return histogram_units;
 }
 
+inline unsigned int scope_get_min_val(){
+    // value from 0 to 16k
+    return min_val;
+}
+
+inline unsigned int scope_get_max_val(){
+    // value from 0 to 16k
+    return max_val;
+}
+
 // Number of samples taken since last term refresh
 inline unsigned int scope_get_num_samples() {
     return num_samples;
