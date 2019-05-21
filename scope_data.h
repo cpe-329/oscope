@@ -17,6 +17,8 @@
 
 #define HISTOGRAM_SIZE (8)
 
+#define FREQ_ALIGNMENT (1)
+
 #define SCOPE_DC_HIST_DIV (120)
 #define SCOPE_AC_HIST_DIV (1)
 #define SCOPE_HIST_UNITS_MS (0)
