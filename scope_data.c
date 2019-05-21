@@ -25,8 +25,7 @@ volatile static unsigned int dc_value = 0;
 volatile static unsigned int ac_pkpk = 0;
 volatile static unsigned int ac_dc_offset = 0;
 volatile static unsigned int ac_true_rms = 0;
-volatile static unsigned int rms_samples = 0;
-volatile static unsigned int ac_rms_sum = 0;
+volatile static unsigned long ac_rms_sum = 0;
 volatile static unsigned int ac_freq = 0;
 volatile static unsigned int ac_period = 0;
 volatile static unsigned int histogram[HISTOGRAM_SIZE] = {};
@@ -58,7 +57,7 @@ inline unsigned int scope_get_dc_value() {
 inline unsigned int scope_get_true_rms() {
     // mV from 0 to 300
     if (ac_rms_sum != 0){
-        ac_true_rms = sqrt(ac_rms_sum / num_peaks);
+        ac_true_rms = sqrt(ac_rms_sum / num_samples);
     }
     return adc_map_val(ac_true_rms);
 }
@@ -116,6 +115,7 @@ inline unsigned int scope_get_num_samples() {
 }
 
 inline void scope_reset_num_samples() {
+    ac_rms_sum = 0;
     num_samples = 0;
 }
 
@@ -211,7 +211,6 @@ inline void scope_read_data() {
     }
     if (avg_val >= ac_dc_offset){
         ac_rms_sum += avg_val * avg_val;
-        rms_samples ++;
     }
     count_peaks(avg_val);
 }
