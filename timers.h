@@ -22,9 +22,11 @@
 
 void timer_init(void);
 
+inline void timer_stop_main();
+inline void timer_restart();
 inline void increment_refresh_delay();
 inline void reset_refresh_delay();
 
-inline void timers_stop_fast();
-inline void timers_resume_fast();
+inline void timer_stop_fast();
+inline void timer_resume_fast();
 #endif

@@ -52,7 +52,7 @@ int main(void) {
 
         // Schedule repaint of entire term
         if (seconds_counter >= SECONDS_COUNT_MAX) {
-            repaint_term = true;
+            // repaint_term = true;
             seconds_counter = 0;
         }
 
@@ -63,10 +63,14 @@ int main(void) {
             paint_terminal();
             led_off();
 
+            scope_cycle_ac_data();
             // Reset number of sample since last refresh
+            scope_reset_num_samples();
+
             repaint_term = false;
-        }
+        }else
         if (refresh_term) {
+            // timer_stop_main();
             // Refresh data displayed in term
             scope_refresh_data();
 
@@ -74,6 +78,7 @@ int main(void) {
             // Refresh UART VT100 terminal
             scope_refresh_term();
             led_off();
+            // timer_restart();
 
             // Reset number of sample since last refresh
             scope_reset_num_samples();

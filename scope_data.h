@@ -17,7 +17,7 @@
 
 #define HISTOGRAM_SIZE (8)
 
-#define FREQ_SCALING (1)
+#define FREQ_SCALING (1.155)
 
 #define SCOPE_DC_HIST_DIV (120)
 #define SCOPE_AC_HIST_DIV (1)
