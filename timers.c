@@ -18,7 +18,7 @@
 #include "msp.h"
 #include "my_msp.h"
 
-#define REPAINT_DELAY (2051)
+#define TIMER_ONE_SECOND_DELAY (2051)
 #define REFRESH_DELAY_DELTA (256)
 
 void timer_init(void) {
@@ -35,8 +35,8 @@ void timer_init(void) {
     TIMER_A0->CCTL[0] = TIMER_A_CCTLN_CCIE;  // TACCR0 interrupt enabled
     TIMER_A0->CCTL[1] = TIMER_A_CCTLN_CCIE;  // TACCR1 interrupt enabled
 
-    TIMER_A0->CCR[0] = REPAINT_DELAY;  // set CCR0 count
-    TIMER_A0->CCR[1] = REFRESH_DELAY_DELTA;              // set CCR1 count
+    TIMER_A0->CCR[0] = TIMER_ONE_SECOND_DELAY;  // set CCR0 count
+    TIMER_A0->CCR[1] = REFRESH_DELAY_DELTA;     // set CCR1 count
 
     TIMER_A0->CTL = TIMER_A_CTL_TASSEL_1 |  // ACLK,
                     TIMER_A_CTL_MC_1;       // UP mode, count up to CCR[0]
@@ -57,10 +57,10 @@ inline void reset_refresh_delay() {
     TIMER_A0->CCR[1] = REFRESH_DELAY_DELTA;  // set CCR1 count
 }
 
-inline void timers_stop_fast(){
-     TIMER_A0->CCTL[1] = TIMER_A_CCTLN_CCIE;  // TACCR1 interrupt enabled
+inline void timers_stop_fast() {
+    TIMER_A0->CCTL[1] = TIMER_A_CCTLN_CCIE;  // TACCR1 interrupt enabled
 }
 
-inline void timers_resume_fast(){
-     TIMER_A0->CCTL[1] = 0;  // TACCR1 interrupt enabled
+inline void timers_resume_fast() {
+    TIMER_A0->CCTL[1] = 0;  // TACCR1 interrupt enabled
 }

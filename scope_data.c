@@ -19,12 +19,12 @@
 
 volatile static uint8_t scope_mode = SCOPE_MODE_AC;
 volatile static unsigned int dc_value = 0;
-volatile static unsigned int ac_dc_offset = 0;
+volatile static unsigned int ac_true_rms = 0;
 volatile static unsigned int ac_pkpk = 0;
 volatile static unsigned int ac_freq = 0;
 volatile static unsigned int ac_period = 0;
 volatile static unsigned int histogram[HISTOGRAM_SIZE] = {};
-static unsigned int histogram_div = SCOPE_DC_HIST_DIV;
+static unsigned int histogram_div = SCOPE_AC_HIST_DIV;
 uint8_t histogram_units = 0;
 volatile static unsigned int num_samples = 0;
 
@@ -52,9 +52,14 @@ inline unsigned int scope_get_dc_value() {
     return dc_value;
 }
 
+inline unsigned int scope_get_true_rms() {
+    // mV from 0 to 300
+    return ac_true_rms;
+}
+
 // AC Mode data
 inline unsigned int scope_get_ac_dc_offset() {
-    // mV from 0 to 3000
+    // mV from 0 to 300
     return ac_dc_offset;
 }
 
@@ -78,7 +83,7 @@ inline unsigned int scope_get_true_rms(){
 }
 
 inline unsigned int scope_get_histogram(uint8_t i) {
-    // mV from 0 to 3000
+    // mV from 0 to 300
     return histogram[i];
 }
 
@@ -107,7 +112,7 @@ inline void scope_reset_num_samples() {
     num_samples = 0;
 }
 
-inline void scope_reset_num_peaks() {
+inline void scope_cycle_peak_data() {
     num_peaks = 0;
 }
 
@@ -116,11 +121,6 @@ inline void scope_reset_min_max() {
     max_prev = max_val;
     min_val = 16000;
     max_val = 0;
-}
-
-inline void scope_reset_locks() {
-    min_max_valid = false;
-    dc_offset_valid = false;
 }
 
 inline void count_peaks(unsigned int val) {
@@ -164,7 +164,8 @@ inline void scope_switch_mode() {
     }
 }
 
-void scope_read_data() {
+// Process latest value from ADC 
+inline void scope_read_data() {
     unsigned int avg_val = 0;
     // Read in new data
     adc_log_reading();
@@ -179,10 +180,10 @@ void scope_read_data() {
     } else if (avg_val < min_val) {
         min_val = avg_val;
     }
-    min_max_valid = max_val > min_val;
     count_peaks(avg_val);
 }
 
+// Prep for screen refresh
 void scope_refresh_data() {
     unsigned int avg_val = adc_get_avg();
 
@@ -198,11 +199,12 @@ void scope_refresh_data() {
         fast_ac_pkpk = adc_map_val(max_val - min_val);
 
         // if (min_max_valid) {
-            ac_dc_offset = (ac_pkpk >> 1) + min_val;
+        ac_dc_offset = adc_map_val((ac_pkpk >> 1) + min_val);
         //     dc_offset_valid =
         //         (min_val < ac_dc_offset) && (max_val > ac_dc_offset);
         // }
-        peak_delta = fast_ac_pkpk >> 2;
+
+        ac_true_rms = (ac_pkpk >> 1) * 0.7071;
 
         ac_period = 1000 / ac_freq;
     }

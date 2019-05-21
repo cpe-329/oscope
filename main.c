@@ -36,10 +36,10 @@ volatile uint8_t seconds_counter = 0;
 int main(void) {
     init(FREQ);
 
-    adc_set_calibration(ADC_CALI_MIN, ADC_CALI_MAX);
     term_clear_screen();
     paint_terminal();
-
+    scope_switch_mode();
+    
     while (1) {
         // Check button to switch mode
         if (button_get()) {
@@ -64,7 +64,7 @@ int main(void) {
             // Reset number of sample since last refresh
             repaint_term = false;
         }
-        if (refresh_term || (scope_get_mode() && one_sec_interval)) {
+        if (refresh_term || ((scope_get_mode() == SCOPE_MODE_AC) && one_sec_interval)) {
             // Refresh data displayed in term
             scope_refresh_data();
 
