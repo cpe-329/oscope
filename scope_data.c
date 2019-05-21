@@ -98,12 +98,12 @@ inline uint8_t scope_get_histogram_units() {
     return histogram_units;
 }
 
-inline unsigned int scope_get_min_val() {
+inline unsigned int scope_get_min() {
     // value from 0 to 16k
     return min_val;
 }
 
-inline unsigned int scope_get_max_val() {
+inline unsigned int scope_get_max() {
     // value from 0 to 16k
     return max_val;
 }
