@@ -40,9 +40,7 @@ volatile static unsigned int max_prev = 0;
 volatile static unsigned int min_prev = 16000;
 
 volatile static unsigned int peak_delta = 0;
-volatile static unsigned int fast_ac_pkpk = 0;
-volatile static unsigned int min_max_valid = false;
-volatile static bool dc_offset_valid = false;
+volatile static unsigned int ac_pkpk_prev = 0;
 
 // Mode selction
 inline uint8_t scope_get_mode() {
@@ -52,23 +50,23 @@ inline uint8_t scope_get_mode() {
 // DC Mode data
 inline unsigned int scope_get_dc_value() {
     // mV from 0 to 300
-    return dc_value;
+    return adc_map_val(dc_value);
 }
 
 inline unsigned int scope_get_true_rms() {
     // mV from 0 to 300
-    return ac_true_rms;
+    return adc_map_val(ac_true_rms);
+}
+
+inline unsigned int scope_get_ac_pkpk() {
+    // mV from 0 to 300
+    return adc_map_val(ac_pkpk_prev);
 }
 
 // AC Mode data
 inline unsigned int scope_get_ac_dc_offset() {
     // mV from 0 to 300
-    return ac_dc_offset;
-}
-
-inline unsigned int scope_get_ac_pkpk() {
-    // mV from 0 to 3000
-    return ac_pkpk;
+    return adc_map_val(ac_dc_offset);
 }
 
 inline unsigned int scope_get_ac_freq() {
@@ -102,20 +100,23 @@ inline unsigned int scope_get_num_samples() {
     return num_samples;
 }
 
-void scope_store_peak_data() {
-    ac_pkpk = fast_ac_pkpk;
-    ac_freq =   (FREQ_ALIGNMENT)*num_peaks;  // REPAINT_PERIOD;
-}
-
 inline void scope_reset_num_samples() {
     num_samples = 0;
 }
 
-inline void scope_reset_num_peaks() {
-    num_peaks = 0;
-}
+inline void scope_cycle_data() {
+    // Store peak data
+    ac_pkpk_prev = ac_pkpk;
+    peak_delta = ac_pkpk >> 2;
 
-inline void scope_reset_min_max() {
+    // Calculate new peak to peak
+    ac_pkpk = max_val - min_val;
+
+    // Reset peak count
+    ac_freq = num_peaks * FREQ_SCALING;// >> 1;
+    num_peaks = 0;
+    
+    // Store and reset min, max
     min_prev = min_val;
     max_prev = max_val;
     min_val = 16000;
@@ -127,12 +128,12 @@ inline void count_peaks(unsigned int val) {
     if (finding_peak) {
         // Finding peak
         if (val > max_prev - peak_delta) {
+            num_peaks += 1;
             finding_peak = false;
         }
     } else {
         // Finding trough
         if (val < min_prev + peak_delta) {
-            num_peaks += 1;
             finding_peak = true;
         }
     }
@@ -143,23 +144,34 @@ inline void scope_update_histogram() {
     for (i = HISTOGRAM_SIZE - 1; i > 0; i -= 1) {
         histogram[i] = histogram[i - 1];
     }
-    histogram[0] = dc_value;
+    switch (scope_mode) {
+        case SCOPE_MODE_AC:
+            histogram[0] = ac_true_rms;
+            break;
+
+        default:
+            histogram[0] = dc_value;
+            break;
+    }
 }
 
 inline void scope_switch_mode() {
+    int i;
     switch (scope_mode) {
         case SCOPE_MODE_DC:
             scope_mode = SCOPE_MODE_AC;
             histogram_div = SCOPE_AC_HIST_DIV;
             histogram_units = SCOPE_HIST_UNITS_S;
             timers_resume_fast();
-            return;
+            break;
         default:
             scope_mode = SCOPE_MODE_DC;
             histogram_div = SCOPE_DC_HIST_DIV;
             histogram_units = SCOPE_HIST_UNITS_MS;
             timers_stop_fast();
-            return;
+    }
+    for (i = 0; i < HISTOGRAM_SIZE; i += 1) {
+        histogram[i] = 0;
     }
 }
 
@@ -190,20 +202,18 @@ inline void scope_refresh_data() {
     scope_update_histogram();
 
     // AC/DC MODE
-    dc_value = adc_map_val(avg_val);
+    dc_value = avg_val;
 
     // AC Mode
     if (scope_mode == SCOPE_MODE_AC) {
         // AC Mode
-        fast_ac_pkpk = adc_map_val(max_val - min_val);
-
         // if (min_max_valid) {
-        ac_dc_offset = adc_map_val((ac_pkpk >> 1) + min_val);
+        ac_dc_offset = (ac_pkpk >> 1) + min_val;
         //     dc_offset_valid =
         //         (min_val < ac_dc_offset) && (max_val > ac_dc_offset);
         // }
 
-        ac_true_rms = (ac_pkpk >> 1) * 0.7071;
+        ac_true_rms = ((ac_pkpk >> 1) * 7071) / 1000;
 
         ac_period = 1000 / ac_freq;
     }
