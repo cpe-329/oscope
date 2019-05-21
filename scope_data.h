@@ -46,6 +46,6 @@ inline void scope_update_histogram();
 inline void scope_switch_mode();
 inline void scope_read_data();
 inline void scope_refresh_data();
-inline void scope_cycle_data();
+inline void scope_cycle_ac_data();
 
 #endif /* SCOPE_DATA_H_ */

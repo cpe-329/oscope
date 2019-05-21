@@ -107,7 +107,7 @@ inline void scope_reset_num_samples() {
     num_samples = 0;
 }
 
-inline void scope_cycle_data() {
+inline void scope_cycle_ac_data() {
     // Store peak data
     ac_pkpk_prev = ac_pkpk;
     peak_delta = ac_pkpk >> 2;
