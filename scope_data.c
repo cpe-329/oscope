@@ -25,8 +25,7 @@ volatile static unsigned int dc_value = 0;
 volatile static unsigned int ac_pkpk = 0;
 volatile static unsigned int ac_dc_offset = 0;
 volatile static unsigned int ac_true_rms = 0;
-volatile static unsigned int rms_samples = 0;
-volatile static unsigned int ac_rms_sum = 0;
+volatile static unsigned long ac_rms_sum = 0;
 volatile static unsigned int ac_freq = 0;
 volatile static unsigned int ac_period = 0;
 volatile static unsigned int histogram[HISTOGRAM_SIZE] = {};
@@ -57,10 +56,10 @@ inline unsigned int scope_get_dc_value() {
 
 inline unsigned int scope_get_true_rms() {
     // mV from 0 to 300
-    if (ac_rms_sum != 0){
-        ac_true_rms = sqrt(ac_rms_sum / num_peaks);
+    if (ac_rms_sum != 0) {
+        ac_true_rms = sqrt(ac_rms_sum / num_samples);
     }
-    return adc_map_val(ac_true_rms);
+    return adc_map_val(ac_true_rms << 5);
 }
 
 inline unsigned int scope_get_ac_pkpk() {
@@ -116,6 +115,7 @@ inline unsigned int scope_get_num_samples() {
 }
 
 inline void scope_reset_num_samples() {
+    ac_rms_sum = 0;
     num_samples = 0;
 }
 
@@ -195,6 +195,7 @@ inline void scope_switch_mode() {
 
 // Process latest value from ADC
 inline void scope_read_data() {
+    int reduced_precision = 0;
     unsigned int avg_val = 0;
     // Read in new data
     adc_log_reading();
@@ -209,11 +210,10 @@ inline void scope_read_data() {
     } else if (avg_val < min_val) {
         min_val = avg_val;
     }
-    if (avg_val >= ac_dc_offset){
-        int reduced_precision = avg_val >> 5;
-        ac_rms_sum += reduced_precision * reduced_precision;
-        rms_samples ++;
-    }
+
+    reduced_precision = avg_val >> 5;
+    ac_rms_sum += reduced_precision * reduced_precision;
+
     count_peaks(avg_val);
 }
 
