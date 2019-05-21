@@ -192,7 +192,7 @@ void print_info_values() {
     uart_write_int(scope_get_num_samples());
     uart_write_string("    ", 4);
     move_cursor(INFO_X_CORD +14, y);
-    uart_write_int(scope_get_sample_time());
+    uart_write_int(scope_get_histogram_div());
     uart_write_string("    ", 4);
     y += 2;
     move_cursor(INFO_X_CORD+11, y);
