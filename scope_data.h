@@ -39,7 +39,7 @@ inline unsigned int scope_get_num_samples();
 
 // Internal functions
 inline void scope_reset_num_samples();
-inline void scope_reset_num_peaks();
+void scope_reset_num_peaks();
 inline void scope_update_histogram();
 
 // Main functions for scope

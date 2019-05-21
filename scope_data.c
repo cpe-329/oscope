@@ -20,6 +20,8 @@
 volatile static uint8_t scope_mode = SCOPE_MODE_AC;
 volatile static unsigned int dc_value = 0;
 volatile static unsigned int ac_true_rms = 0;
+volatile static unsigned int ac_dc_offset = 0;
+volatile static unsigned int ac_rms_sum = 0;
 volatile static unsigned int ac_pkpk = 0;
 volatile static unsigned int ac_freq = 0;
 volatile static unsigned int ac_period = 0;
@@ -101,14 +103,14 @@ inline unsigned int scope_get_num_samples() {
 
 void scope_store_peak_data() {
     ac_pkpk = fast_ac_pkpk;
-    ac_freq =   FREQ_ALIGNMENT*num_peaks;  // REPAINT_PERIOD;
+    ac_freq =   (FREQ_ALIGNMENT)*num_peaks;  // REPAINT_PERIOD;
 }
 
 inline void scope_reset_num_samples() {
     num_samples = 0;
 }
 
-inline void scope_cycle_peak_data() {
+inline void scope_reset_num_peaks() {
     num_peaks = 0;
 }
 
