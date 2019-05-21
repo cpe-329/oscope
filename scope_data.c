@@ -25,6 +25,7 @@ volatile static unsigned int dc_value = 0;
 volatile static unsigned int ac_pkpk = 0;
 volatile static unsigned int ac_dc_offset = 0;
 volatile static unsigned int ac_true_rms = 0;
+volatile static unsigned int rms_samples = 0;
 volatile static unsigned int ac_rms_sum = 0;
 volatile static unsigned int ac_freq = 0;
 volatile static unsigned int ac_period = 0;
@@ -145,14 +146,12 @@ inline void count_peaks(unsigned int val) {
     if (finding_peak) {
         // Finding peak
         if (val > max_prev - peak_delta) {
-            ac_rms_sum += val * val;
             num_peaks += 1;
             finding_peak = false;
         }
     } else {
         // Finding trough
         if (val < min_prev + peak_delta) {
-            ac_rms_sum = 0;
             finding_peak = true;
         }
     }
@@ -210,7 +209,10 @@ inline void scope_read_data() {
     } else if (avg_val < min_val) {
         min_val = avg_val;
     }
-
+    if (avg_val >= ac_dc_offset){
+        ac_rms_sum += avg_val * avg_val;
+        rms_samples ++;
+    }
     count_peaks(avg_val);
 }
 
@@ -231,7 +233,6 @@ inline void scope_refresh_data() {
         //     dc_offset_valid =
         //         (min_val < ac_dc_offset) && (max_val > ac_dc_offset);
         // }
-
         ac_period = 1000 / ac_freq;
     }
 }

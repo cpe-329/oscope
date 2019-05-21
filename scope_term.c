@@ -45,8 +45,8 @@ inline void move_home() {
 }
 
 inline void hide_cursor() {
-    unsigned char command[4] = {ESC, '[', '8', 'm'};
-    uart_write_string(command, 4);
+    unsigned char command[6] = {ESC, '[', '?','2', '5', 'l'};
+    uart_write_string(command, 6);
 }
 
 inline void term_clear_screen() {
@@ -194,7 +194,11 @@ void print_info_values() {
     y+=2;
     move_cursor(INFO_X_CORD +14, y);
     uart_write_int(scope_get_histogram_div());
-    uart_write_string(get_histogram_units(), 2);
+    if (scope_get_histogram_units() == 1) {
+           uart_write_string(" s", 2);
+    } else {
+           uart_write_string("ms", 2);
+    }
     uart_write_string("    ", 4);
     y += 2;
     move_cursor(INFO_X_CORD+11, y);
