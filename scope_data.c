@@ -9,6 +9,7 @@
 
 #include <stdbool.h>
 #include <stdint.h>
+#include <math.h>
 
 #include "adc.h"
 #include "delay.h"
@@ -19,9 +20,9 @@
 
 volatile static uint8_t scope_mode = SCOPE_MODE_AC;
 volatile static unsigned int dc_value = 0;
+volatile static unsigned int ac_rms_sum = 0;
 volatile static unsigned int ac_true_rms = 0;
 volatile static unsigned int ac_dc_offset = 0;
-volatile static unsigned int ac_rms_sum = 0;
 volatile static unsigned int ac_pkpk = 0;
 volatile static unsigned int ac_freq = 0;
 volatile static unsigned int ac_period = 0;
@@ -56,6 +57,8 @@ inline unsigned int scope_get_dc_value() {
 
 inline unsigned int scope_get_true_rms() {
     // mV from 0 to 300
+    ac_true_rms = adc_map_val(sqrt(ac_rms_sum)/num_peaks);
+    ac_rms_sum = 0;
     return ac_true_rms;
 }
 
@@ -188,7 +191,6 @@ inline void scope_read_data() {
 // Prep for screen refresh
 void scope_refresh_data() {
     unsigned int avg_val = adc_get_avg();
-
     // Update histogram data
     scope_update_histogram();
 
@@ -206,7 +208,7 @@ void scope_refresh_data() {
         //         (min_val < ac_dc_offset) && (max_val > ac_dc_offset);
         // }
 
-        ac_true_rms = (ac_pkpk >> 1) * 0.7071;
+        ac_rms_sum += avg_val*avg_val;
 
         ac_period = 1000 / ac_freq;
     }
