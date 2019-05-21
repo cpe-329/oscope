@@ -17,6 +17,8 @@
 
 #define HISTOGRAM_SIZE (8)
 
+#define FREQ_ALIGNMENT (1.2)
+
 #define SCOPE_DC_HIST_DIV (120)
 #define SCOPE_AC_HIST_DIV (1)
 #define SCOPE_HIST_UNITS_MS (0)
@@ -42,7 +44,7 @@ inline void scope_update_histogram();
 
 // Main functions for scope
 inline void scope_switch_mode();
-inline void scope_read_data();
+void scope_read_data();
 void scope_refresh_data();
 inline void scope_reset_min_max();
 inline void scope_reset_locks();
