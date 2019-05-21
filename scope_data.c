@@ -56,10 +56,10 @@ inline unsigned int scope_get_dc_value() {
 
 inline unsigned int scope_get_true_rms() {
     // mV from 0 to 300
-    if (ac_rms_sum != 0) {
-        ac_true_rms = sqrt(ac_rms_sum / num_samples);
-    }
-    return adc_map_val(ac_true_rms << 5);
+    // if (ac_rms_sum != 0) {
+    //     ac_true_rms = sqrt(ac_rms_sum / num_samples);
+    // }
+    return adc_map_val(ac_true_rms);
 }
 
 inline unsigned int scope_get_ac_pkpk() {
@@ -115,7 +115,7 @@ inline unsigned int scope_get_num_samples() {
 }
 
 inline void scope_reset_num_samples() {
-    ac_rms_sum = 0;
+    // ac_rms_sum = 0;
     num_samples = 0;
 }
 
@@ -127,8 +127,9 @@ inline void scope_cycle_ac_data() {
     ac_pkpk_prev = ac_pkpk;
     peak_delta = ac_pkpk >> 2;
 
-    // Calculate new peak to peak
+    // Calculate new peak to peak and rms
     ac_pkpk = max_val - min_val;
+    ac_true_rms = sqrt((max_val * max_val) - (min_val * min_val));
 
     // Reset peak count
     ac_freq = num_peaks * FREQ_SCALING;  // >> 1;
@@ -211,8 +212,8 @@ inline void scope_read_data() {
         min_val = avg_val;
     }
 
-    reduced_precision = avg_val >> 5;
-    ac_rms_sum += reduced_precision * reduced_precision;
+    // reduced_precision = avg_val >> 5;
+    // ac_rms_sum += reduced_precision * reduced_precision;
 
     count_peaks(avg_val);
 }
