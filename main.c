@@ -31,6 +31,7 @@ volatile bool refresh_term = false;
 volatile bool repaint_term = true;
 
 volatile bool one_sec_interval = false;
+volatile bool two_second_interval = false;
 volatile uint8_t seconds_counter = 0;
 
 int main(void) {
@@ -39,14 +40,15 @@ int main(void) {
     term_clear_screen();
     paint_terminal();
     scope_switch_mode();
-    
-    while (1) {
+
+    while (true) {
         // Check button to switch mode
         if (button_get()) {
             scope_switch_mode();
             repaint_term = true;
-            // delay_ms(100, FREQ);
         }
+
+        two_second_interval = ((seconds_counter % 2) == 0);
 
         // Schedule repaint of entire term
         if (seconds_counter >= SECONDS_COUNT_MAX) {
@@ -64,7 +66,7 @@ int main(void) {
             // Reset number of sample since last refresh
             repaint_term = false;
         }
-        if (refresh_term || ((scope_get_mode() == SCOPE_MODE_AC) && one_sec_interval)) {
+        if (refresh_term) {
             // Refresh data displayed in term
             scope_refresh_data();
 
@@ -78,18 +80,26 @@ int main(void) {
             refresh_term = false;
         }
 
-        // Reset statistics once a second
-        if (one_sec_interval) {
-            scope_store_peak_data();
-            scope_reset_min_max();
-            scope_reset_num_peaks();
-            one_sec_interval = false;
+        if (one_sec_interval && (scope_get_mode() == SCOPE_MODE_AC)) {
+            // Refresh data displayed in term
+            scope_refresh_data();
+
+            led_on();
+            // Refresh UART VT100 terminal
+            scope_refresh_term();
+            led_off();
+
+            scope_cycle_ac_data();
+
+            // Reset number of sample since last refresh
+            scope_reset_num_samples();
         }
+
+        one_sec_interval = false;
 
         // Read data from scope
         if (adc_data_fresh) {
             scope_read_data();
-
             adc_data_fresh = false;
             adc_start_conversion();
         }
