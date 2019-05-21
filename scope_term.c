@@ -250,17 +250,18 @@ inline void print_volt_divisions() {
 
 void print_bar(unsigned int val, unsigned int x, unsigned int y) {
     int mes = 0, height = 0;
-    while (val > mes) {
+    while (val > mes && height < GRAPH_HEIGHT) {
         mes += VOLT_DIVISION;
         height++;
     }
     if (val < VOLT_DIVISION) {
         draw_vertical(1, x, y, '-', BAR);
         draw_vertical(GRAPH_HEIGHT - 1, x, y - 1, ' ', BAR);
-    } else {
+    } else{
         draw_vertical(height, x, y, '|', BAR);
         draw_vertical(GRAPH_HEIGHT - height, x, y - height, ' ', BAR);
     }
+
 }
 
 inline void print_graph_border() {
