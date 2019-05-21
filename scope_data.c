@@ -100,7 +100,7 @@ inline unsigned int scope_get_num_samples() {
 
 void scope_store_peak_data() {
     ac_pkpk = fast_ac_pkpk;
-    ac_freq = num_peaks;  // REPAINT_PERIOD;
+    ac_freq =   FREQ_ALIGNMENT*num_peaks;  // REPAINT_PERIOD;
 }
 
 inline void scope_reset_num_samples() {
