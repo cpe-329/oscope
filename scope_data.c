@@ -27,7 +27,6 @@ volatile static unsigned int ac_rms_sum = 0;
 volatile static unsigned int ac_true_rms = 0;
 volatile static unsigned int ac_dc_offset = 0;
 volatile static unsigned int ac_pkpk = 0;
-volatile static unsigned int ac_dc_offset = 0;
 volatile static unsigned int ac_freq = 0;
 volatile static unsigned int ac_period = 0;
 volatile static unsigned int histogram[HISTOGRAM_SIZE] = {};
