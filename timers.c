@@ -49,6 +49,14 @@ void timer_init(void) {
     rgb_set(RGB_OFF);
 }
 
+inline void timer_stop_main(){
+    TIMER_A0->CCR[0] = 0;
+}
+
+inline void timer_restart(){
+    TIMER_A0->CCR[0] = TIMER_ONE_SECOND_DELAY;
+}
+
 inline void increment_refresh_delay() {
     TIMER_A0->CCR[1] += REFRESH_DELAY_DELTA;  // increment CCR1 count
 }
@@ -57,10 +65,10 @@ inline void reset_refresh_delay() {
     TIMER_A0->CCR[1] = REFRESH_DELAY_DELTA;  // set CCR1 count
 }
 
-inline void timers_stop_fast() {
+inline void timer_stop_fast() {
     TIMER_A0->CCTL[1] = TIMER_A_CCTLN_CCIE;  // TACCR1 interrupt enabled
 }
 
-inline void timers_resume_fast() {
+inline void timer_resume_fast() {
     TIMER_A0->CCTL[1] = 0;  // TACCR1 interrupt enabled
 }

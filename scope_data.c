@@ -120,7 +120,7 @@ inline void scope_reset_num_samples() {
 }
 
 inline void scope_cycle_ac_data() {
-    if (num_samples <= 1) {
+    if (num_samples <= 60000) {
         return;
     }
     // Store peak data
@@ -180,13 +180,13 @@ inline void scope_switch_mode() {
             scope_mode = SCOPE_MODE_AC;
             histogram_div = SCOPE_AC_HIST_DIV;
             histogram_units = SCOPE_HIST_UNITS_S;
-            timers_resume_fast();
+            timer_resume_fast();
             break;
         default:
             scope_mode = SCOPE_MODE_DC;
             histogram_div = SCOPE_DC_HIST_DIV;
             histogram_units = SCOPE_HIST_UNITS_MS;
-            timers_stop_fast();
+            timer_stop_fast();
     }
     for (i = 0; i < HISTOGRAM_SIZE; i += 1) {
         histogram[i] = 0;
