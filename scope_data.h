@@ -17,7 +17,7 @@
 
 #define HISTOGRAM_SIZE (8)
 
-#define FREQ_ALIGNMENT (1.2)
+#define FREQ_ALIGNMENT (1)
 
 #define SCOPE_DC_HIST_DIV (120)
 #define SCOPE_AC_HIST_DIV (1)
@@ -39,7 +39,7 @@ inline unsigned int scope_get_num_samples();
 
 // Internal functions
 inline void scope_reset_num_samples();
-inline void scope_reset_num_peaks();
+void scope_reset_num_peaks();
 inline void scope_update_histogram();
 
 // Main functions for scope
@@ -47,7 +47,7 @@ inline void scope_switch_mode();
 void scope_read_data();
 void scope_refresh_data();
 inline void scope_reset_min_max();
-inline void scope_reset_locks();
+void scope_reset_locks();
 void scope_store_peak_data();
 
 #endif /* SCOPE_DATA_H_ */

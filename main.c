@@ -83,7 +83,6 @@ int main(void) {
             scope_store_peak_data();
             scope_reset_min_max();
             scope_reset_num_peaks();
-            scope_reset_locks();
             one_sec_interval = false;
         }
 
