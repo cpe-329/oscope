@@ -22,7 +22,7 @@ volatile static uint8_t scope_mode = SCOPE_MODE_AC;
 
 volatile static unsigned int dc_value = 0;
 
-volatile static unsigned int ac_rms_sum = 0;
+volatile static unsigned long ac_rms_sum = 0;
 
 volatile static unsigned int ac_true_rms = 0;
 volatile static unsigned int ac_dc_offset = 0;
@@ -59,7 +59,7 @@ inline unsigned int scope_get_dc_value() {
 
 inline unsigned int scope_get_true_rms() {
     // mV from 0 to 300
-    ac_true_rms = adc_map_val(sqrt(ac_rms_sum)/num_peaks);
+    ac_true_rms = adc_map_val(sqrt(ac_rms_sum/num_peaks));
     ac_rms_sum = 0;
     return ac_true_rms;
 }
@@ -183,6 +183,7 @@ inline void scope_read_data() {
     } else if (avg_val < min_val) {
         min_val = avg_val;
     }
+    ac_rms_sum += avg_val*avg_val;
     count_peaks(avg_val);
 }
 
@@ -205,8 +206,6 @@ inline void scope_refresh_data() {
         //     dc_offset_valid =
         //         (min_val < ac_dc_offset) && (max_val > ac_dc_offset);
         // }
-
-        ac_rms_sum += avg_val*avg_val;
 
         ac_period = 1000 / ac_freq;
     }

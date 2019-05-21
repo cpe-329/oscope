@@ -138,6 +138,15 @@ void print_info_text() {
     y += 2;
     move_cursor(INFO_X_CORD, y);
     uart_write_string("Num Samples: ", 13);
+    y += 2;
+    move_cursor(INFO_X_CORD, y);
+    uart_write_string("Sample Time: ", 14);
+    y += 2;
+    move_cursor(INFO_X_CORD, y);
+    uart_write_string("Max Value: ", 11);
+    y += 2;
+    move_cursor(INFO_X_CORD, y);
+    uart_write_string("Min Value: ", 11);
     if (scope_get_mode() == SCOPE_MODE_DC) {
         for (i = 0; i < 4; i++) {
             y += 2;
@@ -181,6 +190,17 @@ void print_info_values() {
     y += 2;
     move_cursor(INFO_X_CORD + 13, y);
     uart_write_int(scope_get_num_samples());
+    uart_write_string("    ", 4);
+    move_cursor(INFO_X_CORD +14, y);
+    uart_write_int(scope_get_sample_time());
+    uart_write_string("    ", 4);
+    y += 2;
+    move_cursor(INFO_X_CORD+11, y);
+    uart_write_volts(scope_get_max());
+    uart_write_string("    ", 4);
+    y += 2;
+    move_cursor(INFO_X_CORD+11, y);
+    uart_write_volts(scope_get_min());
     uart_write_string("    ", 4);
 }
 
