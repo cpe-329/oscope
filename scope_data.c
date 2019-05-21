@@ -84,7 +84,7 @@ inline unsigned int scope_get_ac_period() {
 
 inline unsigned int scope_get_histogram(uint8_t i) {
     // mV from 0 to 300
-    return histogram[i];
+    return adc_map_val(histogram[i]);
 }
 
 inline unsigned int scope_get_histogram_div() {
