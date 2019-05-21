@@ -210,7 +210,8 @@ inline void scope_read_data() {
         min_val = avg_val;
     }
     if (avg_val >= ac_dc_offset){
-        ac_rms_sum += avg_val * avg_val;
+        int reduced_precision = avg_val >> 5;
+        ac_rms_sum += reduced_precision * reduced_precision;
         rms_samples ++;
     }
     count_peaks(avg_val);
