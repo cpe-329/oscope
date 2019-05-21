@@ -15,41 +15,41 @@
 
 static unsigned char com[2] = {ESC, '['};
 
-void inline move_down(unsigned int val) {
+inline void move_down(unsigned int val) {
     uart_write_string(com, 2);
     uart_write_int(val);
     uart_write('B');
 }
 
-void inline move_up(unsigned int val) {
+inline void move_up(unsigned int val) {
     uart_write_string(com, 2);
     uart_write_int(val);
     uart_write('A');
 }
 
-void inline move_left(unsigned int val) {
+inline void move_left(unsigned int val) {
     uart_write_string(com, 2);
     uart_write_int(val);
     uart_write('D');
 }
 
-void inline move_right(unsigned int val) {
+inline void move_right(unsigned int val) {
     uart_write_string(com, 2);
     uart_write_int(val);
     uart_write('C');
 }
 
-void inline move_home() {
+inline void move_home() {
     unsigned char command[3] = {ESC, '[', 'H'};
     uart_write_string(command, 3);
 }
 
-void inline hide_cursor() {
+inline void hide_cursor() {
     unsigned char command[4] = {ESC, '[', '8', 'm'};
     uart_write_string(command, 4);
 }
 
-void inline term_clear_screen() {
+inline void term_clear_screen() {
     unsigned char command[4] = {ESC, '[', '2', 'J'};
     uart_write_string(command, 4);
 }
@@ -62,7 +62,7 @@ void move_cursor(unsigned int x, unsigned int y) {
     uart_write('H');
 }
 
-void inline draw_horizontal(unsigned int length,
+inline void draw_horizontal(unsigned int length,
                      unsigned int x,
                      unsigned int y,
                      char c) {
@@ -73,7 +73,7 @@ void inline draw_horizontal(unsigned int length,
     }
 }
 
-void inline draw_vertical(unsigned int length,
+inline void draw_vertical(unsigned int length,
                    unsigned int x,
                    unsigned int y,
                    char c,
@@ -111,7 +111,7 @@ void print_info_text() {
         uart_write_string("  AC Mode", 9);
         y += 2;
         move_cursor(INFO_X_CORD, y);
-        uart_write_string("True RMS: ", 11);
+        uart_write_string("True RMS: ", 10);
         y += 2;
         move_cursor(INFO_X_CORD, y);
         uart_write_string("AC Pkpk: ", 9);
@@ -152,7 +152,7 @@ void print_info_values() {
     move_cursor(INFO_X_CORD, y);
     if (scope_get_mode() == SCOPE_MODE_AC) {
         y += 2;
-        move_cursor(INFO_X_CORD + 9, y);
+        move_cursor(INFO_X_CORD + 10, y);
         uart_write_volts(scope_get_true_rms());
         uart_write_string("    ", 4);
         y += 2;
@@ -184,7 +184,7 @@ void print_info_values() {
     uart_write_string("    ", 4);
 }
 
-void inline print_graph_title() {
+inline void print_graph_title() {
     move_cursor(HIST_TITLE_X, HIST_TITLE_Y);
     uart_write_string("Histogram", 9);
     move_cursor(INFO_X_CORD, INFO_Y_CORD);
@@ -209,7 +209,7 @@ void print_time_divisions() {
     }
 }
 
-void inline print_volt_divisions() {
+inline void print_volt_divisions() {
     int volt_mes_y = HIST_TITLE_Y + 1;
     int i;
     int volts = 330;
@@ -237,7 +237,7 @@ void print_bar(unsigned int val, unsigned int x, unsigned int y) {
     }
 }
 
-void  inline print_graph_border() {
+inline void print_graph_border() {
     print_graph_title();
     print_volt_divisions();
 }
