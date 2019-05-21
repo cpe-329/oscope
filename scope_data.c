@@ -19,18 +19,21 @@
 #include "timers.h"
 
 volatile static uint8_t scope_mode = SCOPE_MODE_AC;
+
 volatile static unsigned int dc_value = 0;
+
 volatile static unsigned int ac_rms_sum = 0;
+
 volatile static unsigned int ac_true_rms = 0;
 volatile static unsigned int ac_dc_offset = 0;
 volatile static unsigned int ac_pkpk = 0;
+volatile static unsigned int ac_dc_offset = 0;
 volatile static unsigned int ac_freq = 0;
 volatile static unsigned int ac_period = 0;
 volatile static unsigned int histogram[HISTOGRAM_SIZE] = {};
 static unsigned int histogram_div = SCOPE_AC_HIST_DIV;
 uint8_t histogram_units = 0;
 volatile static unsigned int num_samples = 0;
-
 volatile static unsigned int num_peaks = 0;
 
 volatile static unsigned int max_val = 0;
@@ -82,10 +85,6 @@ inline unsigned int scope_get_ac_period() {
     // ms from 1 to 1000
     return ac_period;
 }
-
-//inline unsigned int scope_get_true_rms(){
-//    return ;
-//}
 
 inline unsigned int scope_get_histogram(uint8_t i) {
     // mV from 0 to 300
@@ -169,7 +168,7 @@ inline void scope_switch_mode() {
     }
 }
 
-// Process latest value from ADC 
+// Process latest value from ADC
 inline void scope_read_data() {
     unsigned int avg_val = 0;
     // Read in new data
@@ -189,7 +188,7 @@ inline void scope_read_data() {
 }
 
 // Prep for screen refresh
-void scope_refresh_data() {
+inline void scope_refresh_data() {
     unsigned int avg_val = adc_get_avg();
     // Update histogram data
     scope_update_histogram();

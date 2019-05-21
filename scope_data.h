@@ -44,10 +44,10 @@ inline void scope_update_histogram();
 
 // Main functions for scope
 inline void scope_switch_mode();
-void scope_read_data();
-void scope_refresh_data();
+inline void scope_read_data();
+inline void scope_refresh_data();
 inline void scope_reset_min_max();
-void scope_reset_locks();
-void scope_store_peak_data();
+inline void scope_reset_locks();
+inline void scope_store_peak_data();
 
 #endif /* SCOPE_DATA_H_ */
