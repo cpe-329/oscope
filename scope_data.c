@@ -56,8 +56,9 @@ inline unsigned int scope_get_dc_value() {
 
 inline unsigned int scope_get_true_rms() {
     // mV from 0 to 300
-    ac_true_rms = sqrt(ac_rms_sum / num_peaks);
-    ac_rms_sum = 0;
+    if (ac_rms_sum != 0){
+        ac_true_rms = sqrt(ac_rms_sum / num_peaks);
+    }
     return adc_map_val(ac_true_rms);
 }
 
@@ -144,12 +145,14 @@ inline void count_peaks(unsigned int val) {
     if (finding_peak) {
         // Finding peak
         if (val > max_prev - peak_delta) {
+            ac_rms_sum += val * val;
             num_peaks += 1;
             finding_peak = false;
         }
     } else {
         // Finding trough
         if (val < min_prev + peak_delta) {
+            ac_rms_sum = 0;
             finding_peak = true;
         }
     }
@@ -207,7 +210,7 @@ inline void scope_read_data() {
     } else if (avg_val < min_val) {
         min_val = avg_val;
     }
-    ac_rms_sum += avg_val * avg_val;
+
     count_peaks(avg_val);
 }
 
