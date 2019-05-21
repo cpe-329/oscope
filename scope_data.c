@@ -7,6 +7,7 @@
  *
  */
 
+#include <math.h>
 #include <stdbool.h>
 #include <stdint.h>
 
@@ -55,6 +56,8 @@ inline unsigned int scope_get_dc_value() {
 
 inline unsigned int scope_get_true_rms() {
     // mV from 0 to 300
+    ac_true_rms = sqrt(ac_rms_sum) / num_peaks;
+    ac_rms_sum = 0;
     return adc_map_val(ac_true_rms);
 }
 
@@ -113,9 +116,9 @@ inline void scope_cycle_data() {
     ac_pkpk = max_val - min_val;
 
     // Reset peak count
-    ac_freq = num_peaks * FREQ_SCALING;// >> 1;
+    ac_freq = num_peaks * FREQ_SCALING;  // >> 1;
     num_peaks = 0;
-    
+
     // Store and reset min, max
     min_prev = min_val;
     max_prev = max_val;
@@ -197,7 +200,6 @@ inline void scope_read_data() {
 // Prep for screen refresh
 inline void scope_refresh_data() {
     unsigned int avg_val = adc_get_avg();
-
     // Update histogram data
     scope_update_histogram();
 
@@ -213,7 +215,7 @@ inline void scope_refresh_data() {
         //         (min_val < ac_dc_offset) && (max_val > ac_dc_offset);
         // }
 
-        ac_true_rms = ((ac_pkpk >> 1) * 7071) / 1000;
+        ac_rms_sum += avg_val * avg_val;
 
         ac_period = 1000 / ac_freq;
     }
