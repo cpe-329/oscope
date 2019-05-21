@@ -18,18 +18,20 @@
 #include "timers.h"
 
 volatile static uint8_t scope_mode = SCOPE_MODE_AC;
+
 volatile static unsigned int dc_value = 0;
+
 volatile static unsigned int ac_true_rms = 0;
 volatile static unsigned int ac_dc_offset = 0;
 volatile static unsigned int ac_rms_sum = 0;
 volatile static unsigned int ac_pkpk = 0;
+volatile static unsigned int ac_dc_offset = 0;
 volatile static unsigned int ac_freq = 0;
 volatile static unsigned int ac_period = 0;
 volatile static unsigned int histogram[HISTOGRAM_SIZE] = {};
 static unsigned int histogram_div = SCOPE_AC_HIST_DIV;
 uint8_t histogram_units = 0;
 volatile static unsigned int num_samples = 0;
-
 volatile static unsigned int num_peaks = 0;
 
 volatile static unsigned int max_val = 0;
