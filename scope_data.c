@@ -78,10 +78,6 @@ inline unsigned int scope_get_ac_period() {
     return ac_period;
 }
 
-inline unsigned int scope_get_true_rms(){
-    return ((ac_pkpk/2)*0.7071);
-}
-
 inline unsigned int scope_get_histogram(uint8_t i) {
     // mV from 0 to 300
     return histogram[i];
@@ -159,7 +155,7 @@ inline void scope_switch_mode() {
     }
 }
 
-// Process latest value from ADC 
+// Process latest value from ADC
 inline void scope_read_data() {
     unsigned int avg_val = 0;
     // Read in new data
@@ -179,7 +175,7 @@ inline void scope_read_data() {
 }
 
 // Prep for screen refresh
-void scope_refresh_data() {
+inline void scope_refresh_data() {
     unsigned int avg_val = adc_get_avg();
 
     // Update histogram data
