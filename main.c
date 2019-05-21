@@ -18,7 +18,6 @@
 #include "my_msp.h"
 #include "scope_data.h"
 #include "scope_term.h"
-#include "spi.h"
 #include "timers.h"
 #include "uart.h"
 
@@ -68,8 +67,7 @@ int main(void) {
             scope_reset_num_samples();
 
             repaint_term = false;
-        }else
-        if (refresh_term) {
+        } else if (refresh_term) {
             // timer_stop_main();
             // Refresh data displayed in term
             scope_refresh_data();
